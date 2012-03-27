@@ -28,10 +28,13 @@ export GATK=path/to/GenomeAnalysisTK.jar
 ###################################################################################
 # SET UP WORKSPACE
 
+# Import bash function library
 source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
 
 # Create additional workspace directories
 create_dir data
 create_dir tmp
 create_dir reports
+
+
 
