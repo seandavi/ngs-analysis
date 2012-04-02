@@ -3,17 +3,12 @@
 ###################################################################################
 # SET ENVIRONMENT VARIABLES
 
+# Relative to NGS_ANALYSIS_DIR
 export NGS_ANALYSIS_DIR=`pwd`
 export PATH=$PATH:$NGS_ANALYSIS_DIR/scripts
+export PYTHONPATH=$PYTHONPATH:$NGS_ANALYSIS_DIR/lib/python
 
-export REF=path/to/human_g1k_v37.fasta
-export UCSC_REFFLAT=path/to/refFlat.txt
-export UCSC_DBSNP=path/to/snp132.txt
-export DBSNP_VCF=path/to/dbsnp_132.b37.vcf
-export MILLS_DEVINE_INDEL_VCF=path/to/Mills_Devine_2hit.indels.b37.sites.vcf
-export HAPMAP_VCF=path/to/hapmap_3.3.b37.sites.vcf
-export OMNI1000_VCF=path/to/1000G_omni2.5.b37.sites.vcf
-
+# Programs
 export PYTHON=path/to/python
 export GATK=path/to/GenomeAnalysisTK.jar
 #export CUTADAPT=path/to/
@@ -24,6 +19,14 @@ export GATK=path/to/GenomeAnalysisTK.jar
 #export SOMATIC_SNIPER=path/to/
 #export PLINK=path/to/
 
+# Resources
+export REF=path/to/human_g1k_v37.fasta
+export UCSC_REFFLAT=path/to/refFlat.txt
+export UCSC_DBSNP=path/to/snp132.txt
+export DBSNP_VCF=path/to/dbsnp_132.b37.vcf
+export MILLS_DEVINE_INDEL_VCF=path/to/Mills_Devine_2hit.indels.b37.sites.vcf
+export HAPMAP_VCF=path/to/hapmap_3.3.b37.sites.vcf
+export OMNI1000_VCF=path/to/1000G_omni2.5.b37.sites.vcf
 
 ###################################################################################
 # SET UP WORKSPACE
