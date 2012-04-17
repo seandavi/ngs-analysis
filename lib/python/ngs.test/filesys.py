@@ -32,11 +32,11 @@ class TestFilesysFunctions(unittest.TestCase):
 
         # Read zip
         f = filesys.get_file_read_handle(example_fastq + '.zip')
-        d_zip = f.read()
+        d_zip = f.read(EXAMPLE_FASTQ)
         f.close()
 
         # Test that they are all equal
-        #self.assertTrue(d == d_or and d == d_gz and d == d_zip)
+        self.assertTrue(d == d_or and d == d_gz and d == d_zip)
         
 
 if __name__ == '__main__':

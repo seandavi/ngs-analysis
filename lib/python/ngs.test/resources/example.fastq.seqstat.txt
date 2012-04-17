@@ -1,0 +1,5 @@
+Number of Reads:	3
+Number of Bases:	35
+Length Histogram (Length, Counts)
+10	2
+15	1

@@ -1,41 +1,57 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import unittest
 from ngs import seq
 
 RESOURCE_DIR = 'resources'
-EXAMPLE_FASTQ = 'example.fastq'
-EXAMPLE_FASTQ_SEQSTAT_XML = 'example.fastq.seqstat.xml'
+EXAMPLE_FASTQ = os.path.join(RESOURCE_DIR,'example.fastq')
+EXAMPLE_FASTQ_SEQSTAT_XML = os.path.join(RESOURCE_DIR, 'example.fastq.seqstat.xml')
+EXAMPLE_FASTQ_SEQSTAT_TXT = os.path.join(RESOURCE_DIR, 'example.fastq.seqstat.txt')
 
-class TestSeqFunctions(unittest.TestCase):
+class TestFastqStats(unittest.TestCase):
     
     def setUp(self):
-        f = open(os.path.join(RESOURCE_DIR, EXAMPLE_FASTQ), 'r')
-        self.fastqstats_obj = seq.FastqStats()
-        self.readcount, self.basecount, self.length_hist = self.fastqstats_obj.get_seqstats(f)        
+        self.fastqstats_obj = seq.FastqStats(EXAMPLE_FASTQ)
+        self.readcount, self.basecount, self.length_hist = self.fastqstats_obj.get_seqstats()
 
-    def test_fastq_seqstats(self):
+    def test_get_seqstats(self):
         self.assertEqual(self.readcount, 3)
         self.assertEqual(self.basecount, 35)
         self.assertEqual(self.length_hist[10], 2)
         self.assertEqual(self.length_hist[15], 1)
         self.assertEqual(len(self.length_hist), 2)
 
+    def test_seqstats2txt(self):
+        # Generate seqstat txt from fastqfile
+        seqstat_txt = self.fastqstats_obj.seqstats2txt()
+
+        # Load seqstat txt from file that's already been generated
+        f = open(EXAMPLE_FASTQ_SEQSTAT_TXT, 'r')
+        seqstat_txt_from_file = f.read()
+        f.close()
+        
+        # Compare them to make sure they are equal
+        self.assertEqual(seqstat_txt, seqstat_txt_from_file)
+
     def test_seqstats2xml(self):
         # Generate xml for the seqstats
-        seqstat_xml = self.fastqstats_obj.seqstats2xml(self.readcount, self.basecount, self.length_hist)
+        seqstat_xml = self.fastqstats_obj.seqstats2xml()
         # Output xml to file
-        seqstat_xml_file = os.path.join(RESOURCE_DIR, EXAMPLE_FASTQ_SEQSTAT_XML)
-        f = open(seqstat_xml_file, 'w')
+        f = open(EXAMPLE_FASTQ_SEQSTAT_XML, 'w')
         f.write(seqstat_xml)
         f.close()
 
         # Read xml file
-        f = open(seqstat_xml_file, 'r')
+        f = open(EXAMPLE_FASTQ_SEQSTAT_XML, 'r')
         seqstat_xml = f.read()
         f.close()
+
+        # Extract stats from xml
         rc, bc, lh = self.fastqstats_obj.xml2seqstats(seqstat_xml)
+
+        # Run comparisons
         self.assertEqual(rc, self.readcount)
         self.assertEqual(bc, self.basecount)
         self.assertEqual(lh[10], self.length_hist[10])

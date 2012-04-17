@@ -2,7 +2,7 @@
 
 import io
 import xml.dom.minidom
-from ngs import filesys,seq
+from ngs import filesys
 
 class FastqStats(object):
     
@@ -29,7 +29,7 @@ class FastqStats(object):
         self.readcount = readcount
         self.length_hist = length_hist
 
-    def set_seqstats(self):
+    def _generate_seqstats(self):
         '''
         Read in the file and generate stats about the sequences.
         '''
@@ -56,22 +56,26 @@ class FastqStats(object):
         Lazy getter for sequence statistics
         '''
         if self.basecount is None or self.readcount is None or self.length_hist is None:
-            self.set_seqstats()
-        return self.basecount, self.readcount, self.length_hist
+            self._generate_seqstats()
+        return self.readcount, self.basecount, self.length_hist
         
     def seqstats2txt(self):
         '''
         Generate human-readable text file containing sequence statistics
         '''
-        basecount, readcount, length_hist = self.get_seqstats()
-        
-        
+        readcount, basecount, length_hist = self.get_seqstats()
+        txt = 'Number of Reads:\t%i\n' % readcount
+        txt += 'Number of Bases:\t%i\n' % basecount
+        txt += 'Length Histogram (Length, Counts)\n'
+        for l in sorted(length_hist.keys()):
+            txt += '%i\t%i\n' % (l, length_hist[l])
+        return txt
 
     def seqstats2xml(self):
         '''
         Generate xml from sequence statistics
         '''
-        basecount, readcount, length_hist = self.get_seqstats()
+        readcount, basecount, length_hist = self.get_seqstats()
 
         doc = xml.dom.minidom.Document()
         
