@@ -7,6 +7,9 @@
 export NGS_ANALYSIS_DIR=`pwd`
 export PATH=$PATH:$NGS_ANALYSIS_DIR/scripts
 export PYTHONPATH=$PYTHONPATH:$NGS_ANALYSIS_DIR/lib/python
+export JAVAMEM=-Xmx6g
+export JAVATMPDIR=-Djava.io.tmpdir=$NGS_ANALYSIS_DIR/tmp
+export JAVAJAR='java '$JAVAMEM' '$JAVATMPDIR' -jar'
 
 # Import bash function library
 source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
@@ -20,15 +23,17 @@ create_dir reports
 # EXPERIMENT RUN INFORMATION
 export SAMPLESHEET=path/to/SampleSheet.csv
 export READLENGTH=101
+export READLENGTH_MIN=$(($READLENGTH / 2))
 export PAIRED=true # [true|false]
 
 ###################################################################################
 # PROGRAMS
 export PYTHON=path/to/python
 export CUTADAPT=path/to/cutadapt
-#export SICKLE=path/to/
-#export BWA=path/to/
-#export PICARD_PATH=path/to/
+export SICKLE=path/to/sickle
+export BWA=path/to/
+export PICARD_PATH=path/to/
+export PICARD_MAX_RECORDS_IN_RAM=900000
 export GATK=path/to/GenomeAnalysisTK.jar
 #export VARSCAN=path/to/
 #export SOMATIC_SNIPER=path/to/

@@ -26,9 +26,9 @@ def main():
         out_prefix = params.out_prefix
 
     # Output xml filename
-    outfilename_xml = '.'.join([out_prefix, 'fastq_stats', 'xml'])
+    outfilename_xml = '.'.join([out_prefix, 'seqstat', 'xml'])
     # Output human-readable filename
-    outfilename_txt = '.'.join([out_prefix, 'fastq_stats', 'txt'])
+    outfilename_txt = '.'.join([out_prefix, 'seqstat', 'txt'])
 
     # Generate stats
     fastqstats = seq.FastqStats(params.fastqfile)

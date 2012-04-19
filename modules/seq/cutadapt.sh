@@ -19,11 +19,11 @@ OUTPUTFILE=$OUTPUTPREFIX.fastq.gz
 OUTPUTSUMMARY=$OUTPUTPREFIX.summary
 
 # Run tool
-$CUTADAPT                      \
-	-o $OUTPUTFILE             \
-	-b $2                      \
-	-e 0.1                     \
-	-q 10                      \
-	-O 5                       \
-	$1                         \
-	>& $OUTPUTSUMMARY
+$CUTADAPT                    \
+  -o $OUTPUTFILE             \
+  -b $2                      \
+  -e 0.1                     \
+  -q 10                      \
+  -O 5                       \
+  $1                         \
+  &> $OUTPUTSUMMARY
