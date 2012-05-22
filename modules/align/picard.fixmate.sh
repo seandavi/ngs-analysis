@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Sort and index bam file
+## DESCRIPTION: Ensure that all mate-pair information is in sync between each read and its mate pair
 ##
-## USAGE: picard.sortsam.sh sample.bam
+## USAGE: picard.fixmate.sh sample.bam
 ##
-## OUTPUT: sample.sorted.bam
+## OUTPUT: sample.fixmate.bam
 ##
 
 # Load bash function library
@@ -17,15 +17,14 @@ BAMFILE=$1
 
 # Format output filenames
 OUTPUTPREFIX=`filter_ext $BAMFILE 1`
-OUTPUTFILE=$OUTPUTPREFIX.sorted.bam
-OUTPUTERROR=$OUTPUTPREFIX.sorted.err
+OUTPUTFILE=$OUTPUTPREFIX.fixmate.bam
+OUTPUTERROR=$OUTPUTPREFIX.fixmate.err
 
 # Run tool
-$JAVAJAR $PICARD_PATH/SortSam.jar                     \
+$JAVAJAR $PICARD_PATH/FixMateInformation.jar          \
   INPUT=$BAMFILE                                      \
   OUTPUT=$OUTPUTFILE                                  \
   SORT_ORDER=coordinate                               \
   MAX_RECORDS_IN_RAM=$PICARD_MAX_RECORDS_IN_RAM       \
-  CREATE_INDEX=true                                   \
   VALIDATION_STRINGENCY=LENIENT                       \
   &> $OUTPUTERROR

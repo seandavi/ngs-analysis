@@ -13,17 +13,20 @@ source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
 # Check correct usage
 usage 2 $# $0
 
+INPUT_FASTQ=$1
+ADAPTOR_SEQ=$2
+
 # Format output filenames
-OUTPUTPREFIX=`filter_ext $1 2`.cutadapt
+OUTPUTPREFIX=`filter_ext $INPUT_FASTQ 2`.cutadapt
 OUTPUTFILE=$OUTPUTPREFIX.fastq.gz
 OUTPUTSUMMARY=$OUTPUTPREFIX.summary
 
 # Run tool
 $CUTADAPT                    \
   -o $OUTPUTFILE             \
-  -b $2                      \
+  -b $ADAPTOR_SEQ            \
   -e 0.1                     \
   -q 10                      \
   -O 5                       \
-  $1                         \
+  $INPUT_FASTQ               \
   &> $OUTPUTSUMMARY

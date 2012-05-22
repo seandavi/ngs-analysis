@@ -6,6 +6,7 @@
 # Set environment variables
 export NGS_ANALYSIS_DIR=`pwd`
 export PATH=$PATH:$NGS_ANALYSIS_DIR/scripts
+export PYTHON=path/to/python
 export PYTHONPATH=$PYTHONPATH:$NGS_ANALYSIS_DIR/lib/python
 export JAVAMEM=-Xmx6g
 export JAVATMPDIR=-Djava.io.tmpdir=$NGS_ANALYSIS_DIR/tmp
@@ -28,7 +29,8 @@ export PAIRED=true # [true|false]
 
 ###################################################################################
 # PROGRAMS
-export PYTHON=path/to/python
+export BCL2FASTQ=path/to/CASAVA/bin/configureBclToFastq.pl
+export BCL2FASTQ_NUM_THREADS=20
 export CUTADAPT=path/to/cutadapt
 export SICKLE=path/to/sickle
 export BWA=path/to/

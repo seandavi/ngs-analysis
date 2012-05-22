@@ -13,8 +13,11 @@ source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
 # Check correct usage
 usage 2 $# $0
 
+FASTQ_READ1=$1
+FASTQ_READ2=$2
+
 # Format output filenames
-OUTPUTPREFIX=`filter_ext $1 3`
+OUTPUTPREFIX=`filter_ext $FASTQ_READ1 3`
 OUTPUT_R1=$OUTPUTPREFIX.R1.trimmed.fastq.gz
 OUTPUT_R2=$OUTPUTPREFIX.R2.trimmed.fastq.gz
 OUTPUT_RS=$OUTPUTPREFIX.RS.trimmed.fastq.gz
@@ -24,8 +27,8 @@ OUTPUTSUMMARY=$OUTPUTPREFIX.RX.trimmed.summary
 $SICKLE                   \
   pe                      \
   -t sanger               \
-  -f $1                   \
-  -r $2                   \
+  -f $FASTQ_READ1         \
+  -r $FASTQ_READ2         \
   -q 20                   \
   -l $READLENGTH_MIN      \
   -o $OUTPUT_R1           \

@@ -13,8 +13,10 @@ source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
 # Check correct usage
 usage 1 $# $0
 
+FASTQ=$1
+
 # Format output filenames
-OUTPUTPREFIX=`filter_ext $1 2`
+OUTPUTPREFIX=`filter_ext $FASTQ 2`
 OUTPUTFILE=$OUTPUTPREFIX.aln.sai
 OUTPUTERROR=$OUTPUTPREFIX.aln.err
 
@@ -25,6 +27,6 @@ $BWA                  \
   -l 32               \
   -k 2                \
   $REF                \
-  $1                  \
+  $FASTQ              \
   1> $OUTPUTFILE      \
   2> $OUTPUTERROR
