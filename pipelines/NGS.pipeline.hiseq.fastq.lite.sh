@@ -9,7 +9,11 @@
 ## OUTPUT: Directory containing the outputs of basecalls by casava software, in fastq format
 ##
 
+NGS_ANALYSIS_DIR=ngs-analysis
 
+# Run base caller script
 NGS.pipeline.hiseq.fastq.sh
+
+# Copy configureBclToFastq.pl script log to BaseCalls directory (cwd)
 mv $NGS_ANALYSIS_DIR/data/configureBclToFastq.log .
 rm -rf $NGS_ANALYSIS_DIR

@@ -10,9 +10,12 @@
 
 
 NGS_REPOSITORY=$HOME/src/ngs-analysis
-export NGS_ANALYSIS_DIR=ngs-analysis
+NGS_ANALYSIS_DIR=ngs-analysis
+
+# Clone the workspace
 git clone $NGS_REPOSITORY $NGS_ANALYSIS_DIR
 cd $NGS_ANALYSIS_DIR
 
+# Run basecall
 source setup.sh
 casava.bcl2fastq.hiseq.sh ../ ../Fastq ../SampleSheet.csv
