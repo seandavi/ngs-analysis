@@ -5,7 +5,12 @@
 
 # Set environment variables
 export NGS_ANALYSIS_DIR=`pwd`
-export PATH=$PATH:$NGS_ANALYSIS_DIR/scripts
+export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/align
+export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/annot
+export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/seq
+export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/somatic
+export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/util
+export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/variant
 export PYTHON=path/to/python
 export PYTHONPATH=$PYTHONPATH:$NGS_ANALYSIS_DIR/lib/python
 export JAVAMEM=-Xmx6g
