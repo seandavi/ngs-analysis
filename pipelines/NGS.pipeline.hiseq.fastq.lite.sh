@@ -2,6 +2,7 @@
 ##
 ## DESCRIPTION: Clone the analysis framework workspace and generate fastq files.  
 ##              Remove analysis framework directory at the end
+##              This pipeline should be run from within the BaseCalls directory
 ##
 ## USAGE: NGS.pipeline.hiseq.fastq.lite.sh
 ##
@@ -10,4 +11,5 @@
 
 
 NGS.pipeline.hiseq.fastq.sh
-rm -rf ngs-analysis
+mv $NGS_ANALYSIS_DIR/data/configureBclToFastq.log .
+rm -rf $NGS_ANALYSIS_DIR
