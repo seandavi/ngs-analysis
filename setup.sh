@@ -27,4 +27,4 @@ export READLENGTH_MIN=$(($READLENGTH / 2))
 export PAIRED=true # [true|false]
 
 # Set program and resource paths
-export $NGS_ANALYSIS_DIR/config.sh
+source $NGS_ANALYSIS_DIR/config.sh
