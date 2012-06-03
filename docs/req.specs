@@ -1,10 +1,10 @@
 NGS Analysis Pipeline Framework Specifications
 
-- Transparency – Able to see and edit what goes on in the data processing pipeline
+- Transparency - Able to see and edit what goes on in the data processing pipeline
 - Easily modifiable for user's needs
 - Run modes
-  - Single node – define max number of threads/processes to use
-  - Cluster – SGE
+  - Single node - define max number of threads/processes to use
+  - Cluster - SGE
   - Define max memory
   - Simulation runs?
   - Output run status
