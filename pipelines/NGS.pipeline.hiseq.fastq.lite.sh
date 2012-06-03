@@ -1,9 +1,13 @@
 #!/bin/bash
 ##
-## Generate fastq files without cloning the framework workspace
+## DESCRIPTION: Clone the analysis framework workspace and generate fastq files.  
+##              Remove analysis framework directory at the end
+##
+## USAGE: NGS.pipeline.hiseq.fastq.lite.sh
+##
+## OUTPUT: Directory containing the outputs of basecalls by casava software, in fastq format
 ##
 
-NGS_REPOSITORY=$HOME/src/ngs-analysis
 
-source $NGS_REPOSITORY/config.sh
-$NGS_REPOSITORY/modules/seq/casava.bcl2fastq.hiseq.sh ../ ../Fastq ../SampleSheet.csv
+NGS.pipeline.hiseq.fastq.sh
+rm -rf ngs-analysis
