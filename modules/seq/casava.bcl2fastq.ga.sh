@@ -43,7 +43,7 @@ $BCL2FASTQ                                                 \
   --positions-format _pos.txt                              \
   --fastq-cluster-count 900000000                          \
   --sample-sheet $SAMPLESHEET                              \
-  --output-dir $OUTPUT_DIR >& configureBclToFastq.log
+  --output-dir $OUTPUT_DIR >& data/configureBclToFastq.log
 
 
 # Go into output directory, and run the makefile

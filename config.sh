@@ -1,39 +1,17 @@
 #!/bin/bash
+##
+## SET UP PROGRAM AND RESOURCE PATHS
+##
 
-###################################################################################
-# SET UP WORKSPACE
-
-# Set environment variables
 export NGS_ANALYSIS_DIR=`pwd`
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/align
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/annot
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/seq
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/somatic
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/util
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/variant
+
+
+# Programs
 export PYTHON=path/to/python
 export PYTHONPATH=$PYTHONPATH:$NGS_ANALYSIS_DIR/lib/python
 export JAVAMEM=-Xmx6g
 export JAVATMPDIR=-Djava.io.tmpdir=$NGS_ANALYSIS_DIR/tmp
 export JAVAJAR='java '$JAVAMEM' '$JAVATMPDIR' -jar'
-
-# Import bash function library
-source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
-
-# Create additional workspace directories
-create_dir data
-create_dir tmp
-create_dir reports
-
-###################################################################################
-# EXPERIMENT RUN INFORMATION
-export SAMPLESHEET=path/to/SampleSheet.csv
-export READLENGTH=101
-export READLENGTH_MIN=$(($READLENGTH / 2))
-export PAIRED=true # [true|false]
-
-###################################################################################
-# PROGRAMS
 export BCL2FASTQ=path/to/CASAVA/bin/configureBclToFastq.pl
 export BCL2FASTQ_NUM_THREADS=20
 export CUTADAPT=path/to/cutadapt
@@ -46,8 +24,8 @@ export GATK=path/to/GenomeAnalysisTK.jar
 #export SOMATIC_SNIPER=path/to/
 #export PLINK=path/to/
 
-###################################################################################
-# RESOURCES
+
+# Resources
 export REF=path/to/human_g1k_v37.fasta
 export UCSC_REFFLAT=path/to/refFlat.txt
 export UCSC_DBSNP=path/to/snp132.txt
