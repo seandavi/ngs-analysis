@@ -29,7 +29,7 @@ create_dir reports
 
 
 # Experiment Run Information
-export SAMPLESHEET=path/to/SampleSheet.csv
+#export SAMPLESHEET=path/to/SampleSheet.csv
 export READLENGTH=101
 export READLENGTH_MIN=$(($READLENGTH / 2))
 export PAIRED=true # [true|false]
