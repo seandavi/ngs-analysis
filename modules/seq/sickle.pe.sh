@@ -7,8 +7,8 @@
 ## OUTPUT: sample.R1.sickle.fastq.gz sample.R2.sickle.fastq.gz sample.RS.sickle.fastq.gz
 ##
 
-# Load bash function library
-source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
+# Load analysis config
+source $NGS_ANALYSIS_DIR/ngs.config.sh
 
 # Check correct usage
 usage 2 $# $0

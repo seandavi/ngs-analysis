@@ -7,8 +7,8 @@
 ## OUTPUT: None
 ##
 
-# Include library of bash functions
-source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
+# Load analysis config
+source $NGS_ANALYSIS_DIR/ngs.config.sh
 
 # Usage check:
 # 1st parameter is the desired number of parameters: 1 in this case, i.e. foo

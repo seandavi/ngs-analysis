@@ -35,6 +35,7 @@ export OMNI1000_VCF=path/to/1000G_omni2.5.b37.sites.vcf
 # Developers only
 
 # NGS Analysis Pipeline Framework Tools
+source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
 export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/align
 export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/annot
 export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/seq
