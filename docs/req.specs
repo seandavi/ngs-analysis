@@ -17,13 +17,25 @@ NGS Analysis Pipeline Framework Specifications
 - Generate QC and results reports
 
 ======================================================================================
+Setup/Install
+
+Edit ~/.bash_profile to contain the following lines
+
+# NGS Analysis Pipeline
+export NGS_ANALYSIS_CONFIG=path/to/ngs-analysis/ngs.config.sh
+PATH=path/to/ngs-analysis/pipelines:$PATH
+
+======================================================================================
+
 
 Workflow
+SETUP-----------------------
 1. Clone local git repo
-2. Edit config.sh
-3. In the ngs-analysis root directory, source config.sh
-4. Create symbolic links to fastq files inside data directory
-
+2. Edit .bash_profile (see above)
+3. Edit config.sh
+----------------------------
+4. Run pipeline scripts
+5. Source $NGS_ANALYSIS_CONFIG and run individual scripts
 ======================================================================================
 
 Tools list
