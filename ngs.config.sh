@@ -7,6 +7,7 @@
 # Users: Set path to each tool installed on the server
 
 # Programs
+export NGS_ANALYSIS_CONFIG=${NGS_ANALYSIS_CONFIG:=path/to/ngs.config.sh}  # Set this variable in .bashrc or .bash_profile
 export NGS_ANALYSIS_DIR=path/to/ngs-analysis
 export PYTHON=path/to/python
 export BCL2FASTQ=path/to/CASAVA/bin/configureBclToFastq.pl

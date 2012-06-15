@@ -8,7 +8,7 @@
 ##
 
 # Load analysis config
-source $NGS_ANALYSIS_DIR/ngs.config.sh
+source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
 usage 2 $# $0

@@ -8,7 +8,7 @@
 ##
 
 # Load analysis config
-source $NGS_ANALYSIS_DIR/ngs.config.sh
+source $NGS_ANALYSIS_CONFIG
 
 # Usage check:
 # 1st parameter is the desired number of parameters: 1 in this case, i.e. foo
