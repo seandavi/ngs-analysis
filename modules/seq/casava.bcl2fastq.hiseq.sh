@@ -31,7 +31,7 @@ fi
 
 
 # Setup basecalling makefile
-BASECALLS_DIR='.'
+BASECALLS_DIR=$PWD
 $BCL2FASTQ                                                 \
   --input-dir $BASECALLS_DIR                               \
   --intensities-dir $BASECALLS_DIR/../                     \
