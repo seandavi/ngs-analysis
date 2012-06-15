@@ -7,8 +7,8 @@
 ## OUTPUT: sample.fixmate.bam
 ##
 
-# Load bash function library
-source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
+# Load analysis config
+source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
 usage 1 $# $0

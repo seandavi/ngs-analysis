@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Echo to standard error
 echoerr() {
     echo "$@" 1>&2; 

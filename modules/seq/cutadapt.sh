@@ -7,8 +7,8 @@
 ## OUTPUT: input.cutadapt.fastq.gz
 ##
 
-# Load bash function library
-source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
+# Load analysis config
+source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
 usage 2 $# $0
