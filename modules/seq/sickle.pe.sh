@@ -4,7 +4,7 @@
 ##
 ## USAGE: sickle.pe.sh sample.R1.fastq.gz sample.R2.fastq.gz
 ##
-## OUTPUT: sample.R1.sickle.fastq.gz sample.R2.sickle.fastq.gz sample.RS.sickle.fastq.gz
+## OUTPUT: sample.R1.trimmed.fastq.gz sample.R2.trimmed.fastq.gz sample.RS.trimmed.fastq.gz
 ##
 
 # Load analysis config
@@ -21,7 +21,7 @@ OUTPUTPREFIX=`filter_ext $FASTQ_READ1 3`
 OUTPUT_R1=$OUTPUTPREFIX.R1.trimmed.fastq.gz
 OUTPUT_R2=$OUTPUTPREFIX.R2.trimmed.fastq.gz
 OUTPUT_RS=$OUTPUTPREFIX.RS.trimmed.fastq.gz
-OUTPUTSUMMARY=$OUTPUTPREFIX.RX.trimmed.summary
+OUTPUTLOG=$OUTPUTPREFIX.RX.trimmed.sickle.log
 
 # Run tool
 $SICKLE                   \
@@ -29,9 +29,9 @@ $SICKLE                   \
   -t sanger               \
   -f $FASTQ_READ1         \
   -r $FASTQ_READ2         \
-  -q 20                   \
+  -q $QUAL_THRESH         \
   -l $READLENGTH_MIN      \
   -o $OUTPUT_R1           \
   -p $OUTPUT_R2           \
   -s $OUTPUT_RS           \
-  &> $OUTPUTSUMMARY
+  &> $OUTPUTLOG

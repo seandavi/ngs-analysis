@@ -8,13 +8,18 @@
 
 # Programs
 export NGS_ANALYSIS_CONFIG=${NGS_ANALYSIS_CONFIG:=path/to/ngs.config.sh}  # Set this variable in .bashrc or .bash_profile
-export NGS_ANALYSIS_DIR=path/to/ngs-analysis
+export NGS_ANALYSIS_DIR=${NGS_ANALYSIS_DIR:=path/to/ngs-analysis}         # MUST set this variable
 export PYTHON=path/to/python
 export BCL2FASTQ=path/to/CASAVA/bin/configureBclToFastq.pl
 export BCL2FASTQ_NUM_THREADS=20
 export CUTADAPT=path/to/cutadapt
 export SICKLE=path/to/sickle
-export BWA=path/to/
+export READLENGTH_MIN=20
+export QUAL_THRESH=20
+export BWA=path/to/bwa
+export BWA_ALN_THREAD=2
+export BWA_ALN_SEEDLEN=32
+export BWA_ALN_MAXSEEDDIFF=2
 export PICARD_PATH=path/to/
 export PICARD_MAX_RECORDS_IN_RAM=900000
 export GATK=path/to/GenomeAnalysisTK.jar
