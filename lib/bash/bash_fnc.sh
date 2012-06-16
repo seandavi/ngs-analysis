@@ -12,11 +12,24 @@ create_dir() {
 }
 
 # Check number of input parameters.  If incorrect, output usage information
+# Checks to see if the number of parameters is == number of needed parameters
 usage() {
     # $1: Number of parameters needed
     # $2: Actual number of parameters
     # $3: Path to script that's calling this function
     if [ $1 -ne $2 ]; then
+     	sed -n '/^##/,/^$/s/^## \{0,1\}//p' $3
+       	exit 2
+    fi
+}
+
+# Check number of input parameters.  If incorrect, output usage information
+# Checks to see if the number of parameters is >= number of needed parameters
+usage_min() {
+    # $1: Number of parameters needed
+    # $2: Actual number of parameters
+    # $3: Path to script that's calling this function
+    if [ $1 -gt $2 ]; then
      	sed -n '/^##/,/^$/s/^## \{0,1\}//p' $3
        	exit 2
     fi

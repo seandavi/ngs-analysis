@@ -32,10 +32,19 @@ Workflow
 SETUP-----------------------
 1. Clone local git repo
 2. Edit .bash_profile (see above)
-3. Edit config.sh
+3. Edit ngs.config.sh
 ----------------------------
 4. Run pipeline scripts
-5. Source $NGS_ANALYSIS_CONFIG and run individual scripts
+5. Custom analyses parameters
+	a. copy ngs.config.sh to another place
+	b. edit parameters in ngs.config.sh
+	c. Source ngs.config.sh
+	d. set $NGS_ANALYSIS_CONFIG to the new ngs.config.sh
+	e. Re-run individual scripts/pipelines
+
+
+copy $NGS_ANALYSIS_CONFIG
+
 ======================================================================================
 
 Tools list

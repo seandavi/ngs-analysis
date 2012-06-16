@@ -4,7 +4,7 @@
 ##
 ## USAGE: sickle.pe.sh sample.R1.fastq.gz sample.R2.fastq.gz
 ##
-## OUTPUT: sample.R1.sickle.fastq.gz sample.R2.sickle.fastq.gz sample.RS.sickle.fastq.gz
+## OUTPUT: sample.R1.trimmed.fastq.gz sample.R2.trimmed.fastq.gz sample.RS.trimmed.fastq.gz
 ##
 
 # Load analysis config
