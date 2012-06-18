@@ -7,6 +7,17 @@ Separate out a vcf file containing variant calls for multiple samples into indiv
 import argparse
 import sys
 
+
+def build_genotype_field2indx(field_str):
+    '''
+    Generate a dictionary that maps the sample genotype field to their corresponding index
+    '''
+    fields = field_str.split(':')
+    field2indx = {}
+    for i,fieldname in enumerate(fields):
+        field2indx[fieldname] = i
+    return field2indx
+
 def build_colname2colnum(colname_str):
     '''
     Generate a dictionary that maps column name to the column index number
