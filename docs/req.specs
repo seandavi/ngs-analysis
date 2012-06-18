@@ -139,6 +139,20 @@ Development Steps
 - Single node run mode
 
 
+NEED TO TEST
+seq/
+	casava.bcl2fastq.ga.sh
+	cutadapt.sh
+	fastq_scores.py
+	fastq_stats.py
+	
+align/
+	picard.fixmate.sh
+	picard.sam2bam.sh
+	picard.sortsam.sh
+
+
+
 ======================================================================================
 
 Tutorials

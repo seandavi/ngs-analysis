@@ -48,3 +48,12 @@ filter_ext() {
     done
     echo $FILENAME
 }
+
+# Extract prefix of filenames
+extract_prefix() {
+    # $1: Filename
+    # $2: Number of prefixes to extract
+    NUMPREFIX=$2
+    NUMPREFIX=${NUMPREFIX:=1}
+    echo `echo $1 | cut -f-$NUMPREFIX -d'.'`
+}
