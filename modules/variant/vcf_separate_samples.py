@@ -95,7 +95,7 @@ def separate_samples(vcfin, out_prefix, preserve_all=False):
 
             # If all positions should be outputted, then just loop through and output everything
             if preserve_all:
-                fouts[samplename].write('%s\n' % (row_output_list + [sample_genotype_info_str]))
+                fouts[samplename].write('%s\n' % ('\t'.join(row_output_list + [sample_genotype_info_str])))
                 continue
 
             # If 'no call', and don't output anything
@@ -105,7 +105,7 @@ def separate_samples(vcfin, out_prefix, preserve_all=False):
             # Check if variant, and output variants only to file
             sample_genotype = sample_genotype_info[genotype_field2indx['GT']]
             if sample_genotype != '0/0':
-                fouts[samplename].write('%s\n' % (row_output_list + [sample_genotype_info_str]))
+                fouts[samplename].write('%s\n' % ('\t'.join(row_output_list + [sample_genotype_info_str])))
 
     # Close all file handles for each sample
     for fh in fouts.values():
