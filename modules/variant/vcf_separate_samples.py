@@ -125,7 +125,7 @@ def main():
             out_prefix = 'vcf_file'
 
     # Separate vcf file's samples and create a vcf file for each sample
-    separate_samples(params.vcf_file,params.out_prefix, preserve_all=params.preserve_all_positions)
+    separate_samples(params.vcf_file, out_prefix, preserve_all=params.preserve_all_positions)
     params.vcf_file.close()
 
 
