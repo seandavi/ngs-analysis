@@ -1,5 +1,6 @@
 TOOLS LIST
 
+- CASAVA
 D - GATK & resources (REF, DBSNP_VCF, HAPMAP_VCF, OMNI_VCF)
 D - picard
 D - bwa
@@ -27,6 +28,16 @@ D - varkit
 cd $HOME/src
 
 #---------------------------------------------------------------------------------------------------------------------------
+# CASAVA
+tar -jxf CASAVA_v1.8.2.tar.bz2
+mkdir CASAVA_v1.8.2-build
+cd CASAVA_v1.8.2-build
+../CASAVA_v1.8.2/src/configure --prefix=$HOME --static
+make
+make install
+
+
+#------------------------------------------------------------------------------------
 # GCC
 
 mkdir gmp; cd gmp

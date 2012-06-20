@@ -5,8 +5,8 @@ Generate quality control reports regarding the fastq
 quality scores for fastq data.
 
 Outputs:
-    $PREFIX-qscore-pos-avgs.txt
-    $PREFIX-qscore-cumulative-distrib.txt
+    $PREFIX.qscore.pos.txt
+    $PREFIX.qscore.cdf.txt
 
  Supported fastq file types: 
     phred
@@ -176,11 +176,11 @@ def main():
     # Optional
     ap.add_argument('-t', '--platform-type',
                     help='\n'.join(['0: Phred scores;',
-                                    '1: fastq-sanger, Phred with ASCII offset 33;',
-                                    '2(default): fastq-illumina, Phred with ASCII offset 64']),
+                                    '1(default): fastq-sanger, Phred with ASCII offset 33;',
+                                    '2: fastq-illumina, Phred with ASCII offset 64']),
                     type=int,
                     choices=range(3),
-                    default=_PLATFORM_TYPE['fastq-illumina'])
+                    default=_PLATFORM_TYPE['fastq-sanger'])
     ap.add_argument('-o', '--out-prefix',
                     help='Output prefix.  All output files will be prefixed by this parameter',
                     type=str)
@@ -201,7 +201,7 @@ def main():
     # Output to files
     pos_avg_outstr = '%s\n' % (label + '\t' + '\t'.join(num2str(avgs)))
     cum_dis_outstr = '%s\n' % (label + '\t' + '\t'.join(num2str(cumul_distrib)))
-    fo_avg = open('.'.join([out_prefix, 'qscore.avgs.txt']),'w')
+    fo_avg = open('.'.join([out_prefix, 'qscore.pos.txt']),'w')
     fo_avg.write(pos_avg_outstr)
     fo_avg.close()
     fo_cum = open('.'.join([out_prefix, 'qscore.cdf.txt']),'w')
