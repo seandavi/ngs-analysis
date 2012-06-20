@@ -20,6 +20,7 @@ export BWA=path/to/bwa
 export BWA_ALN_THREAD=2
 export BWA_ALN_SEEDLEN=32
 export BWA_ALN_MAXSEEDDIFF=2
+export SAMTOOLS=path/to/samtools
 export PICARD_PATH=path/to/
 export PICARD_MAX_RECORDS_IN_RAM=900000
 export GATK=path/to/GenomeAnalysisTK.jar
