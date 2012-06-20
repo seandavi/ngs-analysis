@@ -19,23 +19,23 @@ SAMPLE_PREFIX=`filter_ext $FASTQ_R1 3`
 
 #==[ Trim ]=========================================================================#
 
-sickle.pe.sh $FASTQ_R1 $FASTQ_R2
+$NGS_ANALYSIS_DIR/modules/seq/sickle.pe.sh $FASTQ_R1 $FASTQ_R2
 
 #==[ Align ]========================================================================#
 
-bwa.aln.sh $SAMPLE_PREFIX.R1.trimmed.fastq.gz
-bwa.aln.sh $SAMPLE_PREFIX.R2.trimmed.fastq.gz
-bwa.aln.sh $SAMPLE_PREFIX.RS.trimmed.fastq.gz
+$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $SAMPLE_PREFIX.R1.trimmed.fastq.gz
+$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $SAMPLE_PREFIX.R2.trimmed.fastq.gz
+$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $SAMPLE_PREFIX.RS.trimmed.fastq.gz
 
-bwa.sampe.sh                              \
-    $SAMPLE_PREFIX.R1.trimmed.aln.sai     \
-    $SAMPLE_PREFIX.R2.trimmed.aln.sai     \
-    $SAMPLE_PREFIX.R1.trimmed.fastq.gz    \
-    $SAMPLE_PREFIX.R2.trimmed.fastq.gz
+$NGS_ANALYSIS_DIR/modules/align/bwa.sampe.sh             \
+  $SAMPLE_PREFIX.R1.trimmed.aln.sai                      \
+  $SAMPLE_PREFIX.R2.trimmed.aln.sai                      \
+  $SAMPLE_PREFIX.R1.trimmed.fastq.gz                     \
+  $SAMPLE_PREFIX.R2.trimmed.fastq.gz
 
-bwa.samse.sh                              \
-    $SAMPLE_PREFIX.RS.trimmed.aln.sai     \
-    $SAMPLE_PREFIX.RS.trimmed.fastq.gz
+$NGS_ANALYSIS_DIR/modules/align/bwa.samse.sh             \
+  $SAMPLE_PREFIX.RS.trimmed.aln.sai                      \
+  $SAMPLE_PREFIX.RS.trimmed.fastq.gz
 
 
 

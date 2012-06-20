@@ -2,7 +2,7 @@
 ## 
 ## DESCRIPTION: Run Hiseq base calling from within BaseCalls directory
 ##
-## USAGE: NGS.pipeline.hiseq.fastq.sh output_dir_name path/to/SampleSheet.csv
+## USAGE: NGS.pipeline.hiseq.fastq.sh output_dir_name path/to/SampleSheet.csv [num_thread]
 ##
 ## OUTPUT: directory containing fastq files for each project/sample
 ##
@@ -11,9 +11,11 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 2 $# $0
+usage_min 2 $# $0
 
 OUTPUT_DIR=$1
 SAMPLESHEET=$2
+NUM_THREADS=$3
+NUM_THREADS=${NUM_THREADS:=$BCL2FASTQ_NUM_THREADS}
 
-casava.bcl2fastq.hiseq.sh $OUTPUT_DIR $SAMPLESHEET
+$NGS_ANALYSIS_DIR/seq/casava.bcl2fastq.hiseq.sh $OUTPUT_DIR $SAMPLESHEET $NUM_THREADS

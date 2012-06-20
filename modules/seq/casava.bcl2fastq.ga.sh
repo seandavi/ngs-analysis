@@ -3,7 +3,7 @@
 ## DESCRIPTION: Generate fastq files from GA experiment results
 ##              Must be run from within the BaseCalls directory
 ## 
-## USAGE: casava.bcl2fastq.ga.sh output_dir_name path/to/SampleSheet.csv
+## USAGE: casava.bcl2fastq.ga.sh output_dir_name path/to/SampleSheet.csv [num_threads]
 ##
 ## OUTPUT: directory containing fastq files for each project/sample
 ##
@@ -12,10 +12,12 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 2 $# $0
+usage_min 2 $# $0
 
 OUTPUT_DIR=$1
 SAMPLESHEET=$2
+NUM_THREADS=$3
+BCL2FASTQ_NUM_THREADS=${NUM_THREADS:=$BCL2FASTQ_NUM_THREADS}
 
 # Check to make sure that output_directory_name doesn't already exist
 if [ -d $OUTPUT_DIR ]; then
