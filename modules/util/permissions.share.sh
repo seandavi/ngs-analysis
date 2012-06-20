@@ -24,6 +24,7 @@ PERM_DIR=${PERM_DIR:=755}
 # Set permissions
 if [ -d $TARGET ]; then
   chmod $PERM_DIR $TARGET
+  cd $TARGET
   echo "Recursively setting file permissions to $PERM_FILE"
   find . -type f -exec chmod 0$PERM_FILE {} \;
   echo "Recursively setting directory permissions to $PERM_DIR"

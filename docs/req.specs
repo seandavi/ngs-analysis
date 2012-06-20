@@ -24,6 +24,7 @@ Edit ~/.bash_profile to contain the following lines
 # NGS Analysis Pipeline
 export NGS_ANALYSIS_CONFIG=path/to/ngs-analysis/ngs.config.sh
 PATH=path/to/ngs-analysis/pipelines:$PATH
+PATH=path/to/ngs-analysis/modules/util:$PATH
 
 ======================================================================================
 
