@@ -16,7 +16,7 @@ usage 1 $# $0
 INPUTSAM=$1
 OUTPREFIX=`filter_ext $INPUTSAM 2`
 
-samtools               \
+$SAMTOOLS              \
   view                 \
   -uS                  \
   $INPUTSAM            \

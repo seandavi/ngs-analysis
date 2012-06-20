@@ -193,6 +193,11 @@ git push origin master
 See which branch I'm on, and list all branches
 git branch
 
+Ignore current changes, but pull from origin repo
+git stash
+git pull
+git stash apply
+
 ----------------------------------------------------------------
 
 Python Unit Test
@@ -210,3 +215,8 @@ Example shell script: modules/util/example.sh
 
 
 
+-----------------------------------------------------------
+Improvements over minmin
+
+basecalling third option for number of threads
+automatic generation of reports/images/plots

@@ -17,7 +17,7 @@ INPUTBAM1=$1
 OUTPREFIX=`extract_prefix $INPUTBAM1`
 OUTPUTBAM=$OUTPREFIX.bam
 
-samtools           \
+$SAMTOOLS          \
   merge            \
   -f               \
     $OUTPUTBAM     \

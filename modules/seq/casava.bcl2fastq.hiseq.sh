@@ -31,14 +31,14 @@ if [ ! -f $SAMPLESHEET ]; then
   exit 1
 fi
 
-
 # Setup basecalling makefile
 BASECALLS_DIR=$PWD
+FASTQ_CLUSTER_COUNT=0
 $BCL2FASTQ                                                 \
   --input-dir $BASECALLS_DIR                               \
   --intensities-dir $BASECALLS_DIR/../                     \
   --positions-format .clocs                                \
-  --fastq-cluster-count 900000000                          \
+  --fastq-cluster-count $FASTQ_CLUSTER_COUNT               \
   --sample-sheet $SAMPLESHEET                              \
   --output-dir $OUTPUT_DIR >& $BASECALLS_DIR/configureBclToFastq.log
 
