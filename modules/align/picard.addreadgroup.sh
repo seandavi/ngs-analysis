@@ -36,4 +36,4 @@ $JAVAJAR $PICARD_PATH/AddOrReplaceReadGroups.jar  \
   MAX_RECORDS_IN_RAM=$PICARD_MAX_RECORDS_IN_RAM   \
   CREATE_INDEX=true                               \
   VALIDATION_STRINGENCY=LENIENT                   \
-  &> $OUTPUTERROR
+  &> $OUTPUTLOG
