@@ -16,7 +16,7 @@ usage_min 2 $# $0
 INPUTBAM1=$1
 OUTPREFIX=`extract_prefix $INPUTBAM1`
 OUTPUTBAM=$OUTPREFIX.merged.bam
-OUTPUTLOG=$OUTPREFIX.merged.log
+OUTPUTLOG=$OUTPREFIX.merged.bam.log
 
 $SAMTOOLS          \
   merge            \

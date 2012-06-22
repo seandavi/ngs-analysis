@@ -15,7 +15,7 @@ usage 1 $# $0
 
 INPUTSAM=$1
 OUTPREFIX=`filter_ext $INPUTSAM 2`.sorted
-OUTPUTLOG=$OUTPUTPREFIX.log
+OUTPUTLOG=$OUTPUTPREFIX.sorted.bam.log
 
 $SAMTOOLS                    \
   view                       \
