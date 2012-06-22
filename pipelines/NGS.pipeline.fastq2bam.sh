@@ -43,8 +43,17 @@ $NGS_ANALYSIS_DIR/modules/align/bwa.samse.sh             \
 $NGS_ANALYSIS_DIR/modules/align/samtools.sam2sortedbam.sh $SAMPLE_PREFIX.PE.trimmed.sam.gz
 $NGS_ANALYSIS_DIR/modules/align/samtools.sam2sortedbam.sh $SAMPLE_PREFIX.SE.trimmed.sam.gz
 
+#==[ Process bam file ]=============================================================#
+
 # Merge paired and single end bam files
 $NGS_ANALYSIS_DIR/modules/align/samtools.mergebam.sh    \
   $SAMPLE_PREFIX.PE.trimmed.sorted.bam                  \
   $SAMPLE_PREFIX.SE.trimmed.sorted.bam
+
+
+# Sort
+$NGS_ANALYSIS_DIR/modules/align/picard.sortsam.sh $SAMPLE_PREFIX.merged.bam
+
+# Add read group to bam file
+$NGS_ANALYSIS_DIR/modules/align/picard.addreadgroup.sh $SAMPLE_PREFIX.merged.sorted.bam $SAMPLE_PREFIX
 
