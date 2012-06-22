@@ -23,22 +23,28 @@ $NGS_ANALYSIS_DIR/modules/seq/sickle.pe.sh $FASTQ_R1 $FASTQ_R2
 
 #==[ Align ]========================================================================#
 
-$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $SAMPLE_PREFIX.R1.trimmed.fastq.gz
-$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $SAMPLE_PREFIX.R2.trimmed.fastq.gz
-$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $SAMPLE_PREFIX.RS.trimmed.fastq.gz
+# Align
+$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $SAMPLE_PREFIX.R1.trimmed.fastq
+$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $SAMPLE_PREFIX.R2.trimmed.fastq
+$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $SAMPLE_PREFIX.SE.trimmed.fastq
 
+# Create sam
 $NGS_ANALYSIS_DIR/modules/align/bwa.sampe.sh             \
-  $SAMPLE_PREFIX.R1.trimmed.aln.sai                      \
-  $SAMPLE_PREFIX.R2.trimmed.aln.sai                      \
-  $SAMPLE_PREFIX.R1.trimmed.fastq.gz                     \
-  $SAMPLE_PREFIX.R2.trimmed.fastq.gz
+  $SAMPLE_PREFIX.R1.trimmed.sai                          \
+  $SAMPLE_PREFIX.R2.trimmed.sai                          \
+  $SAMPLE_PREFIX.R1.trimmed.fastq                        \
+  $SAMPLE_PREFIX.R2.trimmed.fastq
 
 $NGS_ANALYSIS_DIR/modules/align/bwa.samse.sh             \
-  $SAMPLE_PREFIX.RS.trimmed.aln.sai                      \
-  $SAMPLE_PREFIX.RS.trimmed.fastq.gz
+  $SAMPLE_PREFIX.SE.trimmed.sai                          \
+  $SAMPLE_PREFIX.SE.trimmed.fastq
 
+# Create bam
+$NGS_ANALYSIS_DIR/modules/align/samtools.sam2sortedbam.sh $SAMPLE_PREFIX.PE.trimmed.sam.gz
+$NGS_ANALYSIS_DIR/modules/align/samtools.sam2sortedbam.sh $SAMPLE_PREFIX.SE.trimmed.sam.gz
 
+# Merge paired and single end bam files
+$NGS_ANALYSIS_DIR/modules/align/samtools.mergebam.sh    \
+  $SAMPLE_PREFIX.PE.trimmed.sorted.bam                  \
+  $SAMPLE_PREFIX.SE.trimmed.sorted.bam
 
-sample.RP.sam.gz
-sample.RS.sam.gz
-    

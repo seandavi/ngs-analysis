@@ -2,9 +2,9 @@
 ##
 ## DESCRIPTION: Convert aligned paired read sai files to a single sam file
 ##
-## USAGE: bwa.sampe.sh sample.R1.aln.sai sample.R2.aln.sai sample.R1.fastq.gz sample.R2.fastq.gz
+## USAGE: bwa.sampe.sh sample.R1.sai sample.R2.sai sample.R1.fastq.gz sample.R2.fastq.gz
 ##
-## OUTPUT: sample.RP.sam.gz
+## OUTPUT: sample.PE.sam.gz
 ##
 
 # Load analysis config
@@ -18,11 +18,10 @@ R2_SAI=$2
 R1_FASTQ=$3
 R2_FASTQ=$4
 
-
 # Format output filenames
-OUTPUTPREFIX=`filter_ext $R1_SAI 3`
-OUTPUTFILE=$OUTPUTPREFIX.RP.sam.gz
-OUTPUTERROR=$OUTPUTPREFIX.RP.sam.err
+OUTPUTPREFIX=`filter_ext $R1_SAI 1 | sed 's/R1/PE/'`
+OUTPUTFILE=$OUTPUTPREFIX.sam.gz
+OUTPUTERROR=$OUTPUTPREFIX.sam.err
 
 # Run tool
 $BWA                    \

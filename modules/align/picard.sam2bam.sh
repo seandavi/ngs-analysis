@@ -1,6 +1,6 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Convert a BAM file to a SAM file, or BAM to SAM.
+## DESCRIPTION: Convert a .sam.gz file to a .bam file
 ##
 ## USAGE: picard.sam2bam.sh sample.sam[.gz]
 ##

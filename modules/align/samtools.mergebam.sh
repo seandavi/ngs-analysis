@@ -2,9 +2,9 @@
 ## 
 ## DESCRIPTION: Merge two or more bam files using samtools
 ##
-## USAGE: samtools.mergebam.sh sample.RP.bam sample.RS.bam [...]
+## USAGE: samtools.mergebam.sh sample.PE.bam sample.SE.bam [...]
 ##
-## OUTPUT: sample.bam
+## OUTPUT: sample.merged.bam
 ##
 
 # Load analysis config
@@ -15,10 +15,12 @@ usage_min 2 $# $0
 
 INPUTBAM1=$1
 OUTPREFIX=`extract_prefix $INPUTBAM1`
-OUTPUTBAM=$OUTPREFIX.bam
+OUTPUTBAM=$OUTPREFIX.merged.bam
+OUTPUTLOG=$OUTPREFIX.merged.log
 
 $SAMTOOLS          \
   merge            \
   -f               \
     $OUTPUTBAM     \
-    $@
+    $@             \
+  &> $OUTPUTLOG

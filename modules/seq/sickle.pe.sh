@@ -4,7 +4,7 @@
 ##
 ## USAGE: sickle.pe.sh sample.R1.fastq.gz sample.R2.fastq.gz
 ##
-## OUTPUT: sample.R1.trimmed.fastq.gz sample.R2.trimmed.fastq.gz sample.RS.trimmed.fastq.gz
+## OUTPUT: sample.R1.trimmed.fastq sample.R2.trimmed.fastq sample.SE.trimmed.fastq
 ##
 
 # Load analysis config
@@ -17,11 +17,11 @@ FASTQ_READ1=$1
 FASTQ_READ2=$2
 
 # Format output filenames
-OUTPUTPREFIX=`filter_ext $FASTQ_READ1 3`
-OUTPUT_R1=$OUTPUTPREFIX.R1.trimmed.fastq.gz
-OUTPUT_R2=$OUTPUTPREFIX.R2.trimmed.fastq.gz
-OUTPUT_RS=$OUTPUTPREFIX.RS.trimmed.fastq.gz
-OUTPUTLOG=$OUTPUTPREFIX.RX.trimmed.sickle.log
+OUTPUTPREFIX_R1=`filter_ext $FASTQ_READ1 2`
+OUTPUT_R1=`filter_ext $FASTQ_READ1 2`.trimmed.fastq
+OUTPUT_R2=`filter_ext $FASTQ_READ2 2`.trimmed.fastq
+OUTPUT_SE=`filter_ext $FASTQ_READ1 2 | sed 's/R1/SE/'`.trimmed.fastq
+OUTPUTLOG=`filter_ext $FASTQ_READ1 2 | sed 's/R1/SE/'`.trimmed.log
 
 # Run tool
 $SICKLE                   \
@@ -33,5 +33,5 @@ $SICKLE                   \
   -l $READLENGTH_MIN      \
   -o $OUTPUT_R1           \
   -p $OUTPUT_R2           \
-  -s $OUTPUT_RS           \
+  -s $OUTPUT_SE           \
   &> $OUTPUTLOG

@@ -14,13 +14,15 @@ source $NGS_ANALYSIS_CONFIG
 usage 1 $# $0
 
 INPUTSAM=$1
-OUTPREFIX=`filter_ext $INPUTSAM 2`
+OUTPREFIX=`filter_ext $INPUTSAM 2`.sorted
+OUTPUTLOG=$OUTPUTPREFIX.log
 
-$SAMTOOLS              \
-  view                 \
-  -uS                  \
-  $INPUTSAM            \
-  | samtools           \
-      sort             \
-      -                \
-      $OUTPREFIX.sorted
+$SAMTOOLS                    \
+  view                       \
+  -uS                        \
+  $INPUTSAM                  \
+  | samtools                 \
+      sort                   \
+      -                      \
+      $OUTPREFIX             \
+      &> $OUTPUTLOG

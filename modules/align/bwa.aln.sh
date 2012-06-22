@@ -4,7 +4,7 @@
 ##
 ## USAGE: bwa.aln.sh foo.fastq.gz [thread [seedlen [maxseeddiff]]]
 ##
-## OUTPUT: foo.aln.sai
+## OUTPUT: foo.sai
 ##
 
 # Load analysis config
@@ -24,9 +24,9 @@ BWA_ALN_SEEDLEN=${SEEDLEN:=$BWA_ALN_SEEDLEN}
 BWA_ALN_MAXSEEDDIFF=${MAXSEEDDIFF:=$BWA_ALN_MAXSEEDDIFF}
 
 # Format output filenames
-OUTPUTPREFIX=`filter_ext $FASTQ 2`
-OUTPUTFILE=$OUTPUTPREFIX.aln.sai
-OUTPUTERROR=$OUTPUTPREFIX.aln.err
+OUTPUTPREFIX=`echo $FASTQ | sed 's/\.fastq\.gz//' | sed 's/\.fastq//'`
+OUTPUTFILE=$OUTPUTPREFIX.sai
+OUTPUTERROR=$OUTPUTPREFIX.sai.err
 
 # Run tool
 $BWA                         \
