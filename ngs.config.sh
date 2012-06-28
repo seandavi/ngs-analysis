@@ -38,7 +38,8 @@ export DBSNP_VCF=path/to/dbsnp_132.b37.vcf
 export MILLS_DEVINE_INDEL_VCF=path/to/Mills_Devine_2hit.indels.b37.sites.vcf
 export HAPMAP_VCF=path/to/hapmap_3.3.b37.sites.vcf
 export OMNI1000_VCF=path/to/1000G_omni2.5.b37.sites.vcf
-
+export SURESELECT_BED=path/to/SureSelect_All_Exon_50mb_with_annotation_hg19_bed
+export SURESELECT_INTERVAL=path/to/SureSelect_All_Exon_50mb_with_annotation_hg19_bed.exceptChrUn.intervals
 
 #=====================================================================================
 # Developers only

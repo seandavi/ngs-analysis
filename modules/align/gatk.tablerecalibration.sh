@@ -25,7 +25,6 @@ OUTPUTLOG=$OUTPUTFILE.log
 $JAVAJAR $GATK                                            \
   -T TableRecalibration                                   \
   -R $REF                                                 \
-  -nt $GATK_NUM_THREADS                                   \
   -l INFO                                                 \
   -baq RECALCULATE                                        \
   -I $BAMFILE                                             \
@@ -37,3 +36,6 @@ $JAVAJAR $GATK                                            \
   -sMode SET_Q_ZERO                                       \
   -pQ 5                                                   \
   &> $OUTPUTLOG
+
+
+#  -nt $GATK_NUM_THREADS                                   \ # NOT SUPPORTED

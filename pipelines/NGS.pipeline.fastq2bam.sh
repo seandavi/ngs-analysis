@@ -69,3 +69,4 @@ $NGS_ANALYSIS_DIR/modules/align/gatk.analyzecovariates.sh $SAMPLE_PREFIX.merged.
 $NGS_ANALYSIS_DIR/modules/align/gatk.analyzecovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam.recaldata.csv
 
 # Indel Realignment
+SURESELECT_INTERVAL
