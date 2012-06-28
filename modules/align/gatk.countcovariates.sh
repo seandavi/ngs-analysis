@@ -34,11 +34,8 @@ $JAVAJAR $GATK                                            \
   -cov DinucCovariate                                     \
   -nback 7                                                \
   -knownSites $DBSNP_VCF                                  \
-  -run_without_dbsnp_potentially_ruining_quality false    \
   -solid_nocall_strategy THROW_EXCEPTION                  \
   -sMode SET_Q_ZERO                                       \
-  -standard false                                         \
-  -unsorted false                                         \
   &> $OUTPUTLOG
 
 
