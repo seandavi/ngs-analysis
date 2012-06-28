@@ -1,11 +1,11 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Generate fastq files from Hiseq experiment results
-##              Must be run from within the BaseCalls directory
+## DESCRIPTION:   Generate fastq files from Hiseq experiment results
+##                Must be run from within the BaseCalls directory
 ## 
-## USAGE: casava.bcl2fastq.hiseq.sh output_dir_name path/to/SampleSheet.csv [num_threads]
+## USAGE:         casava.bcl2fastq.hiseq.sh output_dir_name path/to/SampleSheet.csv [num_threads]
 ##
-## OUTPUT: directory containing fastq files for each project/sample
+## OUTPUT:        directory containing fastq files for each project/sample
 ##
 
 # Load analysis config

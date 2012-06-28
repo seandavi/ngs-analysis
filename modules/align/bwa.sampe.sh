@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Convert aligned paired read sai files to a single sam file
+## DESCRIPTION:   Convert aligned paired read sai files to a single sam file
 ##
-## USAGE: bwa.sampe.sh sample.R1.sai sample.R2.sai sample.R1.fastq.gz sample.R2.fastq.gz
+## USAGE:         bwa.sampe.sh sample.R1.sai sample.R2.sai sample.R1.fastq.gz sample.R2.fastq.gz
 ##
-## OUTPUT: sample.PE.sam.gz
+## OUTPUT:        sample.PE.sam.gz
 ##
 
 # Load analysis config

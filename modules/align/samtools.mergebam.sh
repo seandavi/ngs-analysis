@@ -1,10 +1,10 @@
 #!/bin/bash
 ## 
-## DESCRIPTION: Merge two or more bam files using samtools
+## DESCRIPTION:   Merge two or more bam files using samtools
 ##
-## USAGE: samtools.mergebam.sh sample.PE.bam sample.SE.bam [...]
+## USAGE:         samtools.mergebam.sh sample.PE.bam sample.SE.bam [...]
 ##
-## OUTPUT: sample.merged.bam
+## OUTPUT:        sample.merged.bam
 ##
 
 # Load analysis config

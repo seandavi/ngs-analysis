@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Add read group to input bam file
+## DESCRIPTION:   Add read group to input bam file
 ##
-## USAGE: picard.addreadgroup.sh sample.bam readgroupid
+## USAGE:         picard.addreadgroup.sh sample.bam readgroupid
 ##
-## OUTPUT: sample.rg.bam
+## OUTPUT:        sample.rg.bam
 ##
 
 # Load analysis config

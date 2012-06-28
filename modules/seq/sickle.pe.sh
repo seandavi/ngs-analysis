@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Trim off low quality regions of fastq sequences
+## DESCRIPTION:   Trim off low quality regions of fastq sequences
 ##
-## USAGE: sickle.pe.sh sample.R1.fastq.gz sample.R2.fastq.gz
+## USAGE:         sickle.pe.sh sample.R1.fastq.gz sample.R2.fastq.gz
 ##
-## OUTPUT: sample.R1.trimmed.fastq sample.R2.trimmed.fastq sample.SE.trimmed.fastq
+## OUTPUT:        sample.R1.trimmed.fastq sample.R2.trimmed.fastq sample.SE.trimmed.fastq
 ##
 
 # Load analysis config

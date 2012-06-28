@@ -1,10 +1,10 @@
 #!/bin/bash
 ## 
-## DESCRIPTION: Trim, align, merge, recalibrate, realign, dedup
+## DESCRIPTION:   Trim, align, merge, recalibrate, realign, dedup
 ##
-## USAGE: NGS.pipeline.fastq2bam.sh sample.R1.fastq.gz sample.R2.fastq.gz
+## USAGE:         NGS.pipeline.fastq2bam.sh sample.R1.fastq.gz sample.R2.fastq.gz
 ##
-## OUTPUT: sample.bam
+## OUTPUT:        sample.bam
 ##
 
 # Load analysis config

@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Recalibrate base quality scores
+## DESCRIPTION:   Recalibrate base quality scores
 ##
-## USAGE: gatk.tablerecalibration.sh sample.bam sample.bam.recaldata.csv
+## USAGE:         gatk.tablerecalibration.sh sample.bam sample.bam.recaldata.csv
 ##
-## OUTPUT: sample.recal.bam
+## OUTPUT:        sample.recal.bam
 ##
 
 # Load analysis config

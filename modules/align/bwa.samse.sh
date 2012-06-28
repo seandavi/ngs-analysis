@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Convert aligned single read sai file to sam format
+## DESCRIPTION:   Convert aligned single read sai file to sam format
 ##
-## USAGE: bwa.samse.sh sample.SE.sai sample.SE.fastq.gz
+## USAGE:         bwa.samse.sh sample.SE.sai sample.SE.fastq.gz
 ##
-## OUTPUT: sample.SE.sam.gz
+## OUTPUT:        sample.SE.sam.gz
 ##
 
 # Load analysis config

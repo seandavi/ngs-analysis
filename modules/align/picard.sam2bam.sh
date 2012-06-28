@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Convert a .sam.gz file to a .bam file
+## DESCRIPTION:   Convert a .sam.gz file to a .bam file
 ##
-## USAGE: picard.sam2bam.sh sample.sam[.gz]
+## USAGE:         picard.sam2bam.sh sample.sam[.gz]
 ##
-## OUTPUT: sample.bam
+## OUTPUT:        sample.bam
 ##
 
 # Load analysis config

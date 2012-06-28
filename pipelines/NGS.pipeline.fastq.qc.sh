@@ -1,10 +1,10 @@
 #!/bin/bash
 ## 
-## DESCRIPTION: Generate QC for fastq pair
+## DESCRIPTION:   Generate QC for fastq pair
 ##
-## USAGE: NGS.pipeline.fastq.qc.sh sample.R1.fastq.gz sample.R2.fastq.gz
+## USAGE:         NGS.pipeline.fastq.qc.sh sample.R1.fastq.gz sample.R2.fastq.gz
 ##
-## OUTPUT: Various fastq qc analysis results
+## OUTPUT:        Various fastq qc analysis results
 ##
 
 # Load analysis config

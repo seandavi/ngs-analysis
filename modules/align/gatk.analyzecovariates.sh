@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Plot residual error vs covariates
+## DESCRIPTION:   Plot residual error vs covariates
 ##
-## USAGE:       gatk.analyzecovariates.sh sample.recaldata.csv
+## USAGE:         gatk.analyzecovariates.sh sample.recaldata.csv
 ##
-## OUTPUT:      sample.recaldata.analyzecovariates/
+## OUTPUT:        sample.recaldata.analyzecovariates/
 ##
 
 # Load analysis config

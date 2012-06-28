@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Cut adapter sequences from a fastq file
+## DESCRIPTION:   Cut adapter sequences from a fastq file
 ## 
-## USAGE: cutadapt.sh input.fastq.gz adaptor_sequence
+## USAGE:         cutadapt.sh input.fastq.gz adaptor_sequence
 ##
-## OUTPUT: input.cutadapt.fastq.gz
+## OUTPUT:        input.cutadapt.fastq.gz
 ##
 
 # Load analysis config

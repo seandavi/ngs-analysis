@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Ensure that all mate-pair information is in sync between each read and its mate pair
+## DESCRIPTION:   Ensure that all mate-pair information is in sync between each read and its mate pair
 ##
-## USAGE: picard.fixmate.sh sample.bam
+## USAGE:         picard.fixmate.sh sample.bam
 ##
-## OUTPUT: sample.fixmate.bam
+## OUTPUT:        sample.fixmate.bam
 ##
 
 # Load analysis config

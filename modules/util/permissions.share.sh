@@ -1,11 +1,11 @@
 #!/bin/bash
 ## 
-## DESCRIPTION: Change permissions for all the files and subdirs in a directory
-##              To enable read/write from another userid
+## DESCRIPTION:   Change permissions for all the files and subdirs in a directory
+##                To enable read/write from another userid
 ##
-## USAGE: permissions.share.sh file/dir [file_permissions [dir_permissions]]
+## USAGE:         permissions.share.sh file/dir [file_permissions [dir_permissions]]
 ##
-## OUTPUT: None
+## OUTPUT:        None
 ##
 
 # Load analysis config

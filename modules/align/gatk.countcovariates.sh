@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Count covariates to recalibrate base quality scores
+## DESCRIPTION:   Count covariates to recalibrate base quality scores
 ##
-## USAGE: gatk.countcovariates.sh sample.bam
+## USAGE:         gatk.countcovariates.sh sample.bam
 ##
-## OUTPUT: sample.bam.recaldata.csv
+## OUTPUT:        sample.bam.recaldata.csv
 ##
 
 # Load analysis config

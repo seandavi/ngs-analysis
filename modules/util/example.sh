@@ -1,10 +1,10 @@
 #!/bin/bash
 ## 
-## DESCRIPTION: Example script template
+## DESCRIPTION:   Example script template
 ##
-## USAGE: example.sh foo
+## USAGE:         example.sh foo
 ##
-## OUTPUT: None
+## OUTPUT:        None
 ##
 
 # Load analysis config

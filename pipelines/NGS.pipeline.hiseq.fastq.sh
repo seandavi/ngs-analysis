@@ -1,10 +1,10 @@
 #!/bin/bash
 ## 
-## DESCRIPTION: Run Hiseq base calling from within BaseCalls directory
+## DESCRIPTION:   Run Hiseq base calling from within BaseCalls directory
 ##
-## USAGE: NGS.pipeline.hiseq.fastq.sh output_dir_name path/to/SampleSheet.csv [num_threads]
+## USAGE:         NGS.pipeline.hiseq.fastq.sh output_dir_name path/to/SampleSheet.csv [num_threads]
 ##
-## OUTPUT: directory containing fastq files for each project/sample
+## OUTPUT:        directory containing fastq files for each project/sample
 ##
 
 # Load analysis config

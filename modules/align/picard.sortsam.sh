@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Sort and index bam file
+## DESCRIPTION:   Sort and index bam file
 ##
-## USAGE: picard.sortsam.sh sample.bam
+## USAGE:         picard.sortsam.sh sample.bam
 ##
-## OUTPUT: sample.sorted.bam
+## OUTPUT:        sample.sorted.bam
 ##
 
 # Load analysis config

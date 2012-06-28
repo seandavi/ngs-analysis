@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION: Align fastq sequences to a reference
+## DESCRIPTION:   Align fastq sequences to a reference
 ##
-## USAGE: bwa.aln.sh foo.fastq.gz [thread [seedlen [maxseeddiff]]]
+## USAGE:         bwa.aln.sh foo.fastq.gz [thread [seedlen [maxseeddiff]]]
 ##
-## OUTPUT: foo.sai
+## OUTPUT:        foo.sai
 ##
 
 # Load analysis config

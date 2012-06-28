@@ -1,10 +1,10 @@
 #!/bin/bash
 ## 
-## DESCRIPTION: Covert sam to bam and sort the bam file using samtools
+## DESCRIPTION:   Covert sam to bam and sort the bam file using samtools
 ##
-## USAGE: samtools.sam2sortedbam.sh sample.sam.gz
+## USAGE:         samtools.sam2sortedbam.sh sample.sam.gz
 ##
-## OUTPUT: sample.sorted.bam
+## OUTPUT:        sample.sorted.bam
 ##
 
 # Load analysis config
