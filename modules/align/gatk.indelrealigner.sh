@@ -26,7 +26,6 @@ OUTPUTLOG=$OUTPUTBAM.log
 $JAVAJAR $GATK                                            \
   -T IndelRealigner                                       \
   -R $REF                                                 \
-  -nt $GATK_NUM_THREADS                                   \
   -I $BAMFILE                                             \
   -targetIntervals $TARGETINTERVAL                        \
   -o $OUTPUTBAM                                           \
@@ -44,6 +43,8 @@ $JAVAJAR $GATK                                            \
   -compress 5                                             \
   &> $OUTPUTLOG
 
+
+# Does not support -nt option
 
 #
 # --disable_bam_indexing                                               Turn off on-the-fly creation of indices for output 

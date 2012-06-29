@@ -64,9 +64,14 @@ $NGS_ANALYSIS_DIR/modules/align/gatk.countcovariates.sh $SAMPLE_PREFIX.merged.so
 $NGS_ANALYSIS_DIR/modules/align/gatk.tablerecalibration.sh $SAMPLE_PREFIX.merged.sorted.rg.bam $SAMPLE_PREFIX.merged.sorted.rg.bam.recaldata.csv
 # Count covariates again (after recal)
 $NGS_ANALYSIS_DIR/modules/align/gatk.countcovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam
-# Analyze Covariates before and after table recalibration
+# Analyze covariates before and after table recalibration
 $NGS_ANALYSIS_DIR/modules/align/gatk.analyzecovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.bam.recaldata.csv
 $NGS_ANALYSIS_DIR/modules/align/gatk.analyzecovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam.recaldata.csv
 
-# Indel Realignment
-SURESELECT_INTERVAL
+# Indel realignment
+$NGS_ANALYSIS_DIR/modules/align/gatk.realignertargetcreator.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam $SURESELECT_INTERVAL
+$NGS_ANALYSIS_DIR/modules/align/gatk.indelrealigner.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam $SAMPLE_PREFIX.merged.sorted.rg.recal.realign.intervals
+
+# Remove duplicates
+$NGS_ANALYSIS_DIR/modules/align/picard.markduplicates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.realign.bam
+
