@@ -21,7 +21,7 @@ OUTPUTPREFIX=`filter_ext $BAMFILE 1`
 OUTPUTBAM=$OUTPUTPREFIX.realign.bam
 OUTPUTLOG=$OUTPUTBAM.log
 
-# If target interval is not set, then realign entire genome
+
 # Run tool
 $JAVAJAR $GATK                                            \
   -T IndelRealigner                                       \
@@ -32,16 +32,16 @@ $JAVAJAR $GATK                                            \
   -o $OUTPUTBAM                                           \
   -l INFO                                                 \
   -known $MILLS_DEVINE_INDEL_VCF                          \
-  -LOD 5.0
-  -model USE_READS
-  -entropy 0.15  
-  -maxInMemory 150000
-  -maxIsize 3000
-  -maxPosMove 200
-  -maxConsensuses 30
-  -greedy 120
-  -maxReads 20000
-  -compress 5
+  -LOD 5.0                                                \
+  -model USE_READS                                        \
+  -entropy 0.15                                           \
+  -maxInMemory 150000                                     \
+  -maxIsize 3000                                          \
+  -maxPosMove 200                                         \
+  -maxConsensuses 30                                      \
+  -greedy 120                                             \
+  -maxReads 20000                                         \
+  -compress 5                                             \
   &> $OUTPUTLOG
 
 
