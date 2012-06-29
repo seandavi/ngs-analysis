@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Create target intervals for realignment
 ##
-## USAGE:         gatk.indelrealignertargetcreation.sh sample.bam [target_interval]
+## USAGE:         gatk.realignertargetcreator.sh sample.bam [target_region.intervals]
 ##
 ## OUTPUT:        sample.realign.intervals
 ##
@@ -14,7 +14,7 @@ source $NGS_ANALYSIS_CONFIG
 usage_min 1 $# $0
 
 BAMFILE=$1
-TARGETINTERVAL=$2
+TARGETREGION=$2
 
 # Format output filenames
 OUTPUTPREFIX=`filter_ext $BAMFILE 1`
@@ -22,7 +22,7 @@ OUTPUTFILE=$OUTPUTPREFIX.realign.intervals
 OUTPUTLOG=$OUTPUTFILE.log
 
 # If target interval is not set, then realign entire genome
-if [ -z $TARGETINTERVAL ];
+if [ -z $TARGETREGION ];
 then
   # Run tool
   $JAVAJAR $GATK                                            \
@@ -32,7 +32,7 @@ then
     -I $BAMFILE                                             \
     -o $OUTPUTFILE                                          \
     -l INFO                                                 \
-    -known $DBSNP_VCF,$MILLS_DEVINE_INDEL_VCF               \
+    -known $MILLS_DEVINE_INDEL_VCF                          \
     -maxInterval 500                                        \
     -minReads 4                                             \
     -mismatch 0.0                                           \
@@ -48,11 +48,11 @@ else
     -I $BAMFILE                                             \
     -o $OUTPUTFILE                                          \
     -l INFO                                                 \
-    -known $DBSNP_VCF,$MILLS_DEVINE_INDEL_VCF               \
+    -known $MILLS_DEVINE_INDEL_VCF                          \
     -maxInterval 500                                        \
     -minReads 4                                             \
     -mismatch 0.0                                           \
     -window 10                                              \
-    -L $TARGETINTERVAL                                      \
+    -L $TARGETREGION                                        \
     &> $OUTPUTLOG
 fi
