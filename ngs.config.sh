@@ -21,14 +21,14 @@ export BWA_ALN_THREAD=2
 export BWA_ALN_SEEDLEN=32
 export BWA_ALN_MAXSEEDDIFF=2
 export SAMTOOLS=path/to/samtools
-export PICARD_PATH=path/to/
+export PICARD_PATH=path/to/picardtools_directory
 export PICARD_MAX_RECORDS_IN_RAM=900000
 export GATK=path/to/GenomeAnalysisTK.jar
 export GATK_NUM_THREADS=2
 export GATK_ANALYZECOVARIATES=path/to/AnalyzeCovariates.jar
-#export VARSCAN=path/to/
-#export SOMATIC_SNIPER=path/to/
-#export PLINK=path/to/
+export VARSCAN=path/to/VarScan.jar
+export SOMATIC_SNIPER=path/to/bam-somaticsniper
+export PLINK=path/to/plink
 
 # Resources
 export REF=path/to/human_g1k_v37.fasta
