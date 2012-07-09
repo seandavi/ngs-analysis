@@ -31,6 +31,7 @@ $JAVAJAR $GATK                                            \
   -o $OUTPUTBAM                                           \
   -l INFO                                                 \
   -known $MILLS_DEVINE_INDEL_VCF                          \
+  -known $INDEL_1000G_PHASE1_VCF                          \
   -LOD 5.0                                                \
   -model USE_READS                                        \
   -entropy 0.15                                           \

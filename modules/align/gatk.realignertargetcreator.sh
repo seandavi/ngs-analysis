@@ -33,6 +33,7 @@ then
     -o $OUTPUTFILE                                          \
     -l INFO                                                 \
     -known $MILLS_DEVINE_INDEL_VCF                          \
+    -known $INDEL_1000G_PHASE1_VCF                          \
     -maxInterval 500                                        \
     -minReads 4                                             \
     -mismatch 0.0                                           \
@@ -49,6 +50,7 @@ else
     -o $OUTPUTFILE                                          \
     -l INFO                                                 \
     -known $MILLS_DEVINE_INDEL_VCF                          \
+    -known $INDEL_1000G_PHASE1_VCF                          \
     -maxInterval 500                                        \
     -minReads 4                                             \
     -mismatch 0.0                                           \
