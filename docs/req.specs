@@ -26,6 +26,8 @@ export NGS_ANALYSIS_CONFIG=path/to/ngs-analysis/ngs.config.sh
 PATH=path/to/ngs-analysis/pipelines:$PATH
 PATH=path/to/ngs-analysis/modules/util:$PATH
 
+# Change NGS_ANALYSIS_PATH variable to where it was installed in the config file
+
 ======================================================================================
 
 
