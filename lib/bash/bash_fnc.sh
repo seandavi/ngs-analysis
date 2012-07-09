@@ -57,3 +57,16 @@ extract_prefix() {
     NUMPREFIX=${NUMPREFIX:=1}
     echo `echo $1 | cut -f-$NUMPREFIX -d'.'`
 }
+
+# Extract extension
+extract_suffix() {
+    # $1: Filename
+    echo $1 | awk -F"." '{ print $NF }'
+}
+
+# Filter out the extension
+filter_suffix() {
+    # $1: Filename
+    suffix=`extract_suffix $1`
+    echo $1 | sed 's/\.'$suffix'$//'
+}
