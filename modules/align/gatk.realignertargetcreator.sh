@@ -32,7 +32,7 @@ then
     -I $BAMFILE                                             \
     -o $OUTPUTFILE                                          \
     -l INFO                                                 \
-    -known $MILLS_DEVINE_INDEL_VCF                          \
+    -known $MILLS_DEVINE_INDEL_SITES_VCF                    \
     -known $INDEL_1000G_PHASE1_VCF                          \
     -maxInterval 500                                        \
     -minReads 4                                             \
@@ -49,7 +49,7 @@ else
     -I $BAMFILE                                             \
     -o $OUTPUTFILE                                          \
     -l INFO                                                 \
-    -known $MILLS_DEVINE_INDEL_VCF                          \
+    -known $MILLS_DEVINE_INDEL_SITES_VCF                    \
     -known $INDEL_1000G_PHASE1_VCF                          \
     -maxInterval 500                                        \
     -minReads 4                                             \
