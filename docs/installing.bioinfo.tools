@@ -507,6 +507,8 @@ cd ../..
 # VARSCAN
 mkdir varscan; cd varscan
 wget http://sourceforge.net/projects/varscan/files/latest/download?source=files
+or
+wget "http://sourceforge.net/projects/varscan/files/latest/download" -O VarScan.v2.2.11.jar
 chmod 755 ./VarScan*jar
 cd ..
 
