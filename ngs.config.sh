@@ -32,7 +32,7 @@ export SNPEFF=path/to/snpEff.jar
 export SNPEFF_CONFIG=path/to/snpEff.config
 export VEP=path/to/variant_effect_predictor.pl
 export PLINK=path/to/plink
-export BEDTOOLS=path/to/bedtools
+export BEDTOOLS_PATH=path/to/bedtools_dir
 
 # Resources
 export REF=path/to/human_g1k_v37.fasta
