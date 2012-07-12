@@ -28,6 +28,9 @@ export GATK_NUM_THREADS=2
 export GATK_ANALYZECOVARIATES=path/to/AnalyzeCovariates.jar
 export VARSCAN=path/to/VarScan.jar
 export SOMATIC_SNIPER=path/to/bam-somaticsniper
+export SNPEFF=path/to/snpEff.jar
+export SNPEFF_CONFIG=path/to/snpEff.config
+export VEP=path/to/variant_effect_predictor.pl
 export PLINK=path/to/plink
 
 # Resources
