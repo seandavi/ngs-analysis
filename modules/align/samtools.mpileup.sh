@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Generate mpileups of bam files
 ##
-## USAGE:         samtools.mpileup.sh sample.bam [other_mpileup_options] 
+## USAGE:         samtools.mpileup.sh sample.bam ["other_mpileup_options"] 
 ##
 ## OUTPUT:        sample.bam.mpileup
 ##

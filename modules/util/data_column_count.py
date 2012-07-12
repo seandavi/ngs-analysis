@@ -17,7 +17,7 @@ def count_columns(fi, delim=None):
     i = 0
     for line in fi:
         i += 1
-        colcount = len(line.strip().split(delim))
+        colcount = len(line.strip('\n').split(delim))
         if colcount not in colcount2freq:
             colcount2freq[colcount] = 0
         colcount2freq[colcount] += 1

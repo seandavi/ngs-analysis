@@ -17,8 +17,8 @@ D - snpeff
 D - haploview
 D - plink
 D - varkit
+- GenePattern
 - variant effect predictor
-- pyjjinking
 
 #---------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------
@@ -598,6 +598,5 @@ cpan
 #o conf makepl_arg 'PREFIX=/home/adminrig/lib'
 #o conf commit
 install LWP::Simple
-
 
 

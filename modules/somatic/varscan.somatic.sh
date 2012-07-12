@@ -34,5 +34,6 @@ $VARSCAN                                \
   --somatic-p-value $SOMATIC_PVAL       \
   --p-value 0.99                        \
   --strand-filter 1                     \
+  --output-vcf 1                        \
   &> $OUT_PREFIX.log
 

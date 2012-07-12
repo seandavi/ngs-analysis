@@ -1,4 +1,4 @@
-#!/usr/bin/python -tt
+#!/usr/bin/env python
 description = '''
 Modify a column in a data file, i.e. add a number or multiply by a number
 The data file's columnar values are considered to be the first operand, and the value inputted as an option is considered to be the second operand

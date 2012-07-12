@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 description = '''
-Read in a data file, and read in a file containing labels that are sorted in decreasing priority from top to bottom
+Read in a vcf file outputted by SNPEff
 Attach the topmost priority found in the data to each record in the data file.
-
-Read in a vcf file outputted by SNPEff, and read in the Effects categories file containing 2 columns (Impact,Effect)
 Parse and output the data in the vcf file
 '''
 
@@ -11,28 +9,54 @@ import argparse
 import re
 import sys
 
-def load_effects_categories(effects_file):
-    '''
-    Read tab separated effects file, and generate a dictionary that maps effects to impact (col1 to col0)
-    Also generate a list in decreasing priority order of the effects
-    '''
-    try:
-        f = open(effects_file, 'r')
-    except IOError:
-        sys.stderr.write('Could not open effects file. Exiting.\n\n')
-        sys.exit(1)
+
+def get_effects_categories():
+    effects_cats = [['High','SPLICE_SITE_ACCEPTOR'],
+                    ['High','SPLICE_SITE_DONOR'],
+                    ['High','START_LOST'],
+                    ['High','EXON_DELETED'],
+                    ['High','FRAME_SHIFT'],
+                    ['High','STOP_GAINED'],
+                    ['High','STOP_LOST'],
+                    ['Moderate','NON_SYNONYMOUS_CODING'],
+                    ['Moderate','CODON_CHANGE'],
+                    ['Moderate','CODON_INSERTION'],
+                    ['Moderate','CODON_CHANGE_PLUS_CODON_INSERTION'],
+                    ['Moderate','CODON_DELETION'],
+                    ['Moderate','CODON_CHANGE_PLUS_CODON_DELETION'],
+                    ['Moderate','UTR_5_DELETED'],
+                    ['Moderate','UTR_3_DELETED'],
+                    ['Low','SYNONYMOUS_START'],
+                    ['Low','NON_SYNONYMOUS_START'],
+                    ['Low','START_GAINED'],
+                    ['Low','SYNONYMOUS_CODING'],
+                    ['Low','SYNONYMOUS_STOP'],
+                    ['Low','NON_SYNONYMOUS_STOP'],
+                    ['Modifier','UTR_5_PRIME'],
+                    ['Modifier','UTR_3_PRIME'],
+                    ['Modifier','REGULATION'],
+                    ['Modifier','UPSTREAM'],
+                    ['Modifier','DOWNSTREAM'],
+                    ['Modifier','GENE'],
+                    ['Modifier','TRANSCRIPT'],
+                    ['Modifier','EXON'],
+                    ['Modifier','INTRON_CONSERVED'],
+                    ['Modifier','INTRON'],
+                    ['Modifier','INTRAGENIC'],
+                    ['Modifier','INTERGENIC'],
+                    ['Modifier','INTERGENIC_CONSERVED'],
+                    ['Modifier','NONE'],
+                    ['Modifier','CHROMOSOME'],
+                    ['Modifier','CUSTOM'],
+                    ['Modifier','CDS']]
     effects2impact = {}
     effects = []
-    for line in f:
-        la = line.strip().split('\t')
-        impact = la[0]
-        effect = la[1]
-        
+    for row in effects_cats:
+        impact = row[0]
+        effect = row[1]
         effects2impact[effect] = impact
         effects.append(effect)
-    f.close()
     return effects, effects2impact
-
 
 def build_sampleinfo_field2indx(field_str):
     '''
@@ -156,6 +180,7 @@ def parse_file(fin, effects, effects2impact):
         # Column Labels: build column-to-column_number mapping
         if line[0] == '#':
             colname2colnum, sample_names, sample_indexes = build_colname2colnum(line[1:].strip())
+            num_cols = len(colname2colnum)
             sys.stdout.write('%s\n' % '\t'.join(['CHROM',
                                                  'POS',
                                                  'VARIANT_ID',
@@ -163,9 +188,7 @@ def parse_file(fin, effects, effects2impact):
                                                  'ALT',
                                                  'QUAL',
                                                  'FILTER',
-                                                 'ALT_FREQ',
                                                  'TOTAL_DP',
-                                                 'RMS_MQ',
                                                  'EFFECT',
                                                  'EFFECT_IMPACT',
                                                  'FUNCTIONAL_CLASS',
@@ -187,12 +210,14 @@ def parse_file(fin, effects, effects2impact):
                                                 + append_to_sample_names(sample_names, 'GT_base')
                                                 + append_to_sample_names(sample_names, 'DP')
                                                 + append_to_sample_names(sample_names, 'GQ')
-                                                + append_to_sample_names(sample_names, 'AD')))
-    
+                                                + append_to_sample_names(sample_names, 'AD')))    
             continue
         
         # Parse each row of data
-        la = line.strip().split('\t')
+        la = line.strip().split()
+        len_la = len(la)
+        if len_la < num_cols:
+            continue
         # Build info column field2val mapping
         info_field2val = build_info_field2val(la[colname2colnum['INFO']])
 
@@ -204,9 +229,7 @@ def parse_file(fin, effects, effects2impact):
         alt = la[colname2colnum['ALT']]
         qual = la[colname2colnum['QUAL']]
         filtr = la[colname2colnum['FILTER']]
-        alt_freq = info_field2val['AF']
         total_dp = info_field2val['DP']
-        rms_mq = info_field2val['MQ']
         (effect, 
          effect_impact,
          functional_class,
@@ -232,7 +255,8 @@ def parse_file(fin, effects, effects2impact):
         sample_allele_depths = []
 
         # Build sample info string format mapping
-        sample_field2indx = build_sampleinfo_field2indx(la[colname2colnum['FORMAT']])
+        format_string = la[colname2colnum['FORMAT']]
+        sample_field2indx = build_sampleinfo_field2indx(format_string)
         for sample_name in sample_names:
             sample_i = colname2colnum[sample_name]
             sample_info_str = la[sample_i]
@@ -281,9 +305,7 @@ def parse_file(fin, effects, effects2impact):
                                              alt,
                                              qual,
                                              filtr,
-                                             alt_freq,
                                              total_dp,
-                                             rms_mq,
                                              effect,
                                              effect_impact,
                                              functional_class,
@@ -314,11 +336,9 @@ def main():
                     nargs='?',
                     type=argparse.FileType('r'),
                     default=sys.stdin)
-    ap.add_argument('effects_categories_file',
-                    help='File containing impacts and effects (2 columns) as defined by SNPEff')
     params = ap.parse_args()
     
-    effects, effects2impact = load_effects_categories(params.effects_categories_file)
+    effects, effects2impact = get_effects_categories()
     parse_file(params.vcf_file, effects, effects2impact)
     params.vcf_file.close()
 
