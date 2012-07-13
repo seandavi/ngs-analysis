@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python -tt
 description = '''
 Read in a data file, and count the number of occurrences for the values
 in a specific column of the file.
