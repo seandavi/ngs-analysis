@@ -3,12 +3,76 @@ description = '''
 Read in a vcf file outputted by SNPEff
 Attach the topmost priority found in the data to each record in the data file.
 Parse and output the data in tcga maf format
+
+TCGA maf Variant Classification categories:
+
+Frame_Shift_Del
+Frame_Shift_Ins
+In_Frame_Del
+In_Frame_Ins
+Missense_Mutation
+Nonsense_Mutation
+Silent
+Splice_Site
+Translation_Start_Site
+Nonstop_Mutation
+3'UTR
+3'Flank
+5'UTR
+5'Flank
+IGR 
+Intron
+RNA
+Targeted_Region
+Indel
+De_novo_Start_InFrame
+De_novo_Start_OutOfFrame
 '''
 
 import argparse
 import re
 import sys
 
+
+SNPEFF2TCGA = {'SPLICE_SITE_ACCEPTOR': 'Splice_Site',
+               'SPLICE_SITE_DONOR': 'Splice_Site',
+               'START_LOST': 'Missense_Mutation',
+               'EXON_DELETED': 'Frame_Shift_Del',
+               'FRAME_SHIFT_INS': 'Frame_Shift_Ins',
+               'FRAME_SHIFT_DEL': 'Frame_Shift_Del',
+               'STOP_GAINED': 'Nonsense_Mutation',
+               'STOP_LOST': 'Nonstop_Mutation',
+               'NON_SYNONYMOUS_CODING': 'Missense_Mutation',
+               'CODON_CHANGE': 'Missense_Mutation',
+               'CODON_INSERTION': 'In_Frame_Ins',
+               'CODON_CHANGE_PLUS_CODON_INSERTION': 'In_Frame_Ins',
+               'CODON_DELETION': 'In_Frame_Del',
+               'CODON_CHANGE_PLUS_CODON_DELETION': 'In_Frame_Del',
+               'UTR_5_DELETED': '5\'UTR',
+               'UTR_3_DELETED': '3\'UTR',
+               'SYNONYMOUS_START': 'Silent',
+               'NON_SYNONYMOUS_START': 'Missense_Mutation',
+               'START_GAINED': 'De_novo_Start_InFrame',
+               'SYNONYMOUS_CODING': 'Silent',
+               'SYNONYMOUS_STOP': 'Silent',
+               'NON_SYNONYMOUS_STOP': 'Nonsense_Mutation',
+               'UTR_5_PRIME': '5\'UTR',
+               'UTR_3_PRIME': '3\'UTR',
+               'REGULATION': '5\'Flank',
+               'UPSTREAM': '5\'Flank',
+               'DOWNSTREAM': '3\'Flank',
+               'GENE': 'Targeted_Region',
+               'TRANSCRIPT': 'RNA',
+               'EXON': 'Targeted_Region',
+               'INTRON_CONSERVED': 'Intron',
+               'INTRON': 'Intron',
+               'INTRAGENIC': 'Targeted_Region',
+               'INTERGENIC': 'IGR',
+               'INTERGENIC_CONSERVED': 'IGR',
+               'NONE': '',
+               'CHROMOSOME': '',
+               'CUSTOM': '',
+               'CDS': 'Targeted_Region'}
 
 def get_effects_categories():
     effects_cats = [['High','SPLICE_SITE_ACCEPTOR'],
@@ -177,7 +241,7 @@ def somatic_status_code2text(code):
             '3': 'LOH',
             '5': 'Unknown'}[code]
 
-def parse_file(fin, effects, effects2impact):
+def parse_file(fin, effects, effects2impact, sampleid):
     '''
     Read through the vcf file, and parse it.
     Output the columns as defined above
@@ -254,6 +318,13 @@ def parse_file(fin, effects, effects2impact):
          coding,
          transcript,
          exon) = parse_effect(la[colname2colnum['INFO']], effects)
+        
+        # Frame shift - determine whether insertion or deletion
+        if effect == 'FRAME_SHIFT':
+            if len(ref) < len(alt):
+                effect = 'FRAME_SHIFT_INS'
+            else:
+                effect = 'FRAME_SHIFT_DEL'
 
         # Keep track of genotypes for different calls
         nocall = []
@@ -318,23 +389,23 @@ def parse_file(fin, effects, effects2impact):
 
         # Output to standard output
         UNAVAILABLE='N/A'
-        sys.stdout.write('%s\n' % '\t'.join([gene_name,
+        sys.stdout.write('%s\n' % '\t'.join([transcript,
                                              UNAVAILABLE,
                                              'Sequencing_Center',
-                                             'GRCh37',
+                                             '37',
                                              chrom.replace('chr',''),
                                              pos,
                                              pos,
                                              '+',
-                                             effect,
+                                             SNPEFF2TCGA[effect],
                                              'SNP',
                                              ref,
                                              tumor_gt[0],
                                              tumor_gt[1],
                                              variantid,
                                              UNAVAILABLE,
-                                             UNAVAILABLE,
-                                             UNAVAILABLE,
+                                             sampleid,
+                                             sampleid,
                                              normal_gt[0],
                                              normal_gt[1],
                                              '',
@@ -358,10 +429,13 @@ def main():
                     nargs='?',
                     type=argparse.FileType('r'),
                     default=sys.stdin)
+    ap.add_argument('sample_id',
+                    help='Name of sample for whom the vcf file pertains to',
+                    type=str)
     params = ap.parse_args()
     
     effects, effects2impact = get_effects_categories()
-    parse_file(params.vcf_file, effects, effects2impact)
+    parse_file(params.vcf_file, effects, effects2impact, params.sample_id)
     params.vcf_file.close()
 
 

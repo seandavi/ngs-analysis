@@ -1,4 +1,4 @@
-#!/usr/bin/python -tt
+#!/usr/bin/env python
 
 description='''
 Generate quality control reports regarding the fastq

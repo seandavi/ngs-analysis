@@ -4,7 +4,10 @@
 ##
 ## USAGE:         music.bmr.calc_covg.sh bamlist roi_bed_file [ref.fa]
 ##
-## OUTPUT:        sample.bam.mpileup
+## OUTPUT:        bamlist.music/
+##                  gene_covgs
+##                  roi_covgs
+##                  total_covgs
 ##
 
 # Load analysis config

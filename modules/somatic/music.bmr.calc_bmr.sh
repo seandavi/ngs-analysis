@@ -4,7 +4,9 @@
 ##
 ## USAGE:         music.bmr.calc_bmr.sh bamlist maf_file roi_bed_file [ref.fa]
 ##
-## OUTPUT:        sample.bam.mpileup
+## OUTPUT:        bamlist.music/
+##                  gene_mrs
+##                  overall_bmrs
 ##
 
 # Load analysis config
