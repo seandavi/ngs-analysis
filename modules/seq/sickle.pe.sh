@@ -21,7 +21,7 @@ OUTPUTPREFIX_R1=`filter_ext $FASTQ_READ1 2`
 OUTPUT_R1=`filter_ext $FASTQ_READ1 2`.trimmed.fastq
 OUTPUT_R2=`filter_ext $FASTQ_READ2 2`.trimmed.fastq
 OUTPUT_SE=`filter_ext $FASTQ_READ1 2 | sed 's/R1/SE/'`.trimmed.fastq
-OUTPUTLOG=`filter_ext $FASTQ_READ1 2 | sed 's/R1/SE/'`.trimmed.log
+OUTPUTLOG=$OUTPUT_SE.log
 
 # Run tool
 $SICKLE                   \

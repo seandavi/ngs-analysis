@@ -18,7 +18,7 @@ BAMFILE=$1
 # Format output filenames
 OUTPUTPREFIX=`filter_ext $BAMFILE 1`
 OUTPUTFILE=$OUTPUTPREFIX.sorted.bam
-OUTPUTERROR=$OUTPUTPREFIX.sorted.err
+OUTPUTERROR=$OUTPUTFILE.err
 
 # Run tool
 $JAVAJAR $PICARD_PATH/SortSam.jar                     \
