@@ -16,14 +16,16 @@ usage 1 $# $0
 
 # Process input parameters
 MR_FILE=$1
+PROCESSORS=20
 
 # Format output filenames
 OUTPUTPREFIX=$MR_FILE
 OUTPUTFILE=$MR_FILE.smg
-OUTPUTLOG=$OUTPUTPREFIX.log
+OUTPUTLOG=$OUTPUTFILE.log
 
 # Run tool
 genome music smg                       \
   --gene-mr-file $MR_FILE              \
   --output-file $OUTPUTFILE            \
+  --processors $PROCESSORS             \
   &> $OUTPUTLOG
