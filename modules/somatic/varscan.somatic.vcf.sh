@@ -1,10 +1,10 @@
 #!/bin/bash
 ##
-## DESCRIPTION:   Run varscan somatic on normal/tumor pair of mpileups
+## DESCRIPTION:   Run varscan somatic on normal/tumor pair of mpileups, and output results in vcf format
 ##
-## USAGE:         varscan.somatic.sh normal.mpileup tumor.mpileup out_prefix somatic_pval tumor_purity 
+## USAGE:         varscan.somatic.vcf.sh normal.mpileup tumor.mpileup out_prefix somatic_pval tumor_purity 
 ##
-## OUTPUT:        out_prefix.snp out_prefix.indel
+## OUTPUT:        out_prefix.snp.vcf out_prefix.indel.vcf
 ##
 
 # Load analysis config
@@ -34,5 +34,6 @@ $VARSCAN                                \
   --somatic-p-value $SOMATIC_PVAL       \
   --p-value 0.99                        \
   --strand-filter 1                     \
+  --output-vcf 1                        \
   &> $OUT_PREFIX.log
 
