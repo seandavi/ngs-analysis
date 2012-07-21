@@ -600,3 +600,11 @@ cpan
 install LWP::Simple
 
 
+# FastQC
+mkdir fastqc
+cd fastqc
+wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.10.1.zip
+unzip fastqc_v0.10.1.zip
+cd FastQC
+chmod 755 fastqc
+

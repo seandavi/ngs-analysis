@@ -33,6 +33,7 @@ export SNPEFF_CONFIG=path/to/snpEff.config
 export VEP=path/to/variant_effect_predictor.pl
 export PLINK=path/to/plink
 export BEDTOOLS_PATH=path/to/bedtools_dir
+export FASTQC=path/to/fastqc
 
 # Resources
 export REF=path/to/human_g1k_v37.fasta

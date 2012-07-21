@@ -21,10 +21,15 @@ SAMPLE_PREFIX=`filter_ext $FASTQ_R1 3`
 
 $PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_stats.py $FASTQ_R1 &
 $PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_stats.py $FASTQ_R2 &
+wait
 
-#==[ Get fastq quality score summmary ]========================================================================#
+#==[ Get fastq quality score summmary ]========================================================#
 
 $PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_scores.py $FASTQ_R1 &
 $PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_scores.py $FASTQ_R2 &
+wait
 
+#==[ Run FastQC ]==============================================================================#
+$FASTQC $FASTQ_R1 &
+$FASTQC $FASTQ_R2 &
 wait
