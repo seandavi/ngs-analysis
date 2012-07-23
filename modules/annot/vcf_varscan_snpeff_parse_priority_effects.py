@@ -180,7 +180,6 @@ def parse_file(fin, effects, effects2impact):
         # Column Labels: build column-to-column_number mapping
         if line[0] == '#':
             colname2colnum, sample_names, sample_indexes = build_colname2colnum(line[1:].strip())
-            num_cols = len(colname2colnum)
             sys.stdout.write('%s\n' % '\t'.join(['CHROM',
                                                  'POS',
                                                  'VARIANT_ID',
@@ -215,9 +214,7 @@ def parse_file(fin, effects, effects2impact):
         
         # Parse each row of data
         la = line.strip().split()
-        len_la = len(la)
-        if len_la < num_cols:
-            continue
+
         # Build info column field2val mapping
         info_field2val = build_info_field2val(la[colname2colnum['INFO']])
 

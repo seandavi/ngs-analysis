@@ -4,7 +4,8 @@
 ##
 ## USAGE:         snpeff.eff.sh sample.vcf [genome_version(default GRCh37.64)] ["other_snpeff_options"]
 ##
-## OUTPUT:        sample.vcf.snpeff directory containing vcf, genes, and summary html
+## OUTPUT:        sample.snpeff[genome_version].vcf
+##                sample.vcf.snpeff directory containing genes, and summary html
 ##
 
 # Load analysis config
@@ -39,6 +40,11 @@ $JAVAJAR $SNPEFF                        \
   $VCFFILE                              \
   1> $OUTVCF                            \
   2> $OUTERR
+
+# Check if tool ran successfully
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
 # Create output directory to contain all output
 mkdir $OUTDIR
