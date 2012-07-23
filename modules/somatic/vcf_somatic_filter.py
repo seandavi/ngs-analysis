@@ -56,6 +56,10 @@ def main():
                     nargs='?',
                     type=argparse.FileType('r'),
                     default=sys.stdin)
+    ap.add_argument('-p', '--program',
+                    help='Name of somatic variant caller used to generate vcf. VarScan (default) | SomaticSniper',
+                    choices=['varscan','ssniper'],
+                    default='varscan')
     ap.add_argument('-t', '--type',
                     help='Filter type: wildtype | germline | LOH | somatic(default) | unknown',
                     choices=['somatic','wildtype','germline','LOH','unknown'],
@@ -100,9 +104,17 @@ def main():
         normal_genotype_info_str = la[colname2colnum['NORMAL']]
         normal_genotype_info = normal_genotype_info_str.split(':')
 
+        # Parse INFO field
+        info_field2val = build_info_field2val(la[colname2colnum['INFO']])
+
         # Filter by variant type
         # 0=wildtype,1=germline,2=somatic,3=LOH,4=unknown
-        status = tumor_genotype_info[genotype_field2indx['SS']]
+        if params.program == 'ssniper':
+            status = tumor_genotype_info[genotype_field2indx['SS']]
+        else: # varscan
+            status = info_field2val['SS']
+
+        # Skip rows that do not have the wanted somatic status
         if status != wanted_status:
             continue
         

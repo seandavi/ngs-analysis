@@ -113,7 +113,7 @@ def append_to_sample_names(sampleslist, append_str):
     '''
     return ['_'.join([sample, append_str]) for sample in sampleslist]
 
-def count_transcript_effects(fin, transcript2effect2count)
+def count_transcript_effects(fin, transcript2effect2count):
     '''
     Read through the vcf file, and count the effects for each transcript
     Output the columns as defined above
