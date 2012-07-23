@@ -69,7 +69,6 @@ $JAVAJAR $GATK                                            \
   -A SampleList                                           \
   -A QualByDepth                                          \
   -A FisherStrand                                         \
-  -A SnpEff                                               \
   -A HomopolymerRun                                       \
   -A DepthOfCoverage                                      \
   -A MappingQualityZeroFraction                           \
@@ -79,6 +78,8 @@ $JAVAJAR $GATK                                            \
   -A BaseQualityRankSumTest                               \
   &> $OUTLOG
 
+#   -A SnpEff                                               \
+#   --snpEffFile                                            \
 
 #
 # Arguments for UnifiedGenotyper:
