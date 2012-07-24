@@ -255,7 +255,7 @@ def parse_file(fin, effects, effects2impact, sampleid):
         # Column Labels: build column-to-column_number mapping
         if line[0] == '#':
             colname2colnum, sample_names, sample_indexes = build_colname2colnum(line[1:].strip())
-            num_cols = len(colname2colnum)
+            #num_cols = len(colname2colnum)
             sys.stdout.write('%s\n' % '\t'.join(['Hugo_Symbol',
                                                  'Entrez_Gene_Id',
                                                  'Center',
@@ -292,9 +292,10 @@ def parse_file(fin, effects, effects2impact, sampleid):
         
         # Parse each row of data
         la = line.strip().split()
-        len_la = len(la)
-        if len_la < num_cols:
-            continue
+        #len_la = len(la)
+        #if len_la < num_cols:
+        #    sys.stderr.write('hello')
+        #    continue
         # Build info column field2val mapping
         info_field2val = build_info_field2val(la[colname2colnum['INFO']])
 
@@ -325,6 +326,27 @@ def parse_file(fin, effects, effects2impact, sampleid):
                 effect = 'FRAME_SHIFT_INS'
             else:
                 effect = 'FRAME_SHIFT_DEL'
+
+        # Variant type
+        variant_type = 'SNP'
+        len_ref = len(ref)
+        len_alt = len(alt)
+        if len_ref > 1 or len_alt > 1:
+            if len_ref > len_alt:
+                variant_type = 'DEL'
+            elif len_ref < len_alt:
+                variant_type = 'INS'
+            else: # len_ref == len_alt
+                if len_ref == 2:
+                    variant_type = 'DNP'
+                elif len_ref == 3:
+                    variant_type = 'TNP'
+                else:
+                    variant_type = 'ONP'
+                
+        # RSID
+        if variantid[0:2] != 'rs':
+            variantid = 'novel'
 
         # Keep track of genotypes for different calls
         nocall = []
@@ -388,17 +410,17 @@ def parse_file(fin, effects, effects2impact, sampleid):
                 tumor_gt = convert_allele2bases(sample_gt, ref, alt).split('/')
 
         # Output to standard output
-        UNAVAILABLE='N/A'
+        UNAVAILABLE=''
         sys.stdout.write('%s\n' % '\t'.join([gene_name,
                                              UNAVAILABLE,
-                                             'Sequencing_Center',
+                                             'sequencing.center',
                                              '37',
                                              chrom.replace('chr',''),
                                              pos,
-                                             pos,
+                                             str(int(pos) + len(ref) - 1),
                                              '+',
                                              SNPEFF2TCGA[effect],
-                                             'SNP',
+                                             variant_type,
                                              ref,
                                              tumor_gt[0],
                                              tumor_gt[1],
@@ -408,19 +430,19 @@ def parse_file(fin, effects, effects2impact, sampleid):
                                              sampleid,
                                              normal_gt[0],
                                              normal_gt[1],
-                                             '',
-                                             '',
-                                             '',
-                                             '',
-                                             'Unknown',
-                                             'Unknown',
+                                             UNAVAILABLE,
+                                             UNAVAILABLE,
+                                             UNAVAILABLE,
+                                             UNAVAILABLE,
+                                             UNAVAILABLE,
+                                             UNAVAILABLE,
                                              somatic_status,
                                              UNAVAILABLE,
                                              'WES',
                                              UNAVAILABLE,
                                              UNAVAILABLE,
                                              UNAVAILABLE,
-                                             'Hiseq2000']))
+                                             'Illumina HiSeq']))
 
 def main():
     ap = argparse.ArgumentParser(description=description)

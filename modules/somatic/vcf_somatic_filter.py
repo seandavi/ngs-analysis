@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 description = '''
-Read vcf file output from SomaticSniper, and filter out somatic variants based on the tumor sample
+Read vcf file output from VarScan or SomaticSniper, and filter out somatic variants based on the tumor sample
 0=wildtype,1=germline,2=somatic,3=LOH,4=unknown
 '''
 
