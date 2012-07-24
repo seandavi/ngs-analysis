@@ -2,7 +2,7 @@
 ## 
 ## DESCRIPTION:   Example script template
 ##
-## USAGE:         example.sh foo
+## USAGE:         hello_world.sh foo
 ##
 ## OUTPUT:        None
 ##
