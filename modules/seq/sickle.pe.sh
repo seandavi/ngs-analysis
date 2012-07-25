@@ -24,10 +24,6 @@ OUTPUT_R2=$FASTQ_READ2.trimmed.fastq
 OUTPUT_SE=`echo $OUTPUT_R1 | sed 's/R1/SE/'`
 OUTPUTLOG=$OUTPUT_SE.log
 
-echo $OUTPUT_R1
-
-
-
 # Run tool
 $SICKLE                   \
   pe                      \
