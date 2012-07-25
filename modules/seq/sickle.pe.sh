@@ -2,9 +2,11 @@
 ##
 ## DESCRIPTION:   Trim off low quality regions of fastq sequences
 ##
-## USAGE:         sickle.pe.sh sample.R1.fastq.gz sample.R2.fastq.gz
+## USAGE:         sickle.pe.sh R1.fastq.gz R2.fastq.gz
 ##
-## OUTPUT:        sample.R1.trimmed.fastq sample.R2.trimmed.fastq sample.SE.trimmed.fastq
+## OUTPUT:        R1.fastq.gz.trimmed.fastq
+##                R2.fastq.gz.trimmed.fastq
+##                SE.fastq.gz.trimmed.fastq
 ##
 
 # Load analysis config
@@ -17,11 +19,14 @@ FASTQ_READ1=$1
 FASTQ_READ2=$2
 
 # Format output filenames
-OUTPUTPREFIX_R1=`filter_ext $FASTQ_READ1 2`
-OUTPUT_R1=`filter_ext $FASTQ_READ1 2`.trimmed.fastq
-OUTPUT_R2=`filter_ext $FASTQ_READ2 2`.trimmed.fastq
-OUTPUT_SE=`filter_ext $FASTQ_READ1 2 | sed 's/R1/SE/'`.trimmed.fastq
+OUTPUT_R1=$FASTQ_READ1.trimmed.fastq
+OUTPUT_R2=$FASTQ_READ2.trimmed.fastq
+OUTPUT_SE=`echo $OUTPUT_R1 | sed 's/R1/SE/'`
 OUTPUTLOG=$OUTPUT_SE.log
+
+echo $OUTPUT_R1
+
+
 
 # Run tool
 $SICKLE                   \

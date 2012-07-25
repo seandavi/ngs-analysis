@@ -2,7 +2,9 @@
 ## 
 ## DESCRIPTION:   Trim, align, merge, recalibrate, realign, dedup
 ##
-## USAGE:         NGS.pipeline.fastq2bam.sh sample.R1.fastq.gz sample.R2.fastq.gz
+## USAGE:         NGS.pipeline.fastq2bam.sh 
+##                                          Samplename_AAAAAA_L00N_R1_001.fastq.gz
+##                                          Samplename_AAAAAA_L00N_R2_001.fastq.gz
 ##
 ## OUTPUT:        sample.bam
 ##
