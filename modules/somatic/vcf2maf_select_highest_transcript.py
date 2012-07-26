@@ -320,6 +320,10 @@ def parse_file(fin, effects, effects2impact, sampleid):
          transcript,
          exon) = parse_effect(la[colname2colnum['INFO']], effects)
         
+        # If gene name is not found, skip
+        if gene_name == '':
+            continue
+
         # Frame shift - determine whether insertion or deletion
         if effect == 'FRAME_SHIFT':
             if len(ref) < len(alt):
@@ -415,7 +419,7 @@ def parse_file(fin, effects, effects2impact, sampleid):
                                              UNAVAILABLE,
                                              'sequencing.center',
                                              '37',
-                                             chrom.replace('chr',''),
+                                             chrom,
                                              pos,
                                              str(int(pos) + len(ref) - 1),
                                              '+',
