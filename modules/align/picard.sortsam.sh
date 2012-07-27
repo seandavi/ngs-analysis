@@ -21,7 +21,7 @@ OUTPUTFILE=$OUTPUTPREFIX.sorted.bam
 OUTPUTERROR=$OUTPUTFILE.err
 
 # Run tool
-$JAVAJAR $PICARD_PATH/SortSam.jar                     \
+$JAVAJAR32G $PICARD_PATH/SortSam.jar                  \
   INPUT=$BAMFILE                                      \
   OUTPUT=$OUTPUTFILE                                  \
   SORT_ORDER=coordinate                               \

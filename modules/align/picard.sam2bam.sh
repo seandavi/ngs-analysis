@@ -28,7 +28,7 @@ OUTPUTERROR=$OUTPUTPREFIX.bam.err
 
 
 # Run tool
-$JAVAJAR $PICARD_PATH/SamFormatConverter.jar     \
+$JAVAJAR8G $PICARD_PATH/SamFormatConverter.jar   \
   INPUT=$SAMFILE                                 \
   OUTPUT=$OUTPUTFILE                             \
   MAX_RECORDS_IN_RAM=$PICARD_MAX_RECORDS_IN_RAM  \

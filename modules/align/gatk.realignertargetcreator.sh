@@ -25,7 +25,7 @@ OUTPUTLOG=$OUTPUTFILE.log
 if [ -z $TARGETREGION ];
 then
   # Run tool
-  $JAVAJAR $GATK                                            \
+  $JAVAJAR16G $GATK                                         \
     -T RealignerTargetCreator                               \
     -R $REF                                                 \
     -nt $GATK_NUM_THREADS                                   \
@@ -42,7 +42,7 @@ then
 # If target interval is set, realign target region only
 else
   # Run tool
-  $JAVAJAR $GATK                                            \
+  $JAVAJAR16G $GATK                                         \
     -T RealignerTargetCreator                               \
     -R $REF                                                 \
     -nt $GATK_NUM_THREADS                                   \

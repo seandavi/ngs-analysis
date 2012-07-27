@@ -23,7 +23,7 @@ OUTPUTLOG=$OUTPUTBAM.log
 
 
 # Run tool
-$JAVAJAR $GATK                                            \
+$JAVAJAR32G $GATK                                         \
   -T IndelRealigner                                       \
   -R $REF                                                 \
   -I $BAMFILE                                             \

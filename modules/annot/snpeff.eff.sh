@@ -29,7 +29,7 @@ OUTERR=$OUTVCF.err
 OUTDIR=$OUTPREFIX.snpeff
 
 # Run tool
-$JAVAJAR $SNPEFF                        \
+$JAVAJAR16G $SNPEFF                     \
   eff                                   \
   $GENOME_VERSION                       \
   -c $SNPEFF_CONFIG                     \

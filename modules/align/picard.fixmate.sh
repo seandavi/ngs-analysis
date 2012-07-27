@@ -21,7 +21,7 @@ OUTPUTFILE=$OUTPUTPREFIX.fixmate.bam
 OUTPUTERROR=$OUTPUTPREFIX.fixmate.err
 
 # Run tool
-$JAVAJAR $PICARD_PATH/FixMateInformation.jar          \
+$JAVAJAR16G $PICARD_PATH/FixMateInformation.jar       \
   INPUT=$BAMFILE                                      \
   OUTPUT=$OUTPUTFILE                                  \
   SORT_ORDER=coordinate                               \

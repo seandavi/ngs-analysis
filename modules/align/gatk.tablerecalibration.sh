@@ -22,7 +22,7 @@ OUTPUTFILE=$OUTPUTPREFIX.recal.bam
 OUTPUTLOG=$OUTPUTFILE.log
 
 # Run tool
-$JAVAJAR $GATK                                            \
+$JAVAJAR16G $GATK                                         \
   -T TableRecalibration                                   \
   -R $REF                                                 \
   -l INFO                                                 \

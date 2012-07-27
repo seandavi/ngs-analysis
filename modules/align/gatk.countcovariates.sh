@@ -20,7 +20,7 @@ OUTPUTFILE=$BAMFILE.recaldata.csv
 OUTPUTLOG=$OUTPUTFILE.log
 
 # Run tool
-$JAVAJAR $GATK                                            \
+$JAVAJAR8G $GATK                                          \
   -T CountCovariates                                      \
   -R $REF                                                 \
   -nt $GATK_NUM_THREADS                                   \

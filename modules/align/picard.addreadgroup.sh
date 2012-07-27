@@ -22,18 +22,18 @@ OUTPUTFILE=$OUTPUTPREFIX.rg.bam
 OUTPUTLOG=$OUTPUTPREFIX.rg.bam.log
 
 # Run tool
-$JAVAJAR $PICARD_PATH/AddOrReplaceReadGroups.jar  \
-  INPUT=$BAMFILE                                  \
-  OUTPUT=$OUTPUTFILE                              \
-  SORT_ORDER=coordinate                           \
-  RGID=$READGROUP                                 \
-  RGLB=$READGROUP                                 \
-  RGPL=illumina                                   \
-  RGPU=solexa                                     \
-  RGSM=$READGROUP                                 \
-  RGCN=null                                       \
-  RGDS=null                                       \
-  MAX_RECORDS_IN_RAM=$PICARD_MAX_RECORDS_IN_RAM   \
-  CREATE_INDEX=true                               \
-  VALIDATION_STRINGENCY=LENIENT                   \
+$JAVAJAR8G $PICARD_PATH/AddOrReplaceReadGroups.jar  \
+  INPUT=$BAMFILE                                    \
+  OUTPUT=$OUTPUTFILE                                \
+  SORT_ORDER=coordinate                             \
+  RGID=$READGROUP                                   \
+  RGLB=$READGROUP                                   \
+  RGPL=illumina                                     \
+  RGPU=solexa                                       \
+  RGSM=$READGROUP                                   \
+  RGCN=null                                         \
+  RGDS=null                                         \
+  MAX_RECORDS_IN_RAM=$PICARD_MAX_RECORDS_IN_RAM     \
+  CREATE_INDEX=true                                 \
+  VALIDATION_STRINGENCY=LENIENT                     \
   &> $OUTPUTLOG
