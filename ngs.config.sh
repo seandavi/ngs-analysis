@@ -1,14 +1,12 @@
 #!/bin/bash
 ##
-## SET UP PROGRAM AND RESOURCE PATHS
+## Set up programs and resources' paths
 ##
 
 #=====================================================================================
 # Users: Set path to each tool installed on the server
 
 # Programs
-export NGS_ANALYSIS_CONFIG=${NGS_ANALYSIS_CONFIG:=path/to/ngs.config.sh}  # Set this variable in .bashrc or .bash_profile
-export NGS_ANALYSIS_DIR=${NGS_ANALYSIS_DIR:=path/to/ngs-analysis}         # MUST set this variable
 export PYTHON=path/to/python
 export BCL2FASTQ=path/to/CASAVA/bin/configureBclToFastq.pl
 export BCL2FASTQ_NUM_THREADS=20
@@ -60,7 +58,9 @@ export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/seq
 export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/somatic
 export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/util
 export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/variant
-export PYTHONPATH=$PYTHONPATH:$NGS_ANALYSIS_DIR/lib/python
-export JAVAMEM=-Xmx6g
-export JAVATMPDIR=-Djava.io.tmpdir=$PWD
-export JAVAJAR='java '$JAVAMEM' '$JAVATMPDIR' -jar'
+export JAVAJAR8G='java -Xmx8g -Djava.io.tmpdir='$PWD' -jar'
+export JAVAJAR16G='java -Xmx16g -Djava.io.tmpdir='$PWD' -jar'
+export JAVAJAR32G='java -Xmx32g -Djava.io.tmpdir='$PWD' -jar'
+export JAVAJAR64G='java -Xmx64g -Djava.io.tmpdir='$PWD' -jar'
+export JAVAJAR128G='java -Xmx128g -Djava.io.tmpdir='$PWD' -jar'
+export JAVAJAR256G='java -Xmx256g -Djava.io.tmpdir='$PWD' -jar'

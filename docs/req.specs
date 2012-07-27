@@ -19,14 +19,9 @@ NGS Analysis Pipeline Framework Specifications
 ======================================================================================
 Setup/Install
 
-Edit ~/.bash_profile to contain the following lines
+Edit ~/.bash_profile to contain the following line
 
-# NGS Analysis Pipeline
-export NGS_ANALYSIS_CONFIG=path/to/ngs-analysis/ngs.config.sh
-PATH=path/to/ngs-analysis/pipelines:$PATH
-PATH=path/to/ngs-analysis/modules/util:$PATH
-
-# Change NGS_ANALYSIS_PATH variable to where it was installed in the config file
+source path/to/ngs-analysis/ngs.init.sh
 
 ======================================================================================
 
