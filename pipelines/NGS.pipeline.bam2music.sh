@@ -88,5 +88,31 @@ music.bmr.calc_bmr.sh $BAMLIST samples.maf roi.bed $OUT_DIR
 #music.smg.sh $OUT_DIR/gene_mrs.fixed $OUT_DIR 20
 music.smg.sh $OUT_DIR/gene_mrs $OUT_DIR 20
 
+# Mutation relation test
+music.mutation_relation.sh $BAMLIST samples.maf $OUT_DIR 200
+
+# Pfam - doesn't work
+music.pfam.sh samples.maf $OUT_DIR
+
+# Proximity analysis - need transcript name, aa changed, and nucleotide position columns in the maf file
+music.proximity.sh samples.maf $OUT_DIR 10
+
+# Compare variants against COSMIC and OMIM data - need transcript name and aa changed columns in the maf file
+music.cosmic_omim.sh samples.maf $OUT_DIR
 
 
+# bmr                   ...  Calculate gene coverages and background mutation rates.     
+# clinical-correlation       Correlate phenotypic traits against mutated genes, or       
+#                             against individual variants.                               
+# cosmic-omim                Compare the amino acid changes of supplied mutations to     
+#                             COSMIC and OMIM databases.                                 
+# mutation-relation          Identify relationships of mutation concurrency or mutual    
+#                             exclusivity in genes across cases.                         
+# path-scan                  Find signifcantly mutated pathways in a cohort given a list 
+#                             of somatic mutations.                                      
+# pfam                       Add Pfam annotation to a MAF file.                          
+# play                       Run the full suite of MuSiC tools sequentially.             
+# proximity                  Perform a proximity analysis on a list of mutations.        
+# smg                        Identify significantly mutated genes.                       
+# survival                   Create survival plots and P-values for clinical and         
+#                             mutational phenotypes.                
