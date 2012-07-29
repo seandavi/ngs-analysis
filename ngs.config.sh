@@ -28,7 +28,7 @@ export MUSIC=path/to/music
 # Resources
 export REF=path/to/human_g1k_v37.fasta
 export UCSC_REFFLAT=path/to/refFlat.txt
-export UCSC_DBSNP=path/to/snp132.txt
+export UCSC_DBSNP=path/to/snp135.txt
 export DBSNP_VCF=path/to/dbsnp_135.b37.vcf
 export MILLS_DEVINE_INDEL_VCF=path/to/Mills_Devine_2hit.indels.b37.vcf
 export MILLS_DEVINE_INDEL_SITES_VCF=path/to/Mills_Devine_2hit.indels.b37.sites.vcf
