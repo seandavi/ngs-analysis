@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Convert a .sam.gz file to a .bam file
 ##
-## USAGE:         picard.sam2bam.sh sample.sam[.gz]
+## USAGE:         picard.sam2bam.sh sample.sam[.gz] [max_records_in_ram]
 ##
 ## OUTPUT:        sample.bam
 ##
@@ -11,9 +11,11 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 1 $# $0
+usage_min 1 $# $0
 
 SAMFILE=$1
+MAX_RECORDS_IN_RAM=$2
+MAX_RECORDS_IN_RAM=${MAX_RECORDS_IN_RAM:=1000000}
 
 # Format output filenames
 ext=${SAMFILE##*.}
@@ -31,7 +33,7 @@ OUTPUTERROR=$OUTPUTPREFIX.bam.err
 $JAVAJAR8G $PICARD_PATH/SamFormatConverter.jar   \
   INPUT=$SAMFILE                                 \
   OUTPUT=$OUTPUTFILE                             \
-  MAX_RECORDS_IN_RAM=$PICARD_MAX_RECORDS_IN_RAM  \
+  MAX_RECORDS_IN_RAM=$MAX_RECORDS_IN_RAM         \
   VALIDATION_STRINGENCY=LENIENT                  \
   &> $OUTPUTERROR
 

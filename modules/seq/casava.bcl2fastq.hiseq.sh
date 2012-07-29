@@ -17,7 +17,7 @@ usage_min 2 $# $0
 OUTPUT_DIR=$1
 SAMPLESHEET=$2
 NUM_THREADS=$3
-BCL2FASTQ_NUM_THREADS=${NUM_THREADS:=$BCL2FASTQ_NUM_THREADS}
+NUM_THREADS=${NUM_THREADS:=20}
 
 # Check to make sure that output_directory_name doesn't already exist
 if [ -d $OUTPUT_DIR ]; then
@@ -40,9 +40,10 @@ $BCL2FASTQ                                                 \
   --positions-format .clocs                                \
   --fastq-cluster-count $FASTQ_CLUSTER_COUNT               \
   --sample-sheet $SAMPLESHEET                              \
-  --output-dir $OUTPUT_DIR >& $BASECALLS_DIR/configureBclToFastq.log
+  --output-dir $OUTPUT_DIR                                 \
+  >& $BASECALLS_DIR/configureBclToFastq.log
 
 
 # Go into output directory, and run the makefile
 cd $OUTPUT_DIR
-nohup make -j $BCL2FASTQ_NUM_THREADS
+nohup make -j $NUM_THREADS

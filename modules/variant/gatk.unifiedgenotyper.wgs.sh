@@ -39,7 +39,7 @@ $JAVAJAR128G $GATK                                        \
   -T UnifiedGenotyper                                     \
   -l INFO                                                 \
   -R $REF                                                 \
-  -nt $GATK_NUM_THREADS                                   \
+  -nt 20                                                  \
   $INPUTBAM                                               \
   -o $OUTVCF                                              \
   -D $DBSNP_VCF                                           \

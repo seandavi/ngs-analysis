@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Add read group to input bam file
 ##
-## USAGE:         picard.addreadgroup.sh sample.bam readgroupid
+## USAGE:         picard.addreadgroup.sh sample.bam readgroupid [max_records_in_ram]
 ##
 ## OUTPUT:        sample.rg.bam
 ##
@@ -11,10 +11,12 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 2 $# $0
+usage_min 2 $# $0
 
 BAMFILE=$1
 READGROUP=$2
+MAX_RECORDS_IN_RAM=$3
+MAX_RECORDS_IN_RAM=${MAX_RECORDS_IN_RAM:=1000000}
 
 # Format output filenames
 OUTPUTPREFIX=`filter_ext $BAMFILE 1`
@@ -33,7 +35,7 @@ $JAVAJAR8G $PICARD_PATH/AddOrReplaceReadGroups.jar  \
   RGSM=$READGROUP                                   \
   RGCN=null                                         \
   RGDS=null                                         \
-  MAX_RECORDS_IN_RAM=$PICARD_MAX_RECORDS_IN_RAM     \
+  MAX_RECORDS_IN_RAM=$MAX_RECORDS_IN_RAM            \
   CREATE_INDEX=true                                 \
   VALIDATION_STRINGENCY=LENIENT                     \
   &> $OUTPUTLOG

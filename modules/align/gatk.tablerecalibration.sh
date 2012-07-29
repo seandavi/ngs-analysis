@@ -38,4 +38,4 @@ $JAVAJAR16G $GATK                                         \
   &> $OUTPUTLOG
 
 
-#  -nt $GATK_NUM_THREADS                                   \ # NOT SUPPORTED
+#  -nt not supported

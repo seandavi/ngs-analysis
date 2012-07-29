@@ -20,9 +20,9 @@ SEEDLEN=$4
 MAXSEEDDIFF=$5
 
 # If new values are passed in, then use new values
-BWA_ALN_THREAD=${THREAD:=$BWA_ALN_THREAD}
-BWA_ALN_SEEDLEN=${SEEDLEN:=$BWA_ALN_SEEDLEN}
-BWA_ALN_MAXSEEDDIFF=${MAXSEEDDIFF:=$BWA_ALN_MAXSEEDDIFF}
+THREAD=${THREAD:=2}
+SEEDLEN=${SEEDLEN:=32}
+MAXSEEDDIFF=${MAXSEEDDIFF:=2}
 
 # Format output filenames
 OUTPUTFILE=$OUTPREFIX.sai
@@ -31,9 +31,9 @@ OUTPUTERROR=$OUTPREFIX.sai.err
 # Run tool
 $BWA                         \
   aln                        \
-  -t $BWA_ALN_THREAD         \
-  -l $BWA_ALN_SEEDLEN        \
-  -k $BWA_ALN_MAXSEEDDIFF    \
+  -t $THREAD                 \
+  -l $SEEDLEN                \
+  -k $MAXSEEDDIFF            \
   $REF                       \
   $FASTQ                     \
   1> $OUTPUTFILE             \
