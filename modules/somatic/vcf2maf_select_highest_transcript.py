@@ -300,7 +300,9 @@ def parse_file(fin, effects, effects2impact, sampleid, gene2entrez):
                                                  'Validation_Method',
                                                  'Score',
                                                  'BAM_File',
-                                                 'Sequencer']))
+                                                 'Sequencer',
+                                                 'transcript_name',
+                                                 'amino_acid_change']))
             continue
         
         # Parse each row of data
@@ -322,7 +324,7 @@ def parse_file(fin, effects, effects2impact, sampleid, gene2entrez):
         filtr = la[colname2colnum['FILTER']]
         total_dp = info_field2val['DP']
         somatic_status = somatic_status_code2text(info_field2val['SS'])
-        (effect, 
+        (effect,
          effect_impact,
          functional_class,
          codon_change,
@@ -333,6 +335,10 @@ def parse_file(fin, effects, effects2impact, sampleid, gene2entrez):
          transcript,
          exon) = parse_effect(la[colname2colnum['INFO']], effects)
         
+        # If aa change, add 'p.'
+        if aa_change:
+            aa_change = 'p.' + aa_change
+
         # If gene name is not found, skip
         if gene_name == '':
             continue
@@ -464,7 +470,9 @@ def parse_file(fin, effects, effects2impact, sampleid, gene2entrez):
                                              UNAVAILABLE,
                                              UNAVAILABLE,
                                              UNAVAILABLE,
-                                             'Illumina HiSeq']))
+                                             'Illumina HiSeq',
+                                             transcript,
+                                             aa_change]))
 
 def main():
     ap = argparse.ArgumentParser(description=description)
