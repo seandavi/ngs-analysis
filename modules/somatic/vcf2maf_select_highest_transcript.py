@@ -241,7 +241,20 @@ def somatic_status_code2text(code):
             '3': 'LOH',
             '5': 'Unknown'}[code]
 
-def parse_file(fin, effects, effects2impact, sampleid):
+def load_gene2entrez(g2e_fin):
+    '''
+    Given a filename, generate a mapping dict from gene2entrez
+    '''
+    gene2entrez = {}
+    for line in g2e_fin:
+        la = line.strip('\n').split('\t')
+        gene = la[0]
+        entrezid = la[1]
+        if gene and entrezid:
+            gene2entrez[gene] = entrezid
+    return gene2entrez
+
+def parse_file(fin, effects, effects2impact, sampleid, gene2entrez):
     '''
     Read through the vcf file, and parse it.
     Output the columns as defined above
@@ -323,6 +336,11 @@ def parse_file(fin, effects, effects2impact, sampleid):
         # If gene name is not found, skip
         if gene_name == '':
             continue
+
+        # Set up entrez id
+        entrez_id = ''
+        if gene_name in gene2entrez:
+            entrez_id = gene2entrez[gene_name]
 
         # Frame shift - determine whether insertion or deletion
         if effect == 'FRAME_SHIFT':
@@ -416,7 +434,7 @@ def parse_file(fin, effects, effects2impact, sampleid):
         # Output to standard output
         UNAVAILABLE=''
         sys.stdout.write('%s\n' % '\t'.join([gene_name,
-                                             UNAVAILABLE,
+                                             entrez_id,
                                              'sequencing.center',
                                              '37',
                                              chrom,
@@ -458,10 +476,21 @@ def main():
     ap.add_argument('sample_id',
                     help='Name of sample for whom the vcf file pertains to',
                     type=str)
+    ap.add_argument('gene2entrez',
+                    help='File containing gene2entrezid mapping',
+                    nargs='?',
+                    type=argparse.FileType('r'),
+                    default=sys.stdin)
     params = ap.parse_args()
     
+    # Set up effects
     effects, effects2impact = get_effects_categories()
-    parse_file(params.vcf_file, effects, effects2impact, params.sample_id)
+
+    # Load gene2entrez id mapping
+    gene2entrez = load_gene2entrez(params.gene2entrez)
+
+    # Generate maf
+    parse_file(params.vcf_file, effects, effects2impact, params.sample_id, gene2entrez)
     params.vcf_file.close()
 
 
