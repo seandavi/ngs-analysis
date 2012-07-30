@@ -30,6 +30,6 @@ $PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_scores.py $FASTQ_R2 &
 wait
 
 #==[ Run FastQC ]==============================================================================#
-$FASTQC $FASTQ_R1 &
-$FASTQC $FASTQ_R2 &
+$NGS_ANALYSIS_DIR/modules/seq/fastqc.sh $FASTQ_R1 1 &
+$NGS_ANALYSIS_DIR/modules/seq/fastqc.sh $FASTQ_R2 1 &
 wait
