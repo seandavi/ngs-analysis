@@ -1,10 +1,9 @@
 #!/bin/bash
 ## 
 ## DESCRIPTION:   Trim, align, merge, recalibrate, realign, dedup
+##                Assume single sample per lane
 ##
-## USAGE:         NGS.pipeline.fastq2bam.sh 
-##                                          Samplename_AAAAAA_L00N_R1_001.fastq.gz
-##                                          Samplename_AAAAAA_L00N_R2_001.fastq.gz
+## USAGE:         NGS.pipeline.fastq2bam.sh Sample_X(Sample directory)
 ##
 ## OUTPUT:        sample.bam
 ##
@@ -13,12 +12,18 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 2 $# $0
+usage 1 $# $0
 
-FASTQ_R1=$1
-FASTQ_R2=$2
+SAMPLEDIR=$1
+SAMPLENAME=`echo $SAMPLEDIR | cut -f2- -d'_'`
+FASTQ_R1=`ls $SAMPLEDIR/*_*_L???_R1_???.fastq.gz` # Samplename_AAAAAA_L00N_R1_001.fastq.gz
+FASTQ_R2=`ls $SAMPLEDIR/*_*_L???_R2_???.fastq.gz` # Samplename_AAAAAA_L00N_R2_001.fastq.gz
 FASTQ_SE=`echo $FASTQ_R1 | sed 's/R1/SE/'`
 SAMPLE_PREFIX=`$PYTHON $NGS_ANALYSIS_DIR/modules/util/illumina_fastq_extract_samplename.py $FASTQ_R1`
+
+#==[ Fastq QC ]=====================================================================#
+
+NGS.pipeline.fastq.qc.sh $FASTQ_R1 $FASTQ_R2
 
 #==[ Trim ]=========================================================================#
 
@@ -59,7 +64,7 @@ $NGS_ANALYSIS_DIR/modules/align/samtools.mergebam.sh     \
 $NGS_ANALYSIS_DIR/modules/align/picard.sortsam.sh $SAMPLE_PREFIX.merged.bam
 
 # Add read group to bam file
-$NGS_ANALYSIS_DIR/modules/align/picard.addreadgroup.sh $SAMPLE_PREFIX.merged.sorted.bam $SAMPLE_PREFIX
+$NGS_ANALYSIS_DIR/modules/align/picard.addreadgroup.sh $SAMPLE_PREFIX.merged.sorted.bam $SAMPLENAME
 
 # Qscore recalibration
 # Count covariates
@@ -73,9 +78,8 @@ $NGS_ANALYSIS_DIR/modules/align/gatk.analyzecovariates.sh $SAMPLE_PREFIX.merged.
 $NGS_ANALYSIS_DIR/modules/align/gatk.analyzecovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam.recaldata.csv
 
 # Indel realignment
-$NGS_ANALYSIS_DIR/modules/align/gatk.realignertargetcreator.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam $SURESELECT_INTERVAL
+$NGS_ANALYSIS_DIR/modules/align/gatk.realignertargetcreator.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam 2 $SURESELECT_INTERVAL
 $NGS_ANALYSIS_DIR/modules/align/gatk.indelrealigner.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam $SAMPLE_PREFIX.merged.sorted.rg.recal.realign.intervals
 
 # Remove duplicates
 $NGS_ANALYSIS_DIR/modules/align/picard.markduplicates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.realign.bam
-
