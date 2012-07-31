@@ -35,18 +35,22 @@ TMP=tmp.$JOBID.$RANDOM
 mkdir $TMP
 
 # Submit command
-qsub                        \
-  -cwd                      \
-  -hold_jid $WAIT4          \
-  -N $JOBID                 \
-  -v NGS_ANALYSIS_CONFIG    \
-  -S /bin/bash              \
-  -j y                      \
-  -o $TMP                   \
-  -e $TMP                   \
-  -pe orte $NUMPP           \
-  -l h_vmem=$MEMSZ          \
-  -q $QUEUE                 \
+OPTION_V='NGS_ANALYSIS_CONFIG='$NGS_ANALYSIS_CONFIG
+OPTION_V=$OPTION_V',NGS_ANALYSIS_DIR='$NGS_ANALYSIS_DIR
+OPTION_V=$OPTION_V',PATH='$PATH
+OPTION_V=$OPTION_V',PYTHONPATH='$PYTHONPATH
+qsub                                             \
+  -cwd                                           \
+  -hold_jid $WAIT4                               \
+  -N $JOBID                                      \
+  -v $OPTION_V                                   \
+  -S /bin/bash                                   \
+  -j y                                           \
+  -o $TMP                                        \
+  -e $TMP                                        \
+  -pe orte $NUMPP                                \
+  -l h_vmem=$MEMSZ                               \
+  -q $QUEUE                                      \
   $COMMD
 
 #
