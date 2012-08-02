@@ -72,6 +72,10 @@ def main():
                     help='Select variants where the depth of normal is >= this value.  [0]',
                     type=int,
                     default=0)
+    ap.add_argument('-o', '--outfile',
+                    help='Output results file',
+                    type=argparse.FileType('w'),
+                    default=sys.stdout)
     params = ap.parse_args()
     
     # 0=wildtype,1=germline,2=somatic,3=LOH,4=unknown
@@ -88,13 +92,13 @@ def main():
     for line in params.vcf_file:
          # Headers: print w/o filtering
         if line[0:2] == '##':
-            sys.stdout.write(line)
+            params.outfile.write(line)
             continue
 
         # Column Labels: print and build column-to-column_number mapping
         if line[0] == '#':
             colname2colnum, sample_names, sample_indexes = build_colname2colnum(line[1:].strip())
-            sys.stdout.write(line)
+            params.outfile.write(line)
             continue
 
         la = line.strip().split('\t')
@@ -128,8 +132,9 @@ def main():
         if normal_dp < params.min_dp_normal:
             continue
 
-        sys.stdout.write(line)
+        params.outfile.write(line)
 
+    params.outfile.close()
     params.vcf_file.close()
     
     

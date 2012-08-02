@@ -254,7 +254,7 @@ def load_gene2entrez(g2e_fin):
             gene2entrez[gene] = entrezid
     return gene2entrez
 
-def parse_file(fin, effects, effects2impact, sampleid, gene2entrez):
+def parse_file(fin, effects, effects2impact, sampleid, gene2entrez, fout):
     '''
     Read through the vcf file, and parse it.
     Output the columns as defined above
@@ -268,49 +268,45 @@ def parse_file(fin, effects, effects2impact, sampleid, gene2entrez):
         # Column Labels: build column-to-column_number mapping
         if line[0] == '#':
             colname2colnum, sample_names, sample_indexes = build_colname2colnum(line[1:].strip())
-            #num_cols = len(colname2colnum)
-            sys.stdout.write('%s\n' % '\t'.join(['Hugo_Symbol',
-                                                 'Entrez_Gene_Id',
-                                                 'Center',
-                                                 'NCBI_Build',
-                                                 'Chromosome',
-                                                 'Start_position',
-                                                 'End_position',
-                                                 'Strand',
-                                                 'Variant_Classification',
-                                                 'Variant_Type',
-                                                 'Reference_Allele',
-                                                 'Tumor_Seq_Allele1',
-                                                 'Tumor_Seq_Allele2',
-                                                 'dbSNP_RS',
-                                                 'dbSNP_Val_Status',
-                                                 'Tumor_Sample_Barcode',
-                                                 'Matched_Norm_Sample_Barcode',
-                                                 'Match_Norm_Seq_Allele1',
-                                                 'Match_Norm_Seq_Allele2',
-                                                 'Tumor_Validation_Allele1',
-                                                 'Tumor_Validation_Allele2',
-                                                 'Match_Norm_Validation_Allele1',
-                                                 'Match_Norm_Validation_Allele2',
-                                                 'Verification_Status',
-                                                 'Validation_Status',
-                                                 'Mutation_Status',
-                                                 'Sequencing_Phase',
-                                                 'Sequence_Source',
-                                                 'Validation_Method',
-                                                 'Score',
-                                                 'BAM_File',
-                                                 'Sequencer',
-                                                 'transcript_name',
-                                                 'amino_acid_change']))
+            fout.write('%s\n' % '\t'.join(['Hugo_Symbol',
+                                           'Entrez_Gene_Id',
+                                           'Center',
+                                           'NCBI_Build',
+                                           'Chromosome',
+                                           'Start_position',
+                                           'End_position',
+                                           'Strand',
+                                           'Variant_Classification',
+                                           'Variant_Type',
+                                           'Reference_Allele',
+                                           'Tumor_Seq_Allele1',
+                                           'Tumor_Seq_Allele2',
+                                           'dbSNP_RS',
+                                           'dbSNP_Val_Status',
+                                           'Tumor_Sample_Barcode',
+                                           'Matched_Norm_Sample_Barcode',
+                                           'Match_Norm_Seq_Allele1',
+                                           'Match_Norm_Seq_Allele2',
+                                           'Tumor_Validation_Allele1',
+                                           'Tumor_Validation_Allele2',
+                                           'Match_Norm_Validation_Allele1',
+                                           'Match_Norm_Validation_Allele2',
+                                           'Verification_Status',
+                                           'Validation_Status',
+                                           'Mutation_Status',
+                                           'Sequencing_Phase',
+                                           'Sequence_Source',
+                                           'Validation_Method',
+                                           'Score',
+                                           'BAM_File',
+                                           'Sequencer',
+                                           'transcript_name',
+                                           'amino_acid_change']))
             continue
         
         # Parse each row of data
         la = line.strip().split()
-        #len_la = len(la)
-        #if len_la < num_cols:
-        #    sys.stderr.write('hello')
-        #    continue
+
         # Build info column field2val mapping
         info_field2val = build_info_field2val(la[colname2colnum['INFO']])
 
@@ -439,40 +435,40 @@ def parse_file(fin, effects, effects2impact, sampleid, gene2entrez):
 
         # Output to standard output
         UNAVAILABLE=''
-        sys.stdout.write('%s\n' % '\t'.join([gene_name,
-                                             entrez_id,
-                                             'sequencing.center',
-                                             '37',
-                                             chrom,
-                                             pos,
-                                             str(int(pos) + len(ref) - 1),
-                                             '+',
-                                             SNPEFF2TCGA[effect],
-                                             variant_type,
-                                             ref,
-                                             tumor_gt[0],
-                                             tumor_gt[1],
-                                             variantid,
-                                             UNAVAILABLE,
-                                             sampleid,
-                                             sampleid,
-                                             normal_gt[0],
-                                             normal_gt[1],
-                                             UNAVAILABLE,
-                                             UNAVAILABLE,
-                                             UNAVAILABLE,
-                                             UNAVAILABLE,
-                                             UNAVAILABLE,
-                                             UNAVAILABLE,
-                                             somatic_status,
-                                             UNAVAILABLE,
-                                             'WES',
-                                             UNAVAILABLE,
-                                             UNAVAILABLE,
-                                             UNAVAILABLE,
-                                             'Illumina HiSeq',
-                                             transcript,
-                                             aa_change]))
+        fout.write('%s\n' % '\t'.join([gene_name,
+                                       entrez_id,
+                                       'sequencing.center',
+                                       '37',
+                                       chrom,
+                                       pos,
+                                       str(int(pos) + len(ref) - 1),
+                                       '+',
+                                       SNPEFF2TCGA[effect],
+                                       variant_type,
+                                       ref,
+                                       tumor_gt[0],
+                                       tumor_gt[1],
+                                       variantid,
+                                       UNAVAILABLE,
+                                       sampleid,
+                                       sampleid,
+                                       normal_gt[0],
+                                       normal_gt[1],
+                                       UNAVAILABLE,
+                                       UNAVAILABLE,
+                                       UNAVAILABLE,
+                                       UNAVAILABLE,
+                                       UNAVAILABLE,
+                                       UNAVAILABLE,
+                                       somatic_status,
+                                       UNAVAILABLE,
+                                       'WES',
+                                       UNAVAILABLE,
+                                       UNAVAILABLE,
+                                       UNAVAILABLE,
+                                       'Illumina HiSeq',
+                                       transcript,
+                                       aa_change]))
 
 def main():
     ap = argparse.ArgumentParser(description=description)
@@ -489,6 +485,10 @@ def main():
                     nargs='?',
                     type=argparse.FileType('r'),
                     default=sys.stdin)
+    ap.add_argument('-o', '-outfile',
+                    help='Output result file',
+                    type=argparse.FileType('w'),
+                    default=sys.stdout)
     params = ap.parse_args()
     
     # Set up effects
@@ -498,7 +498,7 @@ def main():
     gene2entrez = load_gene2entrez(params.gene2entrez)
 
     # Generate maf
-    parse_file(params.vcf_file, effects, effects2impact, params.sample_id, gene2entrez)
+    parse_file(params.vcf_file, effects, effects2impact, params.sample_id, gene2entrez, params.outfile)
     params.vcf_file.close()
 
 

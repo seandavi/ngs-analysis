@@ -1,8 +1,8 @@
 #!/bin/bash
 ## 
-## DESCRIPTION:   From a list of bamfiles, run MuSiC
+## DESCRIPTION:   From a list of bamfiles, run MuSiC.  Use grid engine using qsub
 ##
-## USAGE:         NGS.pipeline.bam2music.sh bamlist roi_file out_dir [parallel]
+## USAGE:         NGS.pipeline.bam2music.ge.sh bamlist roi_file out_dir
 ##
 ## OUTPUT:        MuSiC output
 ##
@@ -11,68 +11,62 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 3 $# $0
+usage 3 $# $0
 
 # Process input parameters
 BAMLIST=$1
 ROI_BED=$2
 OUT_DIR=$3
-NUM_PARALLEL=$4
-NUM_PARALLEL=${NUM_PARALLEL:=1}
 
 # Create temporary directory
 TMPDIR=tmp.bam2music.$RANDOM
 mkdir $TMPDIR
 
-#==[ Run mpileup ]=============================================================================#
-P=0
+# Run samtools mpileup
+QSUB=$NGS_ANALYSIS_DIR/modules/util/qsub_wrapper.sh
 for bamfile in `cat <(cut -f2 $BAMLIST) <(cut -f3 $BAMLIST)`; do
-  samtools.mpileup.sh $bamfile "-Q 30" &
-  # Control parallel processes
-  P=$((P + 1))
-  if [ $P -ge $NUM_PARALLEL ]; then
-    wait
-    P=0
-  fi
+  $QSUB mpileup.$SAMPL                                                          \
+        all.q                                                                   \
+        1                                                                       \
+        1G                                                                      \
+        none                                                                    \
+        $NGS_ANALYSIS_DIR/modules/align/samtools.mpileup.sh $bamfile "-Q 30"
 done
-wait
 
-#==[ Run VarScan and convert results to maf format ]===========================================#
+# Run varscan, annotate, and create maf files
 mkdir varscan
 SOMATIC_PVAL=0.05
 TUMOR_PURITY=1.0
 GENE2ENTREZ=$NGS_ANALYSIS_DIR/resources/gene2entrezid
-P=0
-# VarScan
 for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   SAMPL=`echo $bamfiles | cut -f1 -d':'`
   BAM_N=`echo $bamfiles | cut -f2 -d':'`
   BAM_T=`echo $bamfiles | cut -f3 -d':'`
-  varscan.somatic.vcf.sh $BAM_N.mpileup $BAM_T.mpileup varscan/$SAMPL $SOMATIC_PVAL $TUMOR_PURITY &
-  # Control parallel processes
-  P=$((P + 1))
-  if [ $P -ge $NUM_PARALLEL ]; then
-    wait
-    P=0
-  fi
-done
-wait
 
-# Convert varscan output vcf files to maf
-P=0
-for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
-  SAMPL=`echo $bamfiles | cut -f1 -d':'`
-  BAM_N=`echo $bamfiles | cut -f2 -d':'`
-  BAM_T=`echo $bamfiles | cut -f3 -d':'`
-  $NGS_ANALYSIS_DIR/pipelines/NGS.pipeline.varscan.vcf2maf.sh varscan/$SAMPL.snp.vcf varscan/$SAMPL.indel.vcf
-  # Control parallel processes
-  P=$((P + 1))
-  if [ $P -ge $NUM_PARALLEL ]; then
-    wait
-    P=0
-  fi
+  # Run VarScan
+  $QSUB varscan.$SAMPL                                                          \
+        all.q                                                                   \
+        1                                                                       \
+        32G                                                                     \
+        mpileup.$SAMPL                                                          \
+        $NGS_ANALYSIS_DIR/modules/somatic/varscan.somatic.vcf.sh                \
+          $BAM_N.mpileup                                                        \
+          $BAM_T.mpileup                                                        \
+          varscan/$SAMPL                                                        \
+          $SOMATIC_PVAL                                                         \
+          $TUMOR_PURITY
+
+  # Convert varscan output to maf
+  $QSUB varscan.vcf2maf.$SAMPL                                                  \
+        all.q                                                                   \
+        1                                                                       \
+        1G                                                                      \
+        varscan.$SAMPL                                                          \
+        $NGS_ANALYSIS_DIR/pipelines/NGS.pipeline.varscan.vcf2maf.sh             \
+          varscan/$SAMPL.snp.vcf                                                \
+          varscan/$SAMPL.indel.vcf
 done
-wait
+
 
 # Merge all mafs
 merge_maf.sh samples varscan/*maf

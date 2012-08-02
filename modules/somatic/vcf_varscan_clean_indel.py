@@ -56,18 +56,22 @@ def main():
                     nargs='?',
                     type=argparse.FileType('r'),
                     default=sys.stdin)
+    ap.add_argument('-o', '--outfile',
+                    help='Name of output result file',
+                    type=argparse.FileType('w'),
+                    default=sys.stdout)
     params = ap.parse_args()
     
     for line in params.vcf_file:
          # Headers: print w/o filtering
         if line[0:2] == '##':
-            sys.stdout.write(line)
+            params.outfile.write(line)
             continue
 
         # Column Labels: print and build column-to-column_number mapping
         if line[0] == '#':
             colname2colnum, sample_names, sample_indexes = build_colname2colnum(line[1:].strip())
-            sys.stdout.write(line)
+            params.outfile.write(line)
             continue
 
         la = line.strip().split('\t')
@@ -103,8 +107,9 @@ def main():
         la[colname2colnum['ALT']] = alt
 
         # Output to stdout
-        sys.stdout.write('%s\n' % '\t'.join(la))
+        params.outfile.write('%s\n' % '\t'.join(la))
 
+    params.outfile.close()
     params.vcf_file.close()
     
     
