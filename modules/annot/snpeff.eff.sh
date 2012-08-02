@@ -25,8 +25,9 @@ GENOME_VERSION=${GENOME_VERSION:=GRCh37.64}
 # Format outputs
 OUTPREFIX=`filter_ext $VCFFILE 1`
 OUTVCF=$OUTPREFIX.snpeff.vcf
+OUTSTATS=$OUTPREFIX.snpeff.snpEff_summary.html
 OUTERR=$OUTVCF.err
-OUTDIR=$OUTPREFIX.snpeff
+#OUTDIR=$OUTPREFIX.snpeff
 
 # Run tool
 $JAVAJAR16G $SNPEFF                     \
@@ -35,20 +36,21 @@ $JAVAJAR16G $SNPEFF                     \
   -c $SNPEFF_CONFIG                     \
   -i vcf                                \
   -o vcf                                \
+  -s $OUTSTATS                          \
   -v                                    \
   $SNPEFF_OPTIONS                       \
   $VCFFILE                              \
   1> $OUTVCF                            \
   2> $OUTERR
 
-# Check if tool ran successfully
-if [ $? -ne 0 ]; then
-  exit 1
-fi
+# # Check if tool ran successfully
+# if [ $? -ne 0 ]; then
+#   exit 1
+# fi
 
-# Create output directory to contain all output
-mkdir $OUTDIR
-mv                                      \
-  snpEff_summary.html                   \
-  snpEff_genes.txt                      \
-  $OUTDIR
+# # Create output directory to contain all output
+# mkdir $OUTDIR
+# mv                                      \
+#   $OUTSTATS                             \
+#   snpEff_genes.txt                      \
+#   $OUTDIR

@@ -43,23 +43,67 @@ SOMATIC_PVAL=0.05
 TUMOR_PURITY=1.0
 GENE2ENTREZ=$NGS_ANALYSIS_DIR/resources/gene2entrezid
 P=0
+# VarScan
 for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   SAMPL=`echo $bamfiles | cut -f1 -d':'`
   BAM_N=`echo $bamfiles | cut -f2 -d':'`
   BAM_T=`echo $bamfiles | cut -f3 -d':'`
-  # Run VarScan, annotate, and convert to maf.  Indel vcf has formatting issues.
-  varscan.somatic.vcf.sh $BAM_N.mpileup $BAM_T.mpileup varscan/$SAMPL $SOMATIC_PVAL $TUMOR_PURITY                                                               \
-    && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_somatic_filter.py varscan/$SAMPL.snp.vcf > varscan/$SAMPL.snp.somatic.vcf                                  \
-    && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_somatic_filter.py varscan/$SAMPL.indel.vcf > varscan/$SAMPL.indel.somatic.vcf                              \
-    && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_varscan_clean_indel.py varscan/$SAMPL.indel.somatic.vcf > varscan/$SAMPL.indel.somatic.fixed.vcf           \
-    && snpeff.eff.sh varscan/$SAMPL.snp.somatic.vcf                                                                                                             \
-    && snpeff.eff.sh varscan/$SAMPL.indel.somatic.fixed.vcf                                                                                                     \
-    && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_varscan_snpeff_indel_insert_format_field.py varscan/$SAMPL.indel.somatic.fixed.snpeff.vcf                  \
-         > varscan/$SAMPL.indel.somatic.fixed.snpeff.format.vcf                                                                                                 \
-    && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf_select_highest_transcript.py varscan/$SAMPL.indel.somatic.fixed.snpeff.format.vcf $SAMPL $GENE2ENTREZ  \
-         > varscan/$SAMPL.indel.somatic.fixed.snpeff.format.vcf.maf                                                                                             \
-    && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf_select_highest_transcript.py varscan/$SAMPL.snp.somatic.snpeff.vcf $SAMPL $GENE2ENTREZ                 \
-         > varscan/$SAMPL.snp.somatic.snpeff.vcf.maf &
+  varscan.somatic.vcf.sh $BAM_N.mpileup $BAM_T.mpileup varscan/$SAMPL $SOMATIC_PVAL $TUMOR_PURITY &
+  # Control parallel processes
+  P=$((P + 1))
+  if [ $P -ge $NUM_PARALLEL ]; then
+    wait
+    P=0
+  fi
+done
+wait
+
+# Filter somatic snp and indel, and clean up indel vcf
+P=0
+for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
+  SAMPL=`echo $bamfiles | cut -f1 -d':'`
+  BAM_N=`echo $bamfiles | cut -f2 -d':'`
+  BAM_T=`echo $bamfiles | cut -f3 -d':'`
+  $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_somatic_filter.py varscan/$SAMPL.snp.vcf > varscan/$SAMPL.snp.somatic.vcf                                     \
+  && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_somatic_filter.py varscan/$SAMPL.indel.vcf > varscan/$SAMPL.indel.somatic.vcf                              \
+  && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_varscan_clean_indel.py varscan/$SAMPL.indel.somatic.vcf > varscan/$SAMPL.indel.somatic.fixed.vcf &
+  # Control parallel processes
+  P=$((P + 1))
+  if [ $P -ge $NUM_PARALLEL ]; then
+    wait
+    P=0
+  fi
+done
+wait
+
+# Annotate
+P=0
+for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
+  SAMPL=`echo $bamfiles | cut -f1 -d':'`
+  BAM_N=`echo $bamfiles | cut -f2 -d':'`
+  BAM_T=`echo $bamfiles | cut -f3 -d':'`
+  snpeff.eff.sh varscan/$SAMPL.snp.somatic.vcf && snpeff.eff.sh varscan/$SAMPL.indel.somatic.fixed.vcf &
+  # Control parallel processes
+  P=$((P + 1))
+  if [ $P -ge $NUM_PARALLEL ]; then
+    wait
+    P=0
+  fi
+done
+wait
+
+# Fix indel format column and convert indel and snp to maf format
+P=0
+for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
+  SAMPL=`echo $bamfiles | cut -f1 -d':'`
+  BAM_N=`echo $bamfiles | cut -f2 -d':'`
+  BAM_T=`echo $bamfiles | cut -f3 -d':'`
+  $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_varscan_snpeff_indel_insert_format_field.py varscan/$SAMPL.indel.somatic.fixed.snpeff.vcf                     \
+    > varscan/$SAMPL.indel.somatic.fixed.snpeff.format.vcf                                                                                                    \
+  && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf_select_highest_transcript.py varscan/$SAMPL.indel.somatic.fixed.snpeff.format.vcf $SAMPL $GENE2ENTREZ  \
+    > varscan/$SAMPL.indel.somatic.fixed.snpeff.format.vcf.maf                                                                                                \
+  && $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf_select_highest_transcript.py varscan/$SAMPL.snp.somatic.snpeff.vcf $SAMPL $GENE2ENTREZ                 \
+    > varscan/$SAMPL.snp.somatic.snpeff.vcf.maf &
   # Control parallel processes
   P=$((P + 1))
   if [ $P -ge $NUM_PARALLEL ]; then

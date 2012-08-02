@@ -1,22 +1,23 @@
 TOOLS LIST
 
 - CASAVA
-D - GATK & resources (REF, DBSNP_VCF, HAPMAP_VCF, OMNI_VCF)
-D - picard
-D - bwa
-D - samtools, tabix
-D - cutadapt
-D - sickle
-D - fastx_toolkit
-D - bedtools
-D - dindel
-D - pindel
-D - somaticsniper
-D - varscan
-D - snpeff
-D - haploview
-D - plink
-D - varkit
+- GATK
+- picard
+- bwa
+- samtools, tabix
+- cutadapt
+- sickle
+- fastx_toolkit
+- bedtools
+- dindel
+- pindel
+- somaticsniper
+- varscan
+- snpeff
+- haploview
+- plink
+- varkit
+- vcftools
 - GenePattern
 - variant effect predictor
 
@@ -608,3 +609,8 @@ unzip fastqc_v0.10.1.zip
 cd FastQC
 chmod 755 fastqc
 
+
+# VCF Tools
+svn checkout https://vcftools.svn.sourceforge.net/svnroot/vcftools vcftools 
+cd vcftools
+make
