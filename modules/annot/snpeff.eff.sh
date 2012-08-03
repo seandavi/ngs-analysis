@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Run snpeff to annotate the variants in a vcf file
 ##
-## USAGE:         snpeff.eff.sh sample.vcf [genome_version(default GRCh37.64)] ["other_snpeff_options"]
+## USAGE:         snpeff.eff.sh sample.vcf [genome_version(default GRCh37.64) ["other_snpeff_options"]]
 ##
 ## OUTPUT:        sample.snpeff.vcf
 ##                sample.snpeff directory containing genes, and summary html
