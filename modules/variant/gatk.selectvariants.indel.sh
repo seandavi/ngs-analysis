@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Select indels from a vcf file
 ##
-## USAGE:         gatk.selectvariants.indel.sh input.vcf [reference]
+## USAGE:         gatk.selectvariants.indel.sh input.vcf ref.fasta
 ##
 ## OUTPUT:        input.indel.vcf
 ##
@@ -11,12 +11,11 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 1 $# $0
+usage 2 $# $0
 
 # Process input params
 VCFIN=$1
 REFER=$2
-REFER=${REFER:=$REF}
 
 # Format output
 OUTPRE=`filter_ext $VCFIN 1`

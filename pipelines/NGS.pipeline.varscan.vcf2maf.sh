@@ -23,7 +23,7 @@ PREFIX_INDEL=`filter_ext $INDEL_VCF 1`
 TMPDIR=tmp.varscan.vcf2maf.$RANDOM
 mkdir $TMPDIR
 
-# Annotate and create maf files
+# Annotate and create maf files ===========================================================#
 SOMATIC_PVAL=0.05
 TUMOR_PURITY=1.0
 GENE2ENTREZ=$NGS_ANALYSIS_DIR/resources/gene2entrezid

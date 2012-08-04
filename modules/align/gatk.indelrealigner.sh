@@ -2,7 +2,12 @@
 ##
 ## DESCRIPTION:   Local realignment for more accurate indel calling
 ##
-## USAGE:         gatk.indelrealigner.sh sample.bam sample.realign.intervals
+## USAGE:         gatk.indelrealigner.sh
+##                                       sample.bam
+##                                       sample.realign.intervals
+##                                       ref.fasta
+##                                       mills.indel.sites.vcf
+##                                       1000G.indel.vcf
 ##
 ## OUTPUT:        sample.realign.bam
 ##
@@ -11,16 +16,18 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 2 $# $0
+usage 5 $# $0
 
 BAMFILE=$1
 TARGETINTERVAL=$2
+REF=$3
+MILLS_VCF=$4
+INDEL_1000G=$5
 
 # Format output filenames
 OUTPUTPREFIX=`filter_ext $BAMFILE 1`
 OUTPUTBAM=$OUTPUTPREFIX.realign.bam
 OUTPUTLOG=$OUTPUTBAM.log
-
 
 # Run tool
 $JAVAJAR32G $GATK                                         \
@@ -30,8 +37,8 @@ $JAVAJAR32G $GATK                                         \
   -targetIntervals $TARGETINTERVAL                        \
   -o $OUTPUTBAM                                           \
   -l INFO                                                 \
-  -known $MILLS_DEVINE_INDEL_SITES_VCF                    \
-  -known $INDEL_1000G_PHASE1_VCF                          \
+  -known $MILLS_VCF                                       \
+  -known $INDEL_1000G                                     \
   -LOD 5.0                                                \
   -model USE_READS                                        \
   -entropy 0.15                                           \

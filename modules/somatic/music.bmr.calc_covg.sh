@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Count covered bases for normal/tumor pair of bam files
 ##
-## USAGE:         music.bmr.calc_covg.sh bamlist roi_bed_file out_dir [ref.fa]
+## USAGE:         music.bmr.calc_covg.sh bamlist roi_bed_file out_dir ref.fa
 ##
 ## OUTPUT:        bamlist.music/
 ##                  gene_covgs
@@ -14,14 +14,13 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 3 $# $0
+usage 4 $# $0
 
 # Process input parameters
 BAMLIST=$1
 ROI_BED=$2
 OUT_DIR=$3
 REFEREN=$4
-REFEREN=${REFEREN:=$REF}
 
 # Format output filenames
 OUTPUTPREFIX=$OUT_DIR.calc-covg

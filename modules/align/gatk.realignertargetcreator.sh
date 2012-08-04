@@ -2,7 +2,12 @@
 ##
 ## DESCRIPTION:   Create target intervals for realignment
 ##
-## USAGE:         gatk.realignertargetcreator.sh sample.bam [num_threads [target_region.intervals]]
+## USAGE:         gatk.realignertargetcreator.sh
+##                                               sample.bam
+##                                               ref.fasta
+##                                               mills.indel.sites.vcf
+##                                               1000G.indel.vcf
+##                                               [num_threads [target_region.intervals]]
 ##
 ## OUTPUT:        sample.realign.intervals
 ##
@@ -11,11 +16,14 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 1 $# $0
+usage_min 4 $# $0
 
 BAMFILE=$1
-NUM_THREADS=$2
-TARGETREGION=$3
+REF=$2
+MILLS_INDEL=$3
+INDEL_1000G=$4
+NUM_THREADS=$5
+TARGETREGION=$6
 NUM_THREADS=${NUM_THREADS:=2}
 
 # Set target interval option
@@ -37,8 +45,8 @@ $JAVAJAR16G $GATK                                         \
   -I $BAMFILE                                             \
   -o $OUTPUTFILE                                          \
   -l INFO                                                 \
-  -known $MILLS_DEVINE_INDEL_SITES_VCF                    \
-  -known $INDEL_1000G_PHASE1_VCF                          \
+  -known $MILLS_INDEL                                     \
+  -known $INDEL_1000G                                     \
   -maxInterval 500                                        \
   -minReads 4                                             \
   -mismatch 0.0                                           \

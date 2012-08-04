@@ -2,7 +2,7 @@
 ## 
 ## DESCRIPTION:   From a list of bamfiles, run MuSiC.  Use grid engine using qsub
 ##
-## USAGE:         NGS.pipeline.bam2music.ge.sh bamlist roi_file out_dir
+## USAGE:         NGS.pipeline.bam2music.ge.sh bamlist roi_file out_dir ref.fasta
 ##
 ## OUTPUT:        MuSiC output
 ##
@@ -11,12 +11,13 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 3 $# $0
+usage 4 $# $0
 
 # Process input parameters
 BAMLIST=$1
 ROI_BED=$2
 OUT_DIR=$3
+REFEREN=$4
 
 # Create temporary directory
 TMPDIR=tmp.bam2music.$RANDOM
@@ -30,7 +31,7 @@ for bamfile in `cat <(cut -f2 $BAMLIST) <(cut -f3 $BAMLIST)`; do
         1                                                                       \
         1G                                                                      \
         none                                                                    \
-        $NGS_ANALYSIS_DIR/modules/align/samtools.mpileup.sh $bamfile "-Q 30"
+        $NGS_ANALYSIS_DIR/modules/align/samtools.mpileup.sh $bamfile $REFEREN "-Q 30"
 done
 
 # Run varscan, annotate, and create maf files
@@ -77,10 +78,10 @@ merge_maf.sh samples varscan/*maf
 grep -w -f <(cut -f1 samples.maf | sed 1d | sort -u | sed '/^$/d') $ROI_BED > roi.bed
 
 # Compute bases covered
-music.bmr.calc_covg.sh $BAMLIST roi.bed $OUT_DIR
+music.bmr.calc_covg.sh $BAMLIST roi.bed $OUT_DIR $REFEREN
 
 # Compute background mutation rate
-music.bmr.calc_bmr.sh $BAMLIST samples.maf roi.bed $OUT_DIR
+music.bmr.calc_bmr.sh $BAMLIST samples.maf roi.bed $OUT_DIR $REFEREN
 
 # Compute per-gene mutation significance
 # Fix erroreous counts where covered > mutations

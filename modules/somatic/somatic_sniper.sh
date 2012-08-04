@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Run SomaticSniper on a tumor/normal pair of bam files
 ##
-## USAGE:         somatic_sniper.sh normal.bam tumor.bam output_prefix
+## USAGE:         somatic_sniper.sh normal.bam tumor.bam output_prefix ref.fasta
 ##
 ## OUTPUT:        output_prefix.vcf
 ##
@@ -11,11 +11,12 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 3 $# $0
+usage 4 $# $0
 
 BAM_NORM=$1
 BAM_TUMOR=$2
 OUT_PREFIX=$3
+REF=$4
 
 # Run tool
 $SOMATIC_SNIPER                 \

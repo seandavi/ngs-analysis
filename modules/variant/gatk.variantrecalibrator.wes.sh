@@ -2,7 +2,12 @@
 ##
 ## DESCRIPTION:   Recalibrate variant quality scores using known variant sites
 ##
-## USAGE:         gatk.variantrecalibrator.wes.sh input.vcf [reference]
+## USAGE:         gatk.variantrecalibrator.wes.sh 
+##                                                input.vcf
+##                                                ref.fasta
+##                                                hapmap.sites.vcf
+##                                                omni.sites.vcf
+##                                                dbsnp.vcf
 ##
 ## OUTPUT:        input.vcf.recal input.vcf.tranches
 ##
@@ -11,12 +16,14 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 1 $# $0
+usage 5 $# $0
 
 # Process input params
 VCFIN=$1
 REFER=$2
-REFER=${REFER:=$REF}
+HAPMAP_VCF=$3
+OMNI_VCF=$4
+DBSNP_VCF=$5
 
 # Format output
 OUTPREFIX=$VCFIN
@@ -25,20 +32,19 @@ OUT_RECAL=$OUTPREFIX.recal
 OUTPUTLOG=$OUT_RECAL.log
 
 # Run tool
-$JAVAJAR2G $GATK                                          \
-   -T VariantRecalibrator                                 \
-   -R $REFER                                              \
-   -input $VCFIN                                          \
-   -recalFile $OUT_RECAL                                  \
-   -tranchesFile $OUTTRANCH                               \
+$JAVAJAR2G $GATK                                                                                 \
+   -T VariantRecalibrator                                                                        \
+   -R $REFER                                                                                     \
+   -input $VCFIN                                                                                 \
+   -recalFile $OUT_RECAL                                                                         \
+   -tranchesFile $OUTTRANCH                                                                      \
+   --maxGaussians 6                                                                              \
+   -resource:hapmap,VCF,known=false,training=true,truth=true,prior=15.0 $HAPMAP_VCF              \
+   -resource:omni,VCF,known=false,training=true,truth=false,prior=12.0 $OMNI_VCF                 \
+   -resource:dbsnp,VCF,known=true,training=false,truth=false,prior=6.0 $DBSNP_VCF                \
+   -an QD -an HaplotypeScore -an MQRankSum -an ReadPosRankSum -an FS -an MQ -an InbreedingCoeff  \
+   -mode SNP                                                                                     \
    &> $OUTPUTLOG
-
- --maxGaussians 6 \
-   -resource:hapmap,VCF,known=false,training=true,truth=true,prior=15.0 $HAPMAP_SITES_VCF          \
-   -resource:omni,VCF,known=false,training=true,truth=false,prior=12.0 1000G_omni2.5.b37.sites.vcf \
-   -resource:dbsnp,VCF,known=true,training=false,truth=false,prior=6.0 dbsnp_135.b37.vcf \
-   -an QD -an HaplotypeScore -an MQRankSum -an ReadPosRankSum -an FS -an MQ -an InbreedingCoeff \
-   -mode SNP \
 
 
 # Arguments for VariantRecalibrator:

@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Count covariates to recalibrate base quality scores
 ##
-## USAGE:         gatk.countcovariates.sh sample.bam [num_threads]
+## USAGE:         gatk.countcovariates.sh sample.bam ref.fasta dbsnp.vcf [num_threads]
 ##
 ## OUTPUT:        sample.bam.recaldata.csv
 ##
@@ -11,10 +11,12 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 1 $# $0
+usage_min 3 $# $0
 
 BAMFILE=$1
-NUM_THREADS=$2
+REF=$2
+DBSNP_VCF=$3
+NUM_THREADS=$4
 NUM_THREADS=${NUM_THREADS:=2}
 
 # Format output filenames

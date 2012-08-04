@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Recalibrate base quality scores
 ##
-## USAGE:         gatk.tablerecalibration.sh sample.bam sample.bam.recaldata.csv
+## USAGE:         gatk.tablerecalibration.sh sample.bam sample.bam.recaldata.csv ref.fasta
 ##
 ## OUTPUT:        sample.recal.bam
 ##
@@ -11,10 +11,11 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 2 $# $0
+usage 3 $# $0
 
 BAMFILE=$1
 RECALFILE=$2
+REF=$3
 
 # Format output filenames
 OUTPUTPREFIX=`filter_ext $BAMFILE 1`

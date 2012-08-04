@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Generate mpileups of bam files
 ##
-## USAGE:         samtools.mpileup.sh sample.bam ["other_mpileup_options"] 
+## USAGE:         samtools.mpileup.sh sample.bam ref.fasta ["other_mpileup_options"] 
 ##
 ## OUTPUT:        sample.bam.mpileup
 ##
@@ -11,10 +11,11 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 1 $# $0
+usage_min 2 $# $0
 
 BAMFILE=$1
-OPTIONS=$2
+REF=$2
+OPTIONS=$3
 
 # Format output filenames
 OUTPUTPREFIX=$BAMFILE

@@ -2,7 +2,12 @@
 ##
 ## DESCRIPTION:   Variant call on bam file(s)
 ##
-## USAGE:         gatk.unifiedgenotyper.wes.sh target_region out_vcf input1.bam [input2.bam [...]]
+## USAGE:         gatk.unifiedgenotyper.wes.sh 
+##                                             target_region
+##                                             ref.fasta
+##                                             dbsnp.vcf
+##                                             out_vcf
+##                                             input1.bam [input2.bam [...]]
 ##
 ## OUTPUT:        out_prefix.vcf
 ##
@@ -11,17 +16,19 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 2 $# $0
+usage_min 5 $# $0
 
 # Process input params
 PARAMS=($@)
 NUM_PARAMS=${#PARAMS[@]}
 TARGET_REGION=${PARAMS[0]}
-NUM_BAMFILES=$(($NUM_PARAMS - 2))
-BAMFILES=${PARAMS[@]:2:$NUM_BAMFILES}
+REF=${PARAMS[1]}
+DBSNP_VCF=${PARAMS[2]}
+OUTVCF=${PARAMS[3]}
+NUM_BAMFILES=$(($NUM_PARAMS - 4))
+BAMFILES=${PARAMS[@]:4:$NUM_BAMFILES}
 
 # Format output filenames
-OUTVCF=${PARAMS[1]}
 OUTLOG=$OUTVCF.log
 
 # Format list of input bam files

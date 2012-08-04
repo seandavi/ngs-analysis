@@ -2,7 +2,7 @@
 ## 
 ## DESCRIPTION:   From a list of bamfiles, run MuSiC
 ##
-## USAGE:         NGS.pipeline.bam2music.sh bamlist roi_file out_dir [parallel]
+## USAGE:         NGS.pipeline.bam2music.sh bamlist roi_file out_dir ref.fa [parallel]
 ##
 ## OUTPUT:        MuSiC output
 ##
@@ -11,13 +11,14 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 3 $# $0
+usage_min 4 $# $0
 
 # Process input parameters
 BAMLIST=$1
 ROI_BED=$2
 OUT_DIR=$3
-NUM_PARALLEL=$4
+REFEREN=$4
+NUM_PARALLEL=$5
 NUM_PARALLEL=${NUM_PARALLEL:=1}
 
 # Create temporary directory
@@ -27,7 +28,7 @@ mkdir $TMPDIR
 #==[ Run mpileup ]=============================================================================#
 P=0
 for bamfile in `cat <(cut -f2 $BAMLIST) <(cut -f3 $BAMLIST)`; do
-  samtools.mpileup.sh $bamfile "-Q 30" &
+  samtools.mpileup.sh $bamfile $REFEREN "-Q 30" &
   # Control parallel processes
   P=$((P + 1))
   if [ $P -ge $NUM_PARALLEL ]; then
@@ -83,10 +84,10 @@ merge_maf.sh samples varscan/*maf
 grep -w -f <(cut -f1 samples.maf | sed 1d | sort -u | sed '/^$/d') $ROI_BED > roi.bed
 
 # Compute bases covered
-music.bmr.calc_covg.sh $BAMLIST roi.bed $OUT_DIR
+music.bmr.calc_covg.sh $BAMLIST roi.bed $OUT_DIR $REFEREN
 
 # Compute background mutation rate
-music.bmr.calc_bmr.sh $BAMLIST samples.maf roi.bed $OUT_DIR
+music.bmr.calc_bmr.sh $BAMLIST samples.maf roi.bed $OUT_DIR $REFEREN
 
 # Compute per-gene mutation significance
 # Fix erroreous counts where covered > mutations

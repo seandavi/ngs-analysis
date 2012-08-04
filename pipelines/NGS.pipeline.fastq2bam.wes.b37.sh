@@ -3,7 +3,12 @@
 ## DESCRIPTION:   Trim, align, merge, recalibrate, realign, dedup
 ##                Assume single sample per lane
 ##
-## USAGE:         NGS.pipeline.fastq2bam.sh Sample_X(Sample directory)
+## USAGE:         NGS.pipeline.fastq2bam.wes.b37.sh
+##                                          Sample_X(Sample directory)
+##                                          ref.fa
+##                                          dbsnp.vcf
+##                                          mills.indel.sites.vcf
+##                                          1000G.indel.vcf
 ##
 ## OUTPUT:        sample.bam
 ##
@@ -12,9 +17,16 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 1 $# $0
+usage 5 $# $0
 
+# Process input params
 SAMPLEDIR=$1
+REFERENCE=$2
+DBSNP_VCF=$3
+MILLS_INDEL_VCF=$4
+INDEL_1000G_VCF=$5
+
+# Set up pipeline variables
 SAMPLENAME=`echo $SAMPLEDIR | cut -f2- -d'_'`
 FASTQ_R1=`ls $SAMPLEDIR/*_*_L???_R1_???.fastq.gz` # Samplename_AAAAAA_L00N_R1_001.fastq.gz
 FASTQ_R2=`ls $SAMPLEDIR/*_*_L???_R2_???.fastq.gz` # Samplename_AAAAAA_L00N_R2_001.fastq.gz
@@ -32,20 +44,22 @@ $NGS_ANALYSIS_DIR/modules/seq/sickle.pe.sh $FASTQ_R1 $FASTQ_R2
 #==[ Align ]========================================================================#
 
 # Align
-$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $FASTQ_R1.trimmed.fastq $SAMPLE_PREFIX.R1
-$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $FASTQ_R2.trimmed.fastq $SAMPLE_PREFIX.R2
-$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $FASTQ_SE.trimmed.fastq $SAMPLE_PREFIX.SE
+$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $FASTQ_R1.trimmed.fastq $SAMPLE_PREFIX.R1 $REFERENCE
+$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $FASTQ_R2.trimmed.fastq $SAMPLE_PREFIX.R2 $REFERENCE
+$NGS_ANALYSIS_DIR/modules/align/bwa.aln.sh $FASTQ_SE.trimmed.fastq $SAMPLE_PREFIX.SE $REFERENCE
 
 # Create sam
 $NGS_ANALYSIS_DIR/modules/align/bwa.sampe.sh             \
   $SAMPLE_PREFIX.R1.sai                                  \
   $SAMPLE_PREFIX.R2.sai                                  \
   $FASTQ_R1.trimmed.fastq                                \
-  $FASTQ_R2.trimmed.fastq
+  $FASTQ_R2.trimmed.fastq                                \
+  $REFERENCE
 
 $NGS_ANALYSIS_DIR/modules/align/bwa.samse.sh             \
   $SAMPLE_PREFIX.SE.sai                                  \
-  $FASTQ_SE.trimmed.fastq
+  $FASTQ_SE.trimmed.fastq                                \
+  $REFERENCE
 
 # Create bam
 $NGS_ANALYSIS_DIR/modules/align/samtools.sam2sortedbam.sh $SAMPLE_PREFIX.PE.sam.gz
@@ -68,18 +82,29 @@ $NGS_ANALYSIS_DIR/modules/align/picard.addreadgroup.sh $SAMPLE_PREFIX.merged.sor
 
 # Qscore recalibration
 # Count covariates
-$NGS_ANALYSIS_DIR/modules/align/gatk.countcovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.bam
+$NGS_ANALYSIS_DIR/modules/align/gatk.countcovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.bam $REFERENCE $DBSNP_VCF
 # Table recalibration
-$NGS_ANALYSIS_DIR/modules/align/gatk.tablerecalibration.sh $SAMPLE_PREFIX.merged.sorted.rg.bam $SAMPLE_PREFIX.merged.sorted.rg.bam.recaldata.csv
+$NGS_ANALYSIS_DIR/modules/align/gatk.tablerecalibration.sh $SAMPLE_PREFIX.merged.sorted.rg.bam $SAMPLE_PREFIX.merged.sorted.rg.bam.recaldata.csv $REFERENCE
 # Count covariates again (after recal)
-$NGS_ANALYSIS_DIR/modules/align/gatk.countcovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam
+$NGS_ANALYSIS_DIR/modules/align/gatk.countcovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam $REFERENCE $DBSNP_VCF
 # Analyze covariates before and after table recalibration
 $NGS_ANALYSIS_DIR/modules/align/gatk.analyzecovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.bam.recaldata.csv
 $NGS_ANALYSIS_DIR/modules/align/gatk.analyzecovariates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam.recaldata.csv
 
 # Indel realignment
-$NGS_ANALYSIS_DIR/modules/align/gatk.realignertargetcreator.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam 2 $SURESELECT_INTERVAL
-$NGS_ANALYSIS_DIR/modules/align/gatk.indelrealigner.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.bam $SAMPLE_PREFIX.merged.sorted.rg.recal.realign.intervals
+$NGS_ANALYSIS_DIR/modules/align/gatk.realignertargetcreator.sh \
+  $SAMPLE_PREFIX.merged.sorted.rg.recal.bam                    \
+  $REFERENCE                                                   \
+  $MILLS_INDEL_VCF                                             \
+  $INDEL_1000G_VCF                                             \
+  2                                                            \
+  $SURESELECT_INTERVAL
+$NGS_ANALYSIS_DIR/modules/align/gatk.indelrealigner.sh         \
+  $SAMPLE_PREFIX.merged.sorted.rg.recal.bam                    \
+  $SAMPLE_PREFIX.merged.sorted.rg.recal.realign.intervals      \
+  $REFERENCE                                                   \
+  $MILLS_INDEL_VCF                                             \
+  $INDEL_1000G_VCF
 
 # Remove duplicates
 $NGS_ANALYSIS_DIR/modules/align/picard.markduplicates.sh $SAMPLE_PREFIX.merged.sorted.rg.recal.realign.bam

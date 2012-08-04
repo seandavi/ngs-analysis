@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Assess sequence coverage in bam file(s)
 ##
-## USAGE:         gatk.depthofcoverage.wgs.sh out_prefix input1.bam [input2.bam [...]]
+## USAGE:         gatk.depthofcoverage.wgs.sh ref.fasta out_prefix input1.bam [input2.bam [...]]
 ##
 ## OUTPUT:        Coverage summaries
 ##
@@ -11,16 +11,17 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 2 $# $0
+usage_min 3 $# $0
 
 # Process input params
 PARAMS=($@)
+REF=${PARAMS[0]}
 NUM_PARAMS=${#PARAMS[@]}
-NUM_BAMFILES=$(($NUM_PARAMS - 1))
-BAMFILES=${PARAMS[@]:1:$NUM_BAMFILES}
+NUM_BAMFILES=$(($NUM_PARAMS - 2))
+BAMFILES=${PARAMS[@]:2:$NUM_BAMFILES}
 
 # Format output filenames
-OUTPREFIX=${PARAMS[0]}
+OUTPREFIX=${PARAMS[1]}
 OUTPUTLOG=$OUTPREFIX.log
 
 # Format list of input bam files
