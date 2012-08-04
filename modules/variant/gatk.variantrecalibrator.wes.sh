@@ -4,7 +4,7 @@
 ##
 ## USAGE:         gatk.variantrecalibrator.wes.sh 
 ##                                                input.vcf
-##                                                ref.fasta
+##                                                ref.fa
 ##                                                hapmap.sites.vcf
 ##                                                omni.sites.vcf
 ##                                                dbsnp.vcf
