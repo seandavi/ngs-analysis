@@ -43,13 +43,18 @@ Development
 		- jinja2
 - Unit tests for python library
 - Statistics gathering and reports
+	- dbsnp coverage percentage
+	- percent homo, het
 	- runtime, memory, run status
+	- circos for bam visualization
 - Improvements to SGE Pipeline
 	- Benchmark various read counts
 	- Resource usage requests based on benchmarking data
 	- Runtime optimization
-		- Merge fastq_scores.py with fastq_stats.py to save time on file io.
+		- Split up fastq files for faster alignment?
+		- Merge fastq_scores.py with fastq_stats.py to save time on file io
 	- Pipeline visualization (dot)
+- Upgrade to GATK 2.0
 
 ======================================================================================
 TESTING
