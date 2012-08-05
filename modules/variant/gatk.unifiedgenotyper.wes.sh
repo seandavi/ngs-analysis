@@ -37,7 +37,7 @@ for bamfile in $BAMFILES; do
   # Check if file exists
   if [ ! -f $bamfile ]; then
     echoerr 'File '$bamfile' does not exist. Exiting.'
-#    exit 1
+    exit 1
   fi
   INPUTBAM=$INPUTBAM' -I '$bamfile
 done
