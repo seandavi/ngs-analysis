@@ -1,0 +1,620 @@
+======================================================================================
+Requirements
+
+- Linux (CentOS, Redhat)
+- Bash shell
+- Python 2.6/2.7
+	- Required Python Modules
+		- argparse
+		- gzip
+		- os
+		- sys
+		- unittest
+		- zipfile
+- Bioinformatics tools
+	- GATK
+	- Cutadapt
+	- Picard Tools
+	- Samtools
+	- Varscan
+	- Somatic Sniper
+	- Pindel
+	- Dindel
+
+======================================================================================
+Setup/Install
+
+1. Clone source code from google code
+	git clone https://jjinking@code.google.com/p/ngs-analysis
+2. Edit ~/.bash_profile to contain the following line
+	source path/to/ngs-analysis/ngs.init.sh
+
+======================================================================================
+Expected Workflow
+
+1. Run pipeline scripts
+2. Custom analyses parameters
+	a. Set environment variables
+		Source ngs.config.sh
+	b. copy specific tools/scripts/pipelines to project workspace
+	c. Re-run individual scripts/pipelines
+		./script.sh
+
+
+======================================================================================
+Additional Guidelines
+
+--------------------------------------------------------------------------------------
+Git
+
+	Clone
+		git clone https://jjinking@code.google.com/p/ngs-analysis/
+
+	Check remote repos
+		git remote -v
+
+	Update from remote repo
+		git pull
+
+	Clone from a local clone
+		git clone ngs-analysis blah
+
+	Check status
+		git status
+
+	Add new file/directory
+		git add docs
+
+	Remove file
+		git rm foo
+
+	Untrack files
+		git rm --cached filename
+
+	Commit to local repo
+		git commit -m 'Created docs and removed file foo'
+
+	Upload to main git repo server
+		git push origin master
+
+	See which branch I'm on, and list all branches
+		git branch
+
+	Ignore current changes, but pull from origin repo
+		git stash
+		git pull
+		git stash apply
+
+--------------------------------------------------------------------------------------
+Python Unit Test
+
+1. In ngs-analysis base directory, run the configuration script to set all the paths, etc
+	source $NGS_ANALYSIS_CONFIG
+2. Go to $NGS_ANALYSIS_DIR/lib/python/ngs.test directory
+3. Run each script as a command-line tool
+
+--------------------------------------------------------------------------------------
+Installing tools in the $HOME directory
+Recommendation: create $HOME/src directory and install tools there
+
+--------------------------------------------------------
+# CASAVA
+tar -jxf CASAVA_v1.8.2.tar.bz2
+mkdir CASAVA_v1.8.2-build
+cd CASAVA_v1.8.2-build
+../CASAVA_v1.8.2/src/configure --prefix=$HOME --static
+make
+make install
+
+--------------------------------------------------------
+# GCC
+mkdir gmp; cd gmp
+wget ftp://gcc.gnu.org/pub/gcc/infrastructure/gmp-4.3.2.tar.bz2
+tar xjf gmp*tar.bz2
+cd gmp*
+./configure --prefix=$HOME
+make
+make check
+make install
+cd ../..
+
+mkdir mpfr; cd mpfr
+wget http://www.mpfr.org/mpfr-2.4.2/mpfr-2.4.2.tar.bz2
+tar xjf mpfr*tar.bz2
+cd mpfr*
+./configure --prefix=$HOME --with-gmp-build=$HOME/src/gmp/gmp-4.3.2/
+make
+make check
+make install
+cd ../..
+
+mkdir mpc; cd mpc
+wget http://www.multiprecision.org/mpc/download/mpc-0.9.tar.gz
+tar zxf mpc*tar.gz
+cd mpc*
+./configure --prefix=$HOME --with-gmp=$HOME --with-mpfr=$HOME
+make
+make check
+make install
+cd ../..
+
+mkdir libtool; cd libtool
+wget http://ftpmirror.gnu.org/libtool/libtool-2.4.2.tar.gz
+tar zxf libtool*.tar.gz
+cd libtool*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir libunistring; cd libunistring
+wget http://ftp.gnu.org/gnu/libunistring/libunistring-0.9.3.tar.gz
+tar zxf libunistring*tar.gz
+cd libunistring*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir libffi; cd libffi
+wget ftp://sourceware.org/pub/libffi/libffi-3.0.10.tar.gz
+tar zxf libffi*tar.gz
+cd lib*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir autoconf; cd autoconf
+wget http://ftp.gnu.org/gnu/autoconf/autoconf-latest.tar.gz
+tar zxf autoconf*tar.gz
+cd autoconf*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir automake; cd automake
+wget http://ftp.gnu.org/gnu/automake/automake-1.11.3.tar.gz
+tar zxf automake*tar.gz
+cd automake*
+export AUTOCONF=$HOME/bin/autoconf
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir bdwgc; cd bdwgc
+wget http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-7.1.tar.gz
+tar zxf gc*
+cd gc*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir guile; cd guile
+wget ftp://ftp.gnu.org/gnu/guile/guile-2.0.5.tar.gz
+tar zxf guile*tar.gz
+cd guile*
+#export PKG_CONFIG_PATH=$HOME/lib/pkgconfig
+#export LIBFFI_LIBS=$HOME/lib
+#export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+#export BDW_GC_LIBS=$HOME/src/bdwgc/bdwgc
+./configure --prefix=$HOME --with-libltdl-prefix=$HOME PKG_CONFIG_PATH=$HOME/lib/pkgconfig
+make
+make install
+cd ../..
+
+mkdir autogen; cd autogen
+wget http://ftp.gnu.org/gnu/autogen/rel5.12/autogen-5.12.tar.gz
+tar zxf autogen*tar.gz
+cd autogen*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir gcc; cd gcc
+wget ftp://ftp.dti.ad.jp/pub/lang/gcc/releases/gcc-4.6.2/gcc-4.6.2.tar.bz2
+tar xjf gcc-4.6.2.tar.bz2
+cd gcc*
+./configure --prefix=$HOME --with-gmp=$HOME --with-mpfr=$HOME --with-mpc=$HOME LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+make LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+make check LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+make install LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+cd ../..
+
+--------------------------------------------------------
+# PYTHON
+
+# BLAS LINEAR ALGEBRA LIBRARIES
+mkdir blas; cd blas
+wget http://www.netlib.org/blas/blas.tgz
+tar xzf blas.tgz
+cd BLAS
+gfortran -O3 -std=legacy -m64 -fno-second-underscore -fPIC -c *.f    # with gfortran
+ar r libfblas.a *.o
+ranlib libfblas.a
+rm -rf *.o
+export BLAS=~/src/blas/BLAS/libfblas.a
+cd ../..
+
+# LAPACK LINEAR ALGEBRA PACKAGE
+mkdir lapack; cd lapack
+wget http://www.netlib.org/lapack/lapack.tgz
+tar xzf lapack.tgz
+cd lapack*
+cp INSTALL/make.inc.gfortran make.inc          # on Linux with lapack-3.2.1 or newer
+# Edit make.inc as follows:
+# OR for GNU compiler on 64-bit Linux:
+PLAT = _LINUX
+OPTS = -O2 -m64 -fPIC
+NOOPT = -m64 -fPIC
+# Continue below irrespective of compiler:
+make lapacklib
+make clean
+#cp lapack_LINUX.a libflapack.a                 # on Linux
+export LAPACK=~/src/lapack/lapack-3.4.0/liblapack.a
+cd ../..
+
+# PYTHON 2.6
+# Install python
+mkdir python; cd python
+#wget http://www.python.org/ftp/python/2.7.2/Python-2.7.2.tgz
+wget http://www.python.org/ftp/python/2.6.7/Python-2.6.7.tgz
+tar zxf Python*tgz*
+cd Python*/
+./configure --prefix=$HOME
+make
+make install
+
+# Install setuptools
+cd ..
+# Add site-packages directory to $PYTHONPATH $HOME/lib/python2.6/site-packages
+wget http://pypi.python.org/packages/2.6/s/setuptools/setuptools-0.6c11-py2.6.egg
+sh setuptools-0.6c11-py2.6.egg --prefix=$HOME
+
+# Install modules
+easy_install --prefix=~ numpy
+easy_install --prefix=~ scipy
+easy_install --prefix=~ BioPython
+easy_install --prefix=~ argparse
+
+--------------------------------------------------------
+# GIT
+mkdir git; cd git
+curl --insecure --location http://github.com/gitster/git/zipball/master > git.zip
+unzip git*zip
+cd git*
+make; make install
+cd ../..
+
+--------------------------------------------------------
+# SVN
+
+# SQLITE
+mkdir sqlite; cd sqlite
+wget http://www.sqlite.org/sqlite-autoconf-3071000.tar.gz
+tar zxf *tar.gz
+cd sqlite*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+# APR
+mkdir apr; cd apr
+wget http://mirror.khlug.org/apache//apr/apr-1.4.5.tar.gz
+tar zxf apr*
+cd apr*
+./configure --enable-shared --prefix=$HOME
+make
+make install
+cd ..
+
+# APR-UTIL
+wget http://mirror.khlug.org/apache//apr/apr-util-1.4.1.tar.gz
+tar zxf apr-util*tar.gz
+cd apr-util*
+./configure --prefix=$HOME \
+     --with-expat=builtin --with-apr=$HOME \
+     --without-berkeley-db
+make
+make install
+cd ../..
+
+# NEON
+mkdir neon; cd neon
+wget http://www.webdav.org/neon/neon-0.29.6.tar.gz
+tar zxf neon*tar.gz
+cd neon*
+./configure --enable-shared \
+            --prefix=$HOME \
+            --with-libs=$HOME \
+            --with-ssl \
+            CXX=$HOME/bin/g++ \
+            LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH \
+make
+make install
+cd ../..
+
+# SVN
+mkdir svn; cd svn
+wget http://apache.tt.co.kr/subversion/subversion-1.7.3.tar.bz2
+tar xjf subversion*bz2
+cd subversion*
+# CHECK MISSING REQUIREMENTS
+sh ./autogen.sh
+./configure --prefix=$HOME --without-berkeley-db \
+     --with-editor=/usr/bin/emacs --with-apr=$HOME \
+     --with-apr-util=$HOME --with-neon=$HOME \
+     --without-apxs --without-apache \
+     --with-sqlite=$HOME/src/sqlite/sqlite-autoconf-3071000/sqlite3.c
+make
+make install
+cd ../..
+
+--------------------------------------------------------
+# GATK
+mkdir gatk; cd gatk
+git clone git://github.com/broadgsa/gatk.git gatk
+cd gatk
+ant
+ant queue
+cd ..
+
+--------------------------------------------------------
+# PICARD
+mkdir picard; cd picard
+svn co https://picard.svn.sourceforge.net/svnroot/picard/trunk
+cd trunk
+ant sam-jar
+ant -lib lib/ant package-commands
+cd ../..
+
+--------------------------------------------------------
+# BWA
+mkdir bwa; cd bwa
+git clone http://github.com/lh3/bwa.git bwa
+cd bwa
+make
+cd ../..
+
+--------------------------------------------------------
+# SAMTOOLS
+mkdir samtools; cd samtools
+svn co https://samtools.svn.sourceforge.net/svnroot/samtools/trunk/samtools  
+cd samtools
+make
+cd ..
+wget http://sourceforge.net/projects/samtools/files/samtools/0.1.16/samtools-0.1.16.tar.bz2/download
+tar xjf samtools-0.1.16.tar.bz2
+cd samtools-0.1.16
+make
+cd ..
+wget http://sourceforge.net/projects/samtools/files/samtools/0.1.6/samtools-0.1.6.tar.bz2/download
+tar xjf samtools-0.1.6.tar.bz2
+cd samtools-0.1.6
+make
+cd ..
+
+# TABIX
+wget http://sourceforge.net/projects/samtools/files/tabix/tabix-0.2.5.tar.bz2/download
+tar xjf tabix*tar.bz2
+cd tabix-0.2.5
+make
+cd ../..
+
+--------------------------------------------------------
+# CUTADAPT
+easy_install --prefix=~ cutadapt
+
+--------------------------------------------------------
+# SICKLE
+# ZLIB
+mkdir zlib; cd zlib
+wget http://zlib.net/zlib-1.2.6.tar.gz
+tar zxf zlib*tar.gz
+cd zlib*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+# SICKLE
+mkdir sickle; cd sickle
+git clone http://github.com/najoshi/sickle.git sickle
+cd sickle
+make
+cd ../..
+
+--------------------------------------------------------
+# FASTX
+mkdir fastx; cd fastx
+# Install libgtextutils
+wget http://cancan.cshl.edu/labmembers/gordon/files/libgtextutils-0.6.tar.bz2
+tar -xjf libgtextutils-0.6.tar.bz2
+cd libgtextutils-0.6
+./configure --prefix=$HOME
+make
+make install
+cd ..
+ 
+# Tell pkg-config to look for libraries in /usr/local/lib, too.
+export PKG_CONFIG_PATH=$HOME/lib/pkgconfig/:$PKG_CONFIG_PATH
+
+wget http://cancan.cshl.edu/labmembers/gordon/files/fastx_toolkit-0.0.12.tar.bz2 
+tar -xjf fastx_toolkit-0.0.12.tar.bz2 
+cd fastx_toolkit-0.0.12
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+--------------------------------------------------------
+# BEDTOOLS
+mkdir bedtools; cd bedtools
+git clone http://github.com/arq5x/bedtools.git bedtools
+cd bedtools
+make
+cd $HOME/bin
+ln -s $HOME/src/bedtools/bedtools/bin/* ./
+cd $HOME/src
+
+--------------------------------------------------------
+# DINDEL
+mkdir dindel; cd dindel
+wget ftp://ftp.sanger.ac.uk/pub4/resources/software/dindel/source_code/dindel-1.01-src.tar.gz
+tar zxf  dindel*src*.tar.gz
+wget ftp://ftp.sanger.ac.uk/pub4/resources/software/dindel/binaries/dindel-1.01-linux.tar.gz
+tar zxf  dindel*linux*.tar.gz
+cd ..
+
+--------------------------------------------------------
+# PINDEL
+mkdir pindel; cd pindel
+svn checkout https://trac.nbic.nl/svn/pindel pindel
+cd pindel/trunk
+./INSTALL $HOME/src/samtools/samtools/
+cd ../../..
+
+# MODIFIED INSTALL FILE TO USE g++ IN $HOME/bin
+#make CXX=$HOME/bin/g++ \
+#     LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH \
+#     LDFLAGS="-L${HOME}/lib" \
+#     CPPFLAGS="-I${HOME}/include" \
+#     CXXFLAGS="-I${HOME}/include" 
+
+--------------------------------------------------------
+# SOMATICSNIPER
+# CMAKE
+mkdir cmake; cd cmake
+wget http://www.cmake.org/files/v2.8/cmake-2.8.7.tar.gz
+tar zxf cmake*tar.gz
+cd cmake*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir somaticsniper; cd somaticsniper
+git clone --recursive git://github.com/genome/somatic-sniper.git src
+mkdir build; cd build
+export SAMTOOLS_ROOT=$HOME/src/samtools/samtools-0.1.6
+cmake ../src
+make
+cd ../..
+
+--------------------------------------------------------
+# VARSCAN
+mkdir varscan; cd varscan
+wget http://sourceforge.net/projects/varscan/files/latest/download?source=files
+or
+wget "http://sourceforge.net/projects/varscan/files/latest/download" -O VarScan.v2.2.11.jar
+chmod 755 ./VarScan*jar
+cd ..
+
+--------------------------------------------------------
+# SNPEFF
+mkdir snpeff; cd snpeff
+wget http://sourceforge.net/projects/snpeff/files/snpEff_v2_0_5d_core.zip/download
+unzip snpEff*.zip
+cd snpEff_*
+chmod 755 *jar
+cd ../..
+
+--------------------------------------------------------
+# HAPLOVIEW
+mkdir haploview; cd haploview
+wget http://www.broadinstitute.org/ftp/pub/mpg/haploview/Haploview.jar
+chmod 755 *.jar
+cd $HOME/bin
+ln -s $HOME/src/haploview/Haploview.jar ./
+cd $HOME/src
+
+--------------------------------------------------------
+# PLINK
+mkdir plink; cd plink
+wget http://pngu.mgh.harvard.edu/~purcell/plink/dist/plink-1.07-x86_64.zip
+unzip *zip
+cd $HOME/bin
+ln -s $HOME/src/plink/plink-1.07-x86_64/plink ./
+cd $HOME/src
+
+--------------------------------------------------------
+# VARKIT
+mkdir leveldb; cd leveldb
+git clone https://code.google.com/p/leveldb/
+cd leveldb
+make
+cd ../..
+
+mkdir libxml; cd libxml
+wget ftp://xmlsoft.org/libxml2/libxml2-2.7.8.tar.gz
+tar zxf libxml*.tar.gz
+cd libxml*
+./configure --prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir libxlt; cd libxlt
+git clone git://git.gnome.org/libxslt
+cd libxslt
+./autogen.sh --prefix=$HOME
+./configure --prefix=$HOME --with-libxml-prefix=$HOME
+make
+make install
+cd ../..
+
+mkdir varkit; cd varkit
+svn checkout http://variationtoolkit.googlecode.com/svn/trunk variationtoolkit-read-only
+cd variationtoolkit-read-only
+mkdir cgi-bin
+# edit config.mk
+--------------------------
+##path to SAMTOOLS
+SAMDIR=${HOME}/src/samtools/samtools
+##path to TABIX
+TABIXDIR=${HOME}/src/samtools/tabix-0.2.5
+##optional path to UCSC kent's src
+##KENTDIR=${HOME}/src/kent/kent
+##optional path to google leveldb
+LEVELDBDIR=${HOME}/src/leveldb/leveldb
+#CGI_BIN_DIR=/var/www/cgi-bin
+CGI_BIN_DIR=${HOME}/src/varkit/variationtoolkit-read-only/cgi-bin
+#SQLITE_CFLAGS=/usr/include/sqlite3.h
+#SQLITE_LIB=-lsqlite3
+--------------------------
+make
+cd ../..
+
+--------------------------------------------------------
+# VARIANT EFFECT PREDICTOR
+mkdir vep; cd vep
+wget -O vep.tar.gz "http://cvs.sanger.ac.uk/cgi-bin/viewvc.cgi/ensembl-tools/scripts/variant_effect_predictor.tar.gz?view=tar&root=ensembl&pathrev=branch-ensembl-66"
+tar zxf vep.tar.gz
+cd var*
+perl INSTALL.pl
+
+# LWP
+cpan
+#o conf makepl_arg 'PREFIX=$HOME/lib'
+#o conf commit
+install LWP::Simple
+
+--------------------------------------------------------
+# FastQC
+mkdir fastqc
+cd fastqc
+wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.10.1.zip
+unzip fastqc_v0.10.1.zip
+cd FastQC
+chmod 755 fastqc
+
+--------------------------------------------------------
+# VCF Tools
+svn checkout https://vcftools.svn.sourceforge.net/svnroot/vcftools vcftools 
+cd vcftools
+make
+

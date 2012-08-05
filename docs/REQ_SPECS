@@ -1,0 +1,68 @@
+NGS Analysis Pipeline Framework Specifications
+
+- Transparency - Able to see and edit what goes on in the data processing pipeline
+- Easily modifiable for user's needs
+- Run modes
+	- Single node - define max number of threads/processes to use
+	- Cluster - SGE
+	- Define max memory
+	- Output run status
+- Record benchmarking data for each step
+	- reads, sequences
+	- time
+	- file sizes
+	- memory use
+- Generate QC and analyses reports
+
+- Improvements over previous pipeline
+	- number of threads option for base calling
+	- automatic generation of reports/images/plots
+
+======================================================================================
+Development
+
+- SGE Pipeline
+	- Pipeline to go from basecalling to vcf calls
+		- Use samplesheet to generate adapter sequence input for cutadapt.sh
+		- Sanity check for SampleSheet.csv
+			- Same index for same lane
+			- Length of index sequence
+			- Total number of commas should be |rows| x (|columns|-1)
+			- Remove space, forward or backward slashes
+			- No period in sample name
+			- Character set - check illumina manual
+	- Fastq scores plotting
+		- positional averages, quartiles, median, max, and min
+		- cumulative distribution of scores
+- Documentation of python library
+	- Class objects, functions
+	- XML format standards
+- QC Reporting tools
+	- Generate sequence statistics, alignment reports as HTML
+		- R graphics library
+		- jinja2
+- Unit tests for python library
+- Statistics gathering and reports
+	- runtime, memory, run status
+- Improvements to SGE Pipeline
+	- Benchmark various read counts
+	- Resource usage requests based on benchmarking data
+	- Runtime optimization
+		- Merge fastq_scores.py with fastq_stats.py to save time on file io.
+	- Pipeline visualization (dot)
+
+======================================================================================
+TESTING
+
+- Create spreadsheet with a row for every single script
+- Test
+	- input parameters
+		- parameter count
+		- input file(s) recognition - i.e. all the bam files, etc
+		- thread count
+		- target region option
+	- script runs and finishes with no errors
+	- resulting outputs
+		- wes
+		- wgs
+
