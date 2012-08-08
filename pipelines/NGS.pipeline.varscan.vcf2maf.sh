@@ -2,7 +2,7 @@
 ## 
 ## DESCRIPTION:   Given varscan output vcf files (snp and indel), convert them to maf format
 ##
-## USAGE:         NGS.pipeline.varscan.vcf2maf.sh sample.varscan.snp.vcf sample.varscan.indel.vcf
+## USAGE:         NGS.pipeline.varscan.vcf2maf.sh sample.varscan.snp.vcf sample.varscan.indel.vcf [snpeff_genome_version(default GRCh37.64)]
 ##
 ## OUTPUT:        sample.varscan.snp.somatic.snpeff.vcf.maf sample.varscan.indel.somatic.clean.snpeff.format.vcf.maf
 ##
@@ -11,11 +11,12 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 2 $# $0
+usage_min 2 $# $0
 
 # Process input parameters
 SNP_VCF=$1
 INDEL_VCF=$2
+SNPEFF_GENOME_VERSION=$3
 PREFIX_SNP=`filter_ext $SNP_VCF 1`
 PREFIX_INDEL=`filter_ext $INDEL_VCF 1`
 
@@ -43,8 +44,8 @@ $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_varscan_clean_indel.py    \
           -o $PREFIX_INDEL.somatic.clean.vcf
 
 # Annotate
-$NGS_ANALYSIS_DIR/modules/annot/snpeff.eff.sh $PREFIX_SNP.somatic.vcf
-$NGS_ANALYSIS_DIR/modules/annot/snpeff.eff.sh $PREFIX_INDEL.somatic.clean.vcf
+$NGS_ANALYSIS_DIR/modules/annot/snpeff.eff.sh $PREFIX_SNP.somatic.vcf $SNPEFF_GENOME_VERSION
+$NGS_ANALYSIS_DIR/modules/annot/snpeff.eff.sh $PREFIX_INDEL.somatic.clean.vcf $SNPEFF_GENOME_VERSION
 
 # Fix indel format column and convert indel and snp to maf format
 $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_varscan_snpeff_indel_insert_format_field.py  \

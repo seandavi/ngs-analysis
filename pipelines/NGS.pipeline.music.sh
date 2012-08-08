@@ -1,93 +1,39 @@
 #!/bin/bash
 ## 
-## DESCRIPTION:   From a list of bamfiles, run MuSiC
+## DESCRIPTION:   Run MuSiC tools
 ##
-## USAGE:         NGS.pipeline.bam2music.sh bamlist roi_file out_dir ref.fa [parallel]
+## USAGE:         NGS.pipeline.music.sh bamlist maf_file roi_file out_dir ref.fasta
 ##
-## OUTPUT:        MuSiC output
+## OUTPUT:        MuSiC outputs
 ##
 
 # Load analysis config
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 4 $# $0
+usage 5 $# $0
 
 # Process input parameters
 BAMLIST=$1
-ROI_BED=$2
-OUT_DIR=$3
-REFEREN=$4
-NUM_PARALLEL=$5
-NUM_PARALLEL=${NUM_PARALLEL:=1}
+MAFFILE=$2
+ROI_BED=$3
+OUT_DIR=$4
+REFEREN=$5
 
 # Create temporary directory
-TMPDIR=tmp.bam2music.$RANDOM
+TMPDIR=tmp.music.$RANDOM
 mkdir $TMPDIR
-
-#==[ Run mpileup ]=============================================================================#
-P=0
-for bamfile in `cat <(cut -f2 $BAMLIST) <(cut -f3 $BAMLIST)`; do
-  samtools.mpileup.sh $bamfile $REFEREN "-Q 30" &
-  # Control parallel processes
-  P=$((P + 1))
-  if [ $P -ge $NUM_PARALLEL ]; then
-    wait
-    P=0
-  fi
-done
-wait
-
-#==[ Run VarScan and convert results to maf format ]===========================================#
-mkdir varscan
-SOMATIC_PVAL=0.05
-TUMOR_PURITY=1.0
-GENE2ENTREZ=$NGS_ANALYSIS_DIR/resources/gene2entrezid
-P=0
-# VarScan
-for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
-  SAMPL=`echo $bamfiles | cut -f1 -d':'`
-  BAM_N=`echo $bamfiles | cut -f2 -d':'`
-  BAM_T=`echo $bamfiles | cut -f3 -d':'`
-  varscan.somatic.vcf.sh $BAM_N.mpileup $BAM_T.mpileup varscan/$SAMPL $SOMATIC_PVAL $TUMOR_PURITY &
-  # Control parallel processes
-  P=$((P + 1))
-  if [ $P -ge $NUM_PARALLEL ]; then
-    wait
-    P=0
-  fi
-done
-wait
-
-# Convert varscan output vcf files to maf
-P=0
-for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
-  SAMPL=`echo $bamfiles | cut -f1 -d':'`
-  BAM_N=`echo $bamfiles | cut -f2 -d':'`
-  BAM_T=`echo $bamfiles | cut -f3 -d':'`
-  $NGS_ANALYSIS_DIR/pipelines/NGS.pipeline.varscan.vcf2maf.sh varscan/$SAMPL.snp.vcf varscan/$SAMPL.indel.vcf
-  # Control parallel processes
-  P=$((P + 1))
-  if [ $P -ge $NUM_PARALLEL ]; then
-    wait
-    P=0
-  fi
-done
-wait
-
-# Merge all mafs
-merge_maf.sh samples varscan/*maf
 
 #==[ Run MuSiC ]===============================================================================#
 
 # Select genes from ensembl exons that are in maf file
-grep -w -f <(cut -f1 samples.maf | sed 1d | sort -u | sed '/^$/d') $ROI_BED > roi.bed
+grep -w -f <(cut -f1 $MAFFILE | sed 1d | sort -u | sed '/^$/d') $ROI_BED > $TMPDIR/roi.bed
 
 # Compute bases covered
-music.bmr.calc_covg.sh $BAMLIST roi.bed $OUT_DIR $REFEREN
+music.bmr.calc_covg.sh $BAMLIST $TMPDIR/roi.bed $OUT_DIR $REFEREN
 
 # Compute background mutation rate
-music.bmr.calc_bmr.sh $BAMLIST samples.maf roi.bed $OUT_DIR $REFEREN
+music.bmr.calc_bmr.sh $BAMLIST $MAFFILE $TMPDIR/roi.bed $OUT_DIR $REFEREN
 
 # Compute per-gene mutation significance
 # Fix erroreous counts where covered > mutations
@@ -96,16 +42,16 @@ music.bmr.calc_bmr.sh $BAMLIST samples.maf roi.bed $OUT_DIR $REFEREN
 music.smg.sh $OUT_DIR/gene_mrs $OUT_DIR 20
 
 # Mutation relation test
-music.mutation_relation.sh $BAMLIST samples.maf $OUT_DIR 200
+music.mutation_relation.sh $BAMLIST $MAFFILE $OUT_DIR 200
 
 # Pfam - doesn't work
-music.pfam.sh samples.maf $OUT_DIR
+music.pfam.sh $MAFFILE $OUT_DIR
 
 # Proximity analysis - need transcript name, aa changed, and nucleotide position columns in the maf file
-music.proximity.sh samples.maf $OUT_DIR 10
+music.proximity.sh $MAFFILE $OUT_DIR 10
 
 # Compare variants against COSMIC and OMIM data - need transcript name and aa changed columns in the maf file
-music.cosmic_omim.sh samples.maf $OUT_DIR
+music.cosmic_omim.sh $MAFFILE $OUT_DIR
 
 
 # bmr                   ...  Calculate gene coverages and background mutation rates.     
