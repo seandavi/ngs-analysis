@@ -66,7 +66,7 @@ export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/seq
 export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/somatic
 export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/util
 export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/variant
-export JAVAJAR2G='java -Xmx1g -Djava.io.tmpdir='$PWD' -jar'
+export JAVAJAR1G='java -Xmx1g -Djava.io.tmpdir='$PWD' -jar'
 export JAVAJAR2G='java -Xmx2g -Djava.io.tmpdir='$PWD' -jar'
 export JAVAJAR4G='java -Xmx4g -Djava.io.tmpdir='$PWD' -jar'
 export JAVAJAR8G='java -Xmx8g -Djava.io.tmpdir='$PWD' -jar'
