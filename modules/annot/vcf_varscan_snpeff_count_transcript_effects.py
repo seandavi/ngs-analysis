@@ -68,7 +68,7 @@ def convert_allele2bases(allele_str, ref, alt):
         elif a == '.':
             bases.append('N')
         else:
-            sys.stderr.write('Could not recognize allele %s\nExiting' % allele_str)
+            sys.stderr.write('Could not recognize allele %s\nExiting\n\n' % allele_str)
             sys.exit(1)
     return '/'.join(bases)
 

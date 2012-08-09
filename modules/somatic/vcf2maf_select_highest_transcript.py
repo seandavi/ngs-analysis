@@ -176,7 +176,7 @@ def convert_allele2bases(allele_str, ref, alt):
         elif a == '.':
             bases.append('N')
         else:
-            sys.stderr.write('Could not recognize allele %s\nExiting' % allele_str)
+            sys.stderr.write('Could not recognize allele %s\nExiting\n\n' % allele_str)
             sys.exit(1)
     return '/'.join(bases)
 
@@ -241,17 +241,19 @@ def somatic_status_code2text(code):
             '3': 'LOH',
             '5': 'Unknown'}[code]
 
-def load_gene2entrez(g2e_fin):
+def load_gene2entrez(filename):
     '''
     Given a filename, generate a mapping dict from gene2entrez
     '''
     gene2entrez = {}
+    g2e_fin = open(filename, 'r')
     for line in g2e_fin:
         la = line.strip('\n').split('\t')
         gene = la[0]
         entrezid = la[1]
         if gene and entrezid:
             gene2entrez[gene] = entrezid
+    g2e_fin.close()
     return gene2entrez
 
 def parse_file(fin, effects, effects2impact, sampleid, gene2entrez, fout):
@@ -482,15 +484,13 @@ def main():
                     type=str)
     ap.add_argument('gene2entrez',
                     help='File containing gene2entrezid mapping',
-                    nargs='?',
-                    type=argparse.FileType('r'),
-                    default=sys.stdin)
-    ap.add_argument('-o', '-outfile',
+                    type=str)
+    ap.add_argument('-o', '--outfile',
                     help='Output result file',
                     type=argparse.FileType('w'),
                     default=sys.stdout)
     params = ap.parse_args()
-    
+
     # Set up effects
     effects, effects2impact = get_effects_categories()
 

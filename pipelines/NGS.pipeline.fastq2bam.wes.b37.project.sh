@@ -2,7 +2,7 @@
 ## 
 ## DESCRIPTION:   Run alignment pipeline on each sample directory
 ##
-## USAGE:         NGS.pipeline.project.fastq2bam.wes.b37.sh Sample_X [Sample_Y [...]]
+## USAGE:         NGS.pipeline.fastq2bam.wes.b37.project.sh Sample_X [Sample_Y [...]]
 ##
 ## OUTPUT:        Alignment files in each sample directory
 ##

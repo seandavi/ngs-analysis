@@ -111,7 +111,7 @@ def convert_allele2bases(allele_str, ref, alt):
         elif a == '.':
             bases.append('N')
         else:
-            sys.stderr.write('Could not recognize allele %s\nExiting' % allele_str)
+            sys.stderr.write('Could not recognize allele %s\nExiting\n\n' % allele_str)
             sys.exit(1)
     return '/'.join(bases)
 
@@ -338,7 +338,7 @@ def main():
                     type=argparse.FileType('r'),
                     default=sys.stdin)
     params = ap.parse_args()
-    
+
     effects, effects2impact = get_effects_categories()
     parse_file(params.vcf_file, effects, effects2impact)
     params.vcf_file.close()

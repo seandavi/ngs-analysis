@@ -60,16 +60,22 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
           $TUMOR_PURITY
 
   # Convert varscan output to maf
-  $QSUB varscan.vcf2maf.$SAMPL                                                  \
+  $QSUB varscan.vcf2maf                                                         \
         all.q                                                                   \
         1                                                                       \
-        2G                                                                      \
+        4G                                                                      \
         varscan.$SAMPL                                                          \
         $NGS_ANALYSIS_DIR/pipelines/NGS.pipeline.varscan.vcf2maf.sh             \
+          $SAMPL                                                                \
           varscan/$SAMPL.snp.vcf                                                \
           varscan/$SAMPL.indel.vcf
 done
 
 
 # Merge all mafs
-merge_maf.sh $OUT_PRE varscan/*maf
+$QSUB merge.maf                                                                 \
+      all.q                                                                     \
+      1                                                                         \
+      1G                                                                        \
+      varscan.vcf2maf                                                           \
+      $NGS_ANALYSIS_DIR/modules/somatic/merge_maf.sh $OUT_PRE varscan/*maf

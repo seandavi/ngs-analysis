@@ -34,6 +34,14 @@ COMMD=${PARAMS[@]:5:$LEN_COMMD}
 TMP=tmp.$JOBID.$RANDOM
 mkdir $TMP
 
+# Record qsub parameters
+echo JOBID $JOBID >> $TMP/qsub_wrapper.params
+echo QUEUE $QUEUE >> $TMP/qsub_wrapper.params
+echo NUMPP $NUMPP >> $TMP/qsub_wrapper.params
+echo MEMSZ $MEMSZ >> $TMP/qsub_wrapper.params
+echo WAIT4 $WAIT4 >> $TMP/qsub_wrapper.params
+echo COMMD $COMMD >> $TMP/qsub_wrapper.params
+
 # Submit command
 OPTION_V='NGS_ANALYSIS_CONFIG='$NGS_ANALYSIS_CONFIG
 OPTION_V=$OPTION_V',NGS_ANALYSIS_DIR='$NGS_ANALYSIS_DIR
