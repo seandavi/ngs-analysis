@@ -504,57 +504,57 @@ def report_gene(report_pos_filename, report_gene_filename):
         if func_class == 'MISSENSE':
             added = True
             increment_count(transcript2missense, transcript, num_samples)
-            if impact == 'STOP_LOST':
+            if effect == 'STOP_LOST':
                 increment_count(transcript2missense_stop_lost, transcript, num_samples)
-            elif impact == 'START_LOST':
+            elif effect == 'START_LOST':
                 increment_count(transcript2missense_start_lost, transcript, num_samples)
-            elif impact == 'NON_SYNONYMOUS_CODING':
+            elif effect == 'NON_SYNONYMOUS_CODING':
                 increment_count(transcript2missense_nonsyn_coding, transcript, num_samples)
-            elif impact == 'NON_SYNONYMOUS_START':
+            elif effect == 'NON_SYNONYMOUS_START':
                 increment_count(transcript2missense_nonsyn_start, transcript, num_samples)
         elif func_class == 'NONSENSE':
             added = True
             increment_count(transcript2nonsense, transcript, num_samples)
-        elif impact == 'SPLICE_SITE_ACCEPTOR':
+        elif effect == 'SPLICE_SITE_ACCEPTOR':
             added = True
             increment_count(transcript2splice_acceptor, transcript, num_samples)
-        elif impact == 'SPLICE_SITE_DONOR':
+        elif effect == 'SPLICE_SITE_DONOR':
             added = True
             increment_count(transcript2splice_donor, transcript, num_samples)
         elif func_class == 'SILENT':
             added = True
             increment_count(transcript2silent, transcript, num_samples)
-            if impact == 'SYNONYMOUS_CODING':
+            if effect == 'SYNONYMOUS_CODING':
                 increment_count(transcript2silent_syn_coding, transcript, num_samples)
-            elif impact == 'SYNONYMOUS_STOP':
+            elif effect == 'SYNONYMOUS_STOP':
                 increment_count(transcript2silent_syn_stop, transcript, num_samples)
-            elif impact == 'START_LOST':
+            elif effect == 'START_LOST':
                 increment_count(transcript2silent_start_lost, transcript, num_samples)
-        elif impact == 'DOWNSTREAM':
+        elif effect == 'DOWNSTREAM':
             added = True
             increment_count(transcript2downstream, transcript, num_samples)
-        elif impact == 'EXON':
+        elif effect == 'EXON':
             added = True
             increment_count(transcript2exon, transcript, num_samples)
-        elif impact == 'INTERGENIC':
+        elif effect == 'INTERGENIC':
             added = True
             increment_count(transcript2intergenic, transcript, num_samples)
-        elif impact == 'INTRAGENIC':
+        elif effect == 'INTRAGENIC':
             added = True
             increment_count(transcript2intragenic, transcript, num_samples)
-        elif impact == 'INTRON':
+        elif effect == 'INTRON':
             added = True
             increment_count(transcript2intron, transcript, num_samples)
-        elif impact == 'START_GAINED':
+        elif effect == 'START_GAINED':
             added = True
             increment_count(transcript2start_gained, transcript, num_samples)
-        elif impact == 'UPSTREAM':
+        elif effect == 'UPSTREAM':
             added = True
             increment_count(transcript2upstream, transcript, num_samples)
-        elif impact == 'UTR_3_PRIME':
+        elif effect == 'UTR_3_PRIME':
             added = True
             increment_count(transcript2utr_3_prime, transcript, num_samples)
-        elif impact == 'UTR_5_PRIME':
+        elif effect == 'UTR_5_PRIME':
             added = True
             increment_count(transcript2utr_5_prime, transcript, num_samples)
 
@@ -608,6 +608,7 @@ def report_gene(report_pos_filename, report_gene_filename):
                                 'total',
                                 'num_samples',
                                 'sample:chr:pos']))
+
     for gene in gene2transcript:
         # Find maximum variant transcript for gene
         t, t_score = find_maximum_mutated_transcript(gene2transcript[gene], transcript2totalmut)
