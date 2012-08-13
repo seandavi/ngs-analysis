@@ -3,12 +3,12 @@
 ## DESCRIPTION:   Trim, align, merge, recalibrate, realign, dedup
 ##                Assume single sample per lane
 ##
-## USAGE:         NGS.pipeline.fastq2bam.wes.b37.sh
-##                                          Sample_X(Sample directory)
-##                                          ref.fa
-##                                          dbsnp.vcf
-##                                          mills.indel.sites.vcf
-##                                          1000G.indel.vcf
+## USAGE:         ngs.pipe.fastq2bam.wes.b37.sh
+##                                              Sample_X(Sample directory)
+##                                              ref.fa
+##                                              dbsnp.vcf
+##                                              mills.indel.sites.vcf
+##                                              1000G.indel.vcf
 ##
 ## OUTPUT:        sample.bam
 ##
@@ -35,7 +35,7 @@ SAMPLE_PREFIX=`$PYTHON $NGS_ANALYSIS_DIR/modules/util/illumina_fastq_extract_sam
 
 #==[ Fastq QC ]=====================================================================#
 
-NGS.pipeline.fastq.qc.sh $FASTQ_R1 $FASTQ_R2
+ngs.pipe.fastq.qc.sh $FASTQ_R1 $FASTQ_R2
 
 #==[ Trim ]=========================================================================#
 

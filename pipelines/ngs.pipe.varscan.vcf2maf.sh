@@ -2,11 +2,11 @@
 ## 
 ## DESCRIPTION:   Given varscan output vcf files (snp and indel), convert them to maf format
 ##
-## USAGE:         NGS.pipeline.varscan.vcf2maf.sh 
-##                                                sample_id
-##                                                sample.varscan.snp.vcf
-##                                                sample.varscan.indel.vcf
-##                                                [snpeff_genome_version(default GRCh37.64)]
+## USAGE:         ngs.pipe.varscan.vcf2maf.sh 
+##                                            sample_id
+##                                            sample.varscan.snp.vcf
+##                                            sample.varscan.indel.vcf
+##                                            [snpeff_genome_version(default GRCh37.64)]
 ##
 ## OUTPUT:        sample.varscan.snp.somatic.snpeff.vcf.maf sample.varscan.indel.somatic.clean.snpeff.format.vcf.maf
 ##

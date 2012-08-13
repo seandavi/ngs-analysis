@@ -2,9 +2,9 @@
 ## 
 ## DESCRIPTION:   Generate QC for fastq pair
 ##
-## USAGE:         NGS.pipeline.fastq.qc.sh 
-##                                         Samplename_AAAAAA_L00N_R1_001.fastq.gz
-##                                         Samplename_AAAAAA_L00N_R2_001.fastq.gz
+## USAGE:         ngs.pipe.fastq.qc.sh 
+##                                     Samplename_AAAAAA_L00N_R1_001.fastq.gz
+##                                     Samplename_AAAAAA_L00N_R2_001.fastq.gz
 ##
 ## OUTPUT:        Various fastq qc analysis results
 ##

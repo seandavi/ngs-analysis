@@ -3,7 +3,7 @@
 ## DESCRIPTION:   From a list of bamfiles, generatea  single combined TCGA maf file
 ##                Bamlist should be given in the format specified by MuSiC (WUSTL)
 ##
-## USAGE:         NGS.pipeline.bam2maf.sh bamlist ref.fa out_prefix [parallel]
+## USAGE:         ngs.pipe.bam2maf.sh bamlist ref.fa out_prefix [parallel]
 ##
 ## OUTPUT:        out_prefix.maf
 ##                VarScan output in varscan/ directory
@@ -66,7 +66,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   SAMPL=`echo $bamfiles | cut -f1 -d':'`
   BAM_N=`echo $bamfiles | cut -f2 -d':'`
   BAM_T=`echo $bamfiles | cut -f3 -d':'`
-  $NGS_ANALYSIS_DIR/pipelines/NGS.pipeline.varscan.vcf2maf.sh $SAMPL varscan/$SAMPL.snp.vcf varscan/$SAMPL.indel.vcf
+  $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.varscan.vcf2maf.sh $SAMPL varscan/$SAMPL.snp.vcf varscan/$SAMPL.indel.vcf
   # Control parallel processes
   P=$((P + 1))
   if [ $P -ge $NUM_PARALLEL ]; then

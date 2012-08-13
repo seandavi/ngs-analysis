@@ -4,7 +4,7 @@
 ##                Use grid engine using qsub
 ##                Bamlist should be given in the format specified by MuSiC (WUSTL)
 ##
-## USAGE:         NGS.pipeline.bam2maf.ge.sh bamlist ref.fasta out_prefix
+## USAGE:         ngs.pipe.bam2maf.ge.sh bamlist ref.fasta out_prefix
 ##
 ## OUTPUT:        out_prefix.maf
 ##                VarScan output in varscan/ directory
@@ -65,7 +65,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
         1                                                                       \
         4G                                                                      \
         varscan.$SAMPL                                                          \
-        $NGS_ANALYSIS_DIR/pipelines/NGS.pipeline.varscan.vcf2maf.sh             \
+        $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.varscan.vcf2maf.sh                 \
           $SAMPL                                                                \
           varscan/$SAMPL.snp.vcf                                                \
           varscan/$SAMPL.indel.vcf

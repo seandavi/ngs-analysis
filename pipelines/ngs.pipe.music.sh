@@ -2,7 +2,7 @@
 ## 
 ## DESCRIPTION:   Run MuSiC tools
 ##
-## USAGE:         NGS.pipeline.music.sh bamlist maf_file roi_file out_dir ref.fasta
+## USAGE:         ngs.pipe.music.sh bamlist maf_file roi_file out_dir ref.fasta
 ##
 ## OUTPUT:        MuSiC outputs
 ##
