@@ -13,9 +13,13 @@ source $NGS_ANALYSIS_CONFIG
 # Check correct usage
 usage_min 2 $# $0
 
+# Process input params
 BAMFILE=$1
 REF=$2
-OPTIONS=$3
+PARAMS=($@)
+NUM_PARAMS=${#PARAMS[@]}
+NUM_OPTIONS=$(($NUM_PARAMS - 2))
+OPTIONS=${PARAMS[@]:2:$NUM_OPTIONS}
 
 # Format output filenames
 OUTPUTPREFIX=$BAMFILE

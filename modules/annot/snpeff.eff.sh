@@ -17,7 +17,10 @@ usage_min 1 $# $0
 # Process input parameters
 VCFFILE=$1
 GENOME_VERSION=$2
-SNPEFF_OPTIONS=$3
+PARAMS=($@)
+NUM_PARAMS=${#PARAMS[@]}
+NUM_OPTIONS=$(($NUM_PARAMS - 2))
+SNPEFF_OPTIONS=${PARAMS[@]:2:$NUM_OPTIONS}
 
 # Set default genome version
 GENOME_VERSION=${GENOME_VERSION:=GRCh37.64}
