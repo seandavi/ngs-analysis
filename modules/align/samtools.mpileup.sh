@@ -25,8 +25,8 @@ OUTPUTERROR=$OUTPUTFILE.err
 # Run tool
 $SAMTOOLS             \
   mpileup             \
-  -f $REF      	      \
   $OPTIONS            \
+  -f $REF      	      \
   $BAMFILE            \
   1> $OUTPUTFILE      \
   2> $OUTPUTERROR
