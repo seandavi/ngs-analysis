@@ -51,5 +51,5 @@ $JAVAJAR16G $GATK                                         \
   -minReads 4                                             \
   -mismatch 0.0                                           \
   -window 10                                              \
-  $TARGET_OPION                                           \
+  $TARGET_OPTION                                          \
   &> $OUTPUTLOG

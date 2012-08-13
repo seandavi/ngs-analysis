@@ -13,6 +13,7 @@ source $NGS_ANALYSIS_CONFIG
 # Check correct usage
 usage_min 3 $# $0
 
+# Process input params
 BAMFILE=$1
 REF=$2
 DBSNP_VCF=$3
@@ -20,7 +21,8 @@ NUM_THREADS=$4
 NUM_THREADS=${NUM_THREADS:=2}
 
 # Format output filenames
-OUTPUTFILE=$BAMFILE.recaldata.csv
+OUTPREFIX=`filter_ext $BAMFILE 1`
+OUTPUTFILE=$OUTPREFIX.recal.csv
 OUTPUTLOG=$OUTPUTFILE.log
 
 # Run tool

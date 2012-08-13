@@ -23,7 +23,7 @@ for sampledir in $SAMPLEDIRS; do
     4                                                               \
     16G                                                             \
     none                                                            \
-    $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq2bam.wes.b37.sh       \
+    $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq2bam.wes.sh           \
       $sampledir                                                    \
       $B3x_REF                                                      \
       $B3x_DBSNP_VCF                                                \

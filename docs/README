@@ -28,6 +28,8 @@ Setup/Install
 	git clone https://jjinking@code.google.com/p/ngs-analysis
 2. Edit ~/.bash_profile to contain the following line
 	source path/to/ngs-analysis/ngs.init.sh
+3. Set path to tools and resources in the configuration file located at
+        path/to/ngs-analysis/ngs.config.sh
 
 ======================================================================================
 Expected Workflow
@@ -35,7 +37,7 @@ Expected Workflow
 1. Run pipeline scripts
 2. Custom analyses parameters
 	a. Set environment variables
-		Source ngs.config.sh
+		source ngs.config.sh
 	b. copy specific tools/scripts/pipelines to project workspace
 	c. Re-run individual scripts/pipelines
 		./script.sh
