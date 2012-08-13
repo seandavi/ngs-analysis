@@ -2,7 +2,7 @@
 ## 
 ## DESCRIPTION:   Run alignment pipeline on each sample directory
 ##
-## USAGE:         ngs.pipe.fastq2bam.wes.b37.project.sh Sample_X [Sample_Y [...]]
+## USAGE:         ngs.pipe.fastq2bam.project.b37.sh Sample_X [Sample_Y [...]]
 ##
 ## OUTPUT:        Alignment files in each sample directory
 ##
@@ -23,7 +23,7 @@ for sampledir in $SAMPLEDIRS; do
     4                                                               \
     16G                                                             \
     none                                                            \
-    $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq2bam.wes.sh           \
+    $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq2bam.sh               \
       $sampledir                                                    \
       $B3x_REF                                                      \
       $B3x_DBSNP_VCF                                                \
