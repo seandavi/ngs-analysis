@@ -11,6 +11,15 @@ create_dir() {
     [ ! -d $1 ] && mkdir $1
 }
 
+# Check to see if a directory exists, and exit if it does with error message
+create_dir_nonexist() {
+    if [ -d $1 ]; then
+	echoerr "Directory '"$1"' already exists. Exiting."
+	exit 1
+    fi
+    mkdir $1
+}
+
 # Check number of input parameters.  If incorrect, output usage information
 # Checks to see if the number of parameters is == number of needed parameters
 usage() {
