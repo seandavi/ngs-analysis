@@ -4,9 +4,9 @@
 ##                Use grid engine using qsub
 ##                Bamlist should be given in the format specified by MuSiC (WUSTL)
 ##
-## USAGE:         ngs.pipe.bam2maf.ge.sh bamlist ref.fasta out_prefix
+## USAGE:         ngs.pipe.bam2maf.ge.sh bamlist ref.fasta maf_out_prefix
 ##
-## OUTPUT:        out_prefix.maf
+## OUTPUT:        maf_out_prefix.maf
 ##                VarScan output in varscan/ directory
 ##
 

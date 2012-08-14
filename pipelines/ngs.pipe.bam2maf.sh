@@ -3,9 +3,9 @@
 ## DESCRIPTION:   From a list of bamfiles, generatea  single combined TCGA maf file
 ##                Bamlist should be given in the format specified by MuSiC (WUSTL)
 ##
-## USAGE:         ngs.pipe.bam2maf.sh bamlist ref.fa out_prefix [parallel]
+## USAGE:         ngs.pipe.bam2maf.sh bamlist ref.fa maf_out_prefix [parallel]
 ##
-## OUTPUT:        out_prefix.maf
+## OUTPUT:        maf_out_prefix.maf
 ##                VarScan output in varscan/ directory
 ##
 
