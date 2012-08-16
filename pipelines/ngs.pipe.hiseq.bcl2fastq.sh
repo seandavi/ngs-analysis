@@ -18,7 +18,7 @@ SAMPLESHEET=$2
 NUM_THREADS=$3
 
 # Samplesheet sanity check
-$NGS_ANALYSIS_DIR/modules/seq/illumina_samplesheet_sanitycheck.py $SAMPLESHEET
+$PYTHON $NGS_ANALYSIS_DIR/modules/seq/illumina_samplesheet_sanitycheck.py $SAMPLESHEET
 if [ $? -ne 0 ]; then
   echoerr 'Invalid samplesheet'
   exit 1
