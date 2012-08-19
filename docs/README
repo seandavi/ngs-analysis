@@ -91,9 +91,10 @@ Git
 Python Unit Test
 
 1. Run the init script to set paths
-    source $NGS_ANALYSIS_DIR/ngs.init.sh
+	source $NGS_ANALYSIS_DIR/ngs.init.sh
 2. Go to $NGS_ANALYSIS_DIR/lib/python/ngs.test directory
 3. Run each script as a command-line tool
+	$PYTHON vcf.py
 
 --------------------------------------------------------------------------------------
 Installing tools in the $HOME directory
