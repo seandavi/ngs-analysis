@@ -44,6 +44,8 @@ music.smg.sh $OUT_DIR/gene_mrs $OUT_DIR 20
 # Mutation relation test
 music.mutation_relation.sh $BAMLIST $MAFFILE $OUT_DIR 200
 
+exit
+
 # Pfam - doesn't work
 music.pfam.sh $MAFFILE $OUT_DIR
 

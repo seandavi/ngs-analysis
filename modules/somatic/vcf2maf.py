@@ -36,6 +36,9 @@ import re
 import sys
 from ngs import vcf
 
+SOMATIC_CALLER = {'VARSCAN': 'varscan',
+                  'GATK_SOMATIC_INDEL_DETECTOR': 'gatk_somatic_indel_detector'}
+
 SNPEFF2TCGA = {'SPLICE_SITE_ACCEPTOR': 'Splice_Site',
                'SPLICE_SITE_DONOR': 'Splice_Site',
                'START_LOST': 'Missense_Mutation',
@@ -92,7 +95,7 @@ def load_gene2entrez(filename):
     g2e_fin.close()
     return gene2entrez
 
-def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False):
+def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  normal_sample='NORMAL', tumor_sample='TUMOR', tool=SOMATIC_CALLER['VARSCAN']):
     '''
     Read through the vcf file, and parse it.
     Output the columns as defined by TCGA maf format
@@ -140,7 +143,6 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False):
 
         # Read in the variant lines
         while True:
-
             try:
                 # Get parsed variant data
                 variant = vcffile.read_variant()
@@ -163,8 +165,10 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False):
             variantid = variant['ID']
             ref = variant['REF']
             alt = variant['ALT']
-            #somatic_status = vcffile.SOMATIC_STATUS_CODE2TEXT[info_map['SS']]
-            somatic_status = 'Somatic'
+            if tool == SOMATIC_CALLER['VARSCAN']:
+                somatic_status = vcffile.SOMATIC_STATUS_CODE2TEXT[info_map['SS']]
+            else:
+                somatic_status = 'Somatic'
 
             # Variant type
             variant_type = 'SNP'
@@ -188,8 +192,8 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False):
                 variantid = 'novel'
 
             # Sample genotypes
-            normal_gt = vcffile.get_sample_gt(variant, 'NORMAL').split('/')
-            tumor_gt = vcffile.get_sample_gt(variant, 'TUMOR').split('/')
+            normal_gt = vcffile.get_sample_gt(variant, normal_sample).split('/')
+            tumor_gt = vcffile.get_sample_gt(variant, tumor_sample).split('/')
 
             # Iterate over the effects
             for effect in effects:
@@ -259,7 +263,7 @@ def main():
                     help='Input vcf file',
                     type=str)
     ap.add_argument('sample_id',
-                    help='Name of sample for whom the vcf file pertains to',
+                    help='Name of sample for whom the vcf file pertains to, to be outputted in the maf file',
                     type=str)
     ap.add_argument('gene2entrez',
                     help='File containing gene2entrezid mapping',
@@ -267,6 +271,18 @@ def main():
     ap.add_argument('-e', '--highest-priority-effect',
                     help='If this flag is set, the highest-priority effect transcript will be selected from each variant annotation',
                     action='store_true')
+    ap.add_argument('--normal',
+                    help='Normal sample name in the vcf file normal column',
+                    type=str,
+                    default='NORMAL')
+    ap.add_argument('--tumor',
+                    help='Tumor sample name in the vcf file tumor column',
+                    type=str,
+                    default='TUMOR')
+    ap.add_argument('-t', '--somatic-caller',
+                    help='Indicate what tool was used to call the somatic variants',
+                    choices=SOMATIC_CALLER.values(),
+                    default=SOMATIC_CALLER['VARSCAN'])
     ap.add_argument('-o', '--outfile',
                     help='Output result file',
                     type=argparse.FileType('w'),
@@ -277,7 +293,14 @@ def main():
     gene2entrez = load_gene2entrez(params.gene2entrez)
 
     # Generate maf
-    parse_vcf(params.vcf_file, params.sample_id, gene2entrez, params.outfile, params.highest_priority_effect)
+    parse_vcf(params.vcf_file,
+              params.sample_id,
+              gene2entrez,
+              params.outfile,
+              highest_priority=params.highest_priority_effect,
+              normal_sample=params.normal,
+              tumor_sample=params.tumor,
+              tool=params.somatic_caller)
 
 
 if __name__ == '__main__':
