@@ -66,7 +66,16 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   SAMPL=`echo $bamfiles | cut -f1 -d':'`
   BAM_N=`echo $bamfiles | cut -f2 -d':'`
   BAM_T=`echo $bamfiles | cut -f3 -d':'`
-  $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.varscan.vcf2maf.sh $SAMPL varscan/$SAMPL.snp.vcf varscan/$SAMPL.indel.vcf
+  # SNP
+  $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.snp.sh $SAMPL varscan/$SAMPL.snp.vcf &
+  # Control parallel processes
+  P=$((P + 1))
+  if [ $P -ge $NUM_PARALLEL ]; then
+    wait
+    P=0
+  fi
+  # INDEL
+  $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.indel.sh $SAMPL varscan/$SAMPL.indel.vcf &
   # Control parallel processes
   P=$((P + 1))
   if [ $P -ge $NUM_PARALLEL ]; then

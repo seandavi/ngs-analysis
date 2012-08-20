@@ -4,7 +4,7 @@
 ##                Use grid engine using qsub
 ##                Bamlist should be given in the format specified by MuSiC (WUSTL)
 ##
-## USAGE:         ngs.pipe.bam2maf.ge.sh bamlist ref.fasta maf_out_prefix
+## USAGE:         ngs.pipe.bam2maf.ge.sh bamlist ref.fasta maf_out_prefix [snpeff_genome_version(default GRCh37.64)]
 ##
 ## OUTPUT:        maf_out_prefix.maf
 ##                VarScan output in varscan/ directory
@@ -14,27 +14,25 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 3 $# $0
+usage_min 3 $# $0
 
 # Process input parameters
 BAMLIST=$1
 REFEREN=$2
 OUT_PRE=$3
+SNPEFFV=$4
 
 # Create temporary directory
-TMPDIR=tmp.bam2maf.$RANDOM
+RNUM=$RANDOM
+TMPDIR=tmp.bam2maf.$RNUM
 mkdir $TMPDIR
 
-# Run samtools mpileup
+# Qsub wrapper path
 QSUB=$NGS_ANALYSIS_DIR/modules/util/qsub_wrapper.sh
-for bamfile in `cat <(cut -f2 $BAMLIST) <(cut -f3 $BAMLIST)`; do
-  $QSUB mpileup.$SAMPL                                                          \
-        all.q                                                                   \
-        1                                                                       \
-        1G                                                                      \
-        none                                                                    \
-        $NGS_ANALYSIS_DIR/modules/align/samtools.mpileup.sh $bamfile $REFEREN "-Q 30"
-done
+
+# Run samtools mpileup
+cat <(cut -f2 $BAMLIST) <(cut -f3 $BAMLIST) > $TMPDIR/bamfileslist
+$NGS_ANALYSIS_DIR/pipelines/ngs.pipe.mpileup.ge.sh $TMPDIR/bamfileslist $REFEREN mpileup.$RNUM -Q 30
 
 # Run varscan, annotate, and create maf files
 mkdir varscan
@@ -51,7 +49,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
         all.q                                                                   \
         1                                                                       \
         32G                                                                     \
-        mpileup.$SAMPL                                                          \
+        mpileup.$RNUM                                                           \
         $NGS_ANALYSIS_DIR/modules/somatic/varscan.somatic.vcf.sh                \
           $BAM_N.mpileup                                                        \
           $BAM_T.mpileup                                                        \
@@ -59,16 +57,28 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
           $SOMATIC_PVAL                                                         \
           $TUMOR_PURITY
 
-  # Convert varscan output to maf
+  # Convert varscan snp output to maf
   $QSUB varscan.vcf2maf                                                         \
         all.q                                                                   \
         1                                                                       \
-        4G                                                                      \
+        5G                                                                      \
         varscan.$SAMPL                                                          \
-        $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.varscan.vcf2maf.sh                 \
+        $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.snp.sh             \
           $SAMPL                                                                \
           varscan/$SAMPL.snp.vcf                                                \
-          varscan/$SAMPL.indel.vcf
+          $SNPEFFV
+
+  # Convert varscan indel output to maf
+  $QSUB varscan.vcf2maf                                                         \
+        all.q                                                                   \
+        1                                                                       \
+        5G                                                                      \
+        varscan.$SAMPL                                                          \
+        $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.indel.sh           \
+          $SAMPL                                                                \
+          varscan/$SAMPL.indel.vcf                                              \
+          $SNPEFFV
+
 done
 
 

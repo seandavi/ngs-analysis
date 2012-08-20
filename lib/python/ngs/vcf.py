@@ -135,7 +135,7 @@ class VcfFile(file):
 
     def get_sample_names(self):
         '''
-        Return the sample names as a list
+        Return the sample names as a list in the column order that they appear
         Note: The header line must have been read in.
         '''
         return self.column_names[9:]

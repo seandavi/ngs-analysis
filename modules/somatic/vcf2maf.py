@@ -192,6 +192,11 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  norm
                 variantid = 'novel'
 
             # Sample genotypes
+            # If GATK SomaticIndelDetector, then get the sample name by position
+            if tool == SOMATIC_CALLER['GATK_SOMATIC_INDEL_DETECTOR']:
+                sample_names = vcffile.get_sample_names()
+                normal_sample = sample_names[0]
+                tumor_sample = sample_names[1]
             normal_gt = vcffile.get_sample_gt(variant, normal_sample).split('/')
             tumor_gt = vcffile.get_sample_gt(variant, tumor_sample).split('/')
 
