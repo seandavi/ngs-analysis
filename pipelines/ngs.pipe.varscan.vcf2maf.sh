@@ -58,12 +58,12 @@ $NGS_ANALYSIS_DIR/modules/annot/snpeff.eff.sh $PREFIX_INDEL.somatic.clean.vcf $S
 #           -o $PREFIX_INDEL.somatic.clean.snpeff.format.vcf
 
 # Convert indel and snp to maf format
-$PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf_select_highest_transcript.py             \
+$PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf.py                                       \
           $PREFIX_SNP.somatic.snpeff.vcf                                                   \
           $SAMPLE_ID                                                                       \
           $GENE2ENTREZ                                                                     \
           -o $PREFIX_SNP.somatic.snpeff.vcf.maf
-$PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf_select_highest_transcript.py             \
+$PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf.py                                       \
           $PREFIX_INDEL.somatic.clean.snpeff.vcf                                           \
           $SAMPLE_ID                                                                       \
           $GENE2ENTREZ                                                                     \
