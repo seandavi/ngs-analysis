@@ -36,10 +36,10 @@ mkdir $OUT_DIR
 
 # Run tool
 genome music bmr calc-covg             \
-  --roi-file=$ROI_BED                  \
-  --reference-sequence=$REFEREN        \
-  --bam-list=$BAMLIST                  \
-  --output-dir=$OUT_DIR                \
+  --roi-file $ROI_BED                  \
+  --reference-sequence $REFEREN        \
+  --bam-list $BAMLIST                  \
+  --output-dir $OUT_DIR                \
   &> $OUTPUTLOG
 
 # Check if tool ran successfully
@@ -49,8 +49,8 @@ fi
 
 # Run again to generate total_covgs
 genome music bmr calc-covg             \
-  --roi-file=$ROI_BED                  \
-  --reference-sequence=$REFEREN        \
-  --bam-list=$BAMLIST                  \
-  --output-dir=$OUT_DIR                \
+  --roi-file $ROI_BED                  \
+  --reference-sequence $REFEREN        \
+  --bam-list $BAMLIST                  \
+  --output-dir $OUT_DIR                \
   &> $OUTPUTLOG2
