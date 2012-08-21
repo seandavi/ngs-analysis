@@ -27,7 +27,8 @@ mkdir $TMPDIR
 #==[ Run MuSiC ]===============================================================================#
 
 # Select genes from ensembl exons that are in maf file
-grep -w -f <(cut -f1 $MAFFILE | sed 1d | sort -u | sed '/^$/d') $ROI_BED > $TMPDIR/roi.bed
+#grep -w -f <(cut -f1 $MAFFILE | sed 1d | sort -u | sed '/^$/d') $ROI_BED > $TMPDIR/roi.bed
+cut -f1 $MAFFILE | sed 1d | sort -u | sed '/^$/d' | $PYTHON $NGS_ANALYSIS_DIR/modules/util/grep_w_column.py - $ROI_BED -k 3 > $TMPDIR/roi.bed
 
 # Compute bases covered
 music.bmr.calc_covg.sh $BAMLIST $TMPDIR/roi.bed $OUT_DIR $REFEREN

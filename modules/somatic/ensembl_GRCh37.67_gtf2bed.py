@@ -47,10 +47,6 @@ def main():
         if not in_chroms(seqname):
             continue
 
-        # If not exon, skip
-        if feature != 'exon':
-            continue
-
         # Process chromosome name
         chrom = seqname.split('.')[0].upper()
 
