@@ -9,6 +9,15 @@
 ##
 ## OUTPUT:        sample.somatic.snpeff.vcf.maf
 ##
+#$ -cwd
+#$ -N vcf2maf.somaticindel
+#$ -S /bin/bash
+#$ -j y
+#$ -o .
+#$ -e .
+#$ -pe orte 1
+#$ -l h_vmem=5G
+#$ -q all.q
 
 # Load analysis config
 source $NGS_ANALYSIS_CONFIG

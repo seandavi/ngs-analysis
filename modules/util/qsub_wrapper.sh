@@ -63,12 +63,13 @@ qsub                                             \
 
 #
 # #$ -cwd
+# #$ -N jobid
 # #$ -v PATH
 # #$ -S /bin/bash
 # #$ -j y
 # #$ -o .
 # #$ -e .
 # #$ -pe orte 2
-# #$ -l mem=8G
+# #$ -l h_vmem=8G
 # #$ -q all.q
 #
