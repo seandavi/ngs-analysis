@@ -4,7 +4,7 @@
 ##
 ## USAGE:         samtools.sam2sortedbam.sh sample.sam.gz
 ##
-## OUTPUT:        sample.sorted.bam
+## OUTPUT:        sample.sort.bam
 ##
 
 # Load analysis config
@@ -14,8 +14,8 @@ source $NGS_ANALYSIS_CONFIG
 usage 1 $# $0
 
 INPUTSAM=$1
-OUTPREFIX=`filter_ext $INPUTSAM 2`.sorted
-OUTPUTLOG=$OUTPREFIX.sorted.bam.log
+OUTPREFIX=`filter_ext $INPUTSAM 2`.sort
+OUTPUTLOG=$OUTPREFIX.sort.bam.log
 
 $SAMTOOLS                    \
   view                       \

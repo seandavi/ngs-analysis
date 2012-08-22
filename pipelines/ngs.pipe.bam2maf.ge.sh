@@ -50,6 +50,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
         1                                                                       \
         32G                                                                     \
         mpileup.$RNUM                                                           \
+        n                                                                       \
         $NGS_ANALYSIS_DIR/modules/somatic/varscan.somatic.vcf.sh                \
           $BAM_N.mpileup                                                        \
           $BAM_T.mpileup                                                        \
@@ -63,6 +64,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
         1                                                                       \
         5G                                                                      \
         varscan.$SAMPL                                                          \
+        n                                                                       \
         $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.snp.sh             \
           $SAMPL                                                                \
           varscan/$SAMPL.snp.vcf                                                \
@@ -74,6 +76,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
         1                                                                       \
         5G                                                                      \
         varscan.$SAMPL                                                          \
+        n                                                                       \
         $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.indel.sh           \
           $SAMPL                                                                \
           varscan/$SAMPL.indel.vcf                                              \
@@ -88,4 +91,5 @@ $QSUB merge.maf                                                                 
       1                                                                         \
       1G                                                                        \
       varscan.vcf2maf                                                           \
+      n                                                                         \
       $NGS_ANALYSIS_DIR/modules/somatic/merge_maf.sh $OUT_PRE varscan/*maf

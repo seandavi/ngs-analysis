@@ -4,7 +4,7 @@
 ##
 ## USAGE:         picard.sortsam.sh sample.bam [max_records_in_ram]
 ##
-## OUTPUT:        sample.sorted.bam
+## OUTPUT:        sample.sort.bam
 ##
 
 # Load analysis config
@@ -19,7 +19,7 @@ MAX_RECORDS_IN_RAM=${MAX_RECORDS_IN_RAM:=1000000}
 
 # Format output filenames
 OUTPUTPREFIX=`filter_ext $BAMFILE 1`
-OUTPUTFILE=$OUTPUTPREFIX.sorted.bam
+OUTPUTFILE=$OUTPUTPREFIX.sort.bam
 OUTPUTERROR=$OUTPUTFILE.err
 
 # Run tool

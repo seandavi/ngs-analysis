@@ -2,7 +2,10 @@
 ##
 ## DESCRIPTION:   Align fastq sequences to a reference
 ##
-## USAGE:         bwa.aln.sh foo.fastq.gz out_prefix ref.fasta [thread [seedlen [maxseeddiff]]]
+## USAGE:         bwa.aln.sh
+##                           foo.fastq
+##                           ref.fa
+##                           [thread [seedlen [maxseeddiff]]]
 ##
 ## OUTPUT:        out_prefix.sai
 ##
@@ -11,14 +14,13 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 3 $# $0
+usage_min 2 $# $0
 
 FASTQ=$1
-OUTPREFIX=$2
-REF=$3
-THREAD=$4
-SEEDLEN=$5
-MAXSEEDDIFF=$6
+REF=$2
+THREAD=$3
+SEEDLEN=$4
+MAXSEEDDIFF=$5
 
 # If new values are passed in, then use new values
 THREAD=${THREAD:=2}
@@ -26,6 +28,7 @@ SEEDLEN=${SEEDLEN:=32}
 MAXSEEDDIFF=${MAXSEEDDIFF:=2}
 
 # Format output filenames
+OUTPREFIX=$FASTQ
 OUTPUTFILE=$OUTPREFIX.sai
 OUTPUTERROR=$OUTPREFIX.sai.err
 

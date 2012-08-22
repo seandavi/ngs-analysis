@@ -2,7 +2,11 @@
 ##
 ## DESCRIPTION:   Convert aligned single read sai file to sam format
 ##
-## USAGE:         bwa.samse.sh sample.SE.sai sample.SE.fastq.gz ref.fasta
+## USAGE:         bwa.samse.sh
+##                             output_prefix
+##                             sample.SE.sai
+##                             sample.SE.fastq.gz
+##                             ref.fasta
 ##
 ## OUTPUT:        sample.SE.sam.gz
 ##
@@ -11,16 +15,16 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 3 $# $0
+usage 4 $# $0
 
-SE_SAI=$1
-SE_FASTQ=$2
-REF=$3
+OUTPUTPREFIX=$1
+SE_SAI=$2
+SE_FASTQ=$3
+REF=$4
 
 # Format output filenames
-OUTPUTPREFIX=`filter_ext $SE_SAI 1`
 OUTPUTFILE=$OUTPUTPREFIX.sam.gz
-OUTPUTERROR=$OUTPUTPREFIX.sam.err
+OUTPUTERROR=$OUTPUTPREFIX.sam.gz.err
 
 # Run tool
 $BWA                    \

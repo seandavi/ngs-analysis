@@ -63,4 +63,4 @@ done
 sort -k 1,1 -k 2,2n $TMP/tmp.gene_transcripts.merged.bed > $OUTFILE
 
 # Remove temporary files
-#rm -rf $TMP
+rm -rf $TMP

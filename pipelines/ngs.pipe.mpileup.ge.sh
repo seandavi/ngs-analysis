@@ -34,5 +34,6 @@ for bamfile in `cat $BAMLIST`; do
         1                                                                               \
         1G                                                                              \
         none                                                                            \
+        n                                                                               \
         $NGS_ANALYSIS_DIR/modules/align/samtools.mpileup.sh $bamfile $REFEREN $OPTIONS
 done

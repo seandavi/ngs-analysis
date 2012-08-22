@@ -2,7 +2,11 @@
 ## 
 ## DESCRIPTION:   Merge two or more bam files using samtools
 ##
-## USAGE:         samtools.mergebam.sh out_prefix sample.PE.bam sample.SE.bam [...]
+## USAGE:         samtools.mergebam.sh
+##                                     out_prefix
+##                                     sample.PE.bam
+##                                     sample.SE.bam
+##                                     [...]
 ##
 ## OUTPUT:        out_prefix.bam
 ##
@@ -11,7 +15,7 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 3 $# $0
+usage_min 2 $# $0
 
 # Process parameters
 PARAMS=($@)
@@ -22,7 +26,15 @@ BAMFILES=${PARAMS[@]:1:$NUM_BAMFILES}
 OUTPUTBAM=$OUTPREFIX.bam
 OUTPUTLOG=$OUTPREFIX.bam.log
 
-# Run tool
+# If the input only contains a single bamfile,
+# create symbolic link to out_prefix.bam
+if [ $NUM_BAMFILES -eq 1 ]; then
+  SINGLE_BAMFILE=${PARAMS[1]}
+  ln -s $SINGLE_BAMFILE $OUTPUTBAM
+  exit
+fi
+
+# Merge multiple bam files
 $SAMTOOLS          \
   merge            \
   -f               \

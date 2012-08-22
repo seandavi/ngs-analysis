@@ -18,7 +18,7 @@ def main():
                     type=str)
     params = ap.parse_args()
 
-    match = re.search(r'(.+)_[ACGT]{6}_L\d{3}_R[12]_\d{3}\.fastq\.gz', params.fastq_file)
+    match = re.search(r'(.+)_[ACGT]+_L\d{3}_R[12]_\d{3}\.fastq\.gz', params.fastq_file)
 
     if not match:
         sys.stderr.write('No sample name found.  Please check to make sure that the file name is correct.\n')
