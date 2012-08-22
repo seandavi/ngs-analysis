@@ -27,9 +27,7 @@ OUTPUTFILE=$OUTPUTPREFIX.mpileup
 OUTPUTERROR=$OUTPUTFILE.err
 
 # If mpileup exists, and has content, don't run
-if [ -s "$OUTPUTFILE" ]; then
-  exit
-fi
+assert_file_not_exists_w_content $OUTPUTFILE
 
 # Run tool
 $SAMTOOLS             \

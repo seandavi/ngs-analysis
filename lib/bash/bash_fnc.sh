@@ -6,6 +6,54 @@ echoerr() {
     echo "$@" 1>&2; 
 }
 
+# If file doesn't exist, exit with error
+assert_file_exists() {
+    if [ ! -f $1 ]; then
+	echoerr "File '"$1"' does not exist.  Exiting."
+	exit 1
+    fi
+}
+
+# If file doesn't exist or have content, exit with error
+assert_file_exists_w_content() {
+    if [ ! -s $1 ]; then
+	echoerr "File '"$1"' does not have content.  Exiting."
+	exit 1
+    fi
+}
+
+# If file exists, exit normally
+assert_file_not_exists() {
+    if [ -f $1 ]; then
+	echoerr "File '"$1"' exists.  Exiting."
+	exit
+    fi
+}
+
+# If file exists with content, exit normally
+assert_file_not_exists_w_content() {
+    if [ -s $1 ]; then
+	echoerr "File '"$1"' exists with content.  Exiting."
+	exit
+    fi
+}
+
+# If directory doesn't exist, exit with error
+assert_dir_exists() {
+    if [ ! -d $1 ]; then
+	echoerr "Directory '"$1"' does not exist.  Exiting."
+	exit 1
+    fi
+}
+
+# If directory exists, exit with error
+assert_dir_not_exists() {
+    if [ -d $1 ]; then
+	echoerr "Directory '"$1"' exists.  Exiting."
+	exit 1
+    fi
+}
+
 # Create a directory if it doesn't already exist
 create_dir() {
     [ ! -d $1 ] && mkdir $1
@@ -32,7 +80,7 @@ usage() {
     fi
 }
 
-# Check number of input parameters.  If incorrect, output usage information
+# Check number of minimum input parameters.  If incorrect, output usage information
 # Checks to see if the number of parameters is >= number of needed parameters
 usage_min() {
     # $1: Number of parameters needed

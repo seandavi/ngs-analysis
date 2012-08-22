@@ -18,11 +18,7 @@ TARGETDIR=$2
 OUTPUTFILE=$FILESLIST.md5checkfail
 
 # If target dir does not exist, exit with error
-if [ ! -d "$TARGETDIR" ]
-then
-  echo 'Directory does not exist!'
-  exit 1
-fi
+assert_dir_exists $TARGETDIR
 
 # Remove existing failed list file
 rm -f $OUTPUTFILE

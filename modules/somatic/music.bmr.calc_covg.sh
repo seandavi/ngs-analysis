@@ -28,10 +28,7 @@ OUTPUTLOG=$OUTPUTPREFIX.log
 OUTPUTLOG2=$OUTPUTPREFIX.2.log
 
 # Create output directory
-if [ -d "$OUT_DIR" ]; then
-  echoerr "Output directory already exists."
-  exit 1
-fi
+assert_dir_not_exists $OUT_DIR
 mkdir $OUT_DIR
 
 # Run tool
