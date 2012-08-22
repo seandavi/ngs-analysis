@@ -13,11 +13,15 @@ source $NGS_ANALYSIS_CONFIG
 # Check correct usage
 usage 5 $# $0
 
+# Process input params
 PILEUP_NORM=$1
 PILEUP_TUMOR=$2
 OUT_PREFIX=$3
 SOMATIC_PVAL=$4
 TUMOR_PURITY=$5
+
+# If output file already exists and has content, then don't run
+assert_file_not_exists_w_content $OUT_PREFIX.snp.vcf
 
 # Run tool
 $VARSCAN                                \

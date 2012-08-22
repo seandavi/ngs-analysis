@@ -19,6 +19,9 @@ OUT_PREFIX=$3
 SOMATIC_PVAL=$4
 TUMOR_PURITY=$5
 
+# If output file already exists and has content, then don't run
+assert_file_not_exists_w_content $OUT_PREFIX.snp
+
 # Run tool
 $VARSCAN                                \
   somatic                               \
