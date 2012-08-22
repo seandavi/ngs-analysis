@@ -20,13 +20,13 @@ NUM_THREADS=$3
 NUM_THREADS=${NUM_THREADS:=20}
 
 # Check to make sure that output_directory_name doesn't already exist
-if [ -d $OUTPUT_DIR ]; then
+if [ -d "$OUTPUT_DIR" ]; then
   echoerr "Error: Output directory $OUTPUT_DIR already exists"
   exit 1
 fi
 
 # Check to make sure that samplesheet exists
-if [ ! -f $SAMPLESHEET ]; then
+if [ ! -f "$SAMPLESHEET" ]; then
   echoerr "Error: Sample sheet file $SAMPLESHEET does not exist!"
   exit 1
 fi

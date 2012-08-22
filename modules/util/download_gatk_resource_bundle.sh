@@ -20,7 +20,7 @@ TARGETDIR=$3
 TARGETDIR=${TARGETDIR:='.'}
 
 # If target dir does not exist, then create it
-if [ ! -d $TARGETDIR ]
+if [ ! -d "$TARGETDIR" ]
 then
   mkdir $TARGETDIR
 fi

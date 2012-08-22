@@ -22,7 +22,7 @@ PERM_FILE=${PERM_FILE:=644}
 PERM_DIR=${PERM_DIR:=755}
 
 # Set permissions
-if [ -d $TARGET ]; then
+if [ -d "$TARGET" ]; then
   chmod $PERM_DIR $TARGET
   cd $TARGET
   echo "Recursively setting file permissions to $PERM_FILE"

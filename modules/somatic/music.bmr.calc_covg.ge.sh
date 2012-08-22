@@ -27,7 +27,7 @@ OUTPUTPREFIX=$OUT_DIR.calc-covg
 OUTPUTLOG=$OUTPUTPREFIX.log
 
 # Create output directory
-if [ -d $OUT_DIR ]; then
+if [ -d "$OUT_DIR" ]; then
   echoerr "Output directory already exists."
   exit 1
 fi

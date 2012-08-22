@@ -26,6 +26,11 @@ OUTPUTPREFIX=$BAMFILE
 OUTPUTFILE=$OUTPUTPREFIX.mpileup
 OUTPUTERROR=$OUTPUTFILE.err
 
+# If mpileup exists, and has content, don't run
+if [ -s "$OUTPUTFILE" ]; then
+  exit
+fi
+
 # Run tool
 $SAMTOOLS             \
   mpileup             \

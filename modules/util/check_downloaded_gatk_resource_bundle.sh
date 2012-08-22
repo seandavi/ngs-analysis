@@ -18,7 +18,7 @@ TARGETDIR=$2
 OUTPUTFILE=$FILESLIST.md5checkfail
 
 # If target dir does not exist, exit with error
-if [ ! -d $TARGETDIR ]
+if [ ! -d "$TARGETDIR" ]
 then
   echo 'Directory does not exist!'
   exit 1

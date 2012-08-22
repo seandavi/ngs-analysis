@@ -32,7 +32,7 @@ OUTLOG=$OUTVCF.log
 INPUTBAM=''
 for bamfile in $BAMFILES; do
   # Check if file exists
-  if [ ! -f $bamfile ]; then
+  if [ ! -f "$bamfile" ]; then
     echoerr 'File '$bamfile' does not exist. Exiting.'
     exit 1
   fi
