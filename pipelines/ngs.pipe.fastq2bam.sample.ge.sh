@@ -59,7 +59,7 @@ qsub_wrapper.sh                                               \
   $SAMPLE.fastq2bam.pe                                        \
   n                                                           \
   $NGS_ANALYSIS_DIR/modules/align/samtools.mergebam.sh        \
-    $SAMPLE.mergelanes                                        \
+    $SAMPLEDIR/$SAMPLE.mergelanes                             \
     $SAMPLEDIR/*rg.bam
 
 # Dedup, realign, recalibrate
@@ -71,7 +71,7 @@ qsub_wrapper.sh                                               \
   $SAMPLE.mergelanes                                          \
   n                                                           \
   $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.dedup.realign.recal.sh \
-    $RAWBAM                                                   \
+    $SAMPLEDIR/$SAMPLE.mergelanes.bam                         \
     $REFERENCE                                                \
     $DBSNP_VCF                                                \
     $MILLS_INDEL_VCF                                          \

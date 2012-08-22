@@ -20,6 +20,13 @@ ROI_BED=$3
 OUT_DIR=$4
 REFEREN=$5
 
+# Check files exist
+assert_file_exists_w_content $BAMLIST
+assert_file_exists_w_content $MAFFILE
+assert_file_exists_w_content $ROI_BED
+assert_dir_not_exists $OUT_DIR
+assert_file_exists_w_content $REFEREN
+
 # Create temporary directory
 TMPDIR=tmp.music.$RANDOM
 mkdir $TMPDIR
