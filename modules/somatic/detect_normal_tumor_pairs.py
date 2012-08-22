@@ -48,9 +48,32 @@ def check_pattern(pattern, filenames_list):
     # If all the files divided up evenly, then pattern works
     len_n_files = len(n_files)
     len_t_files = len(t_files)
+
+    # All files were divided evenly
     if len_n_files == len_t_files:
         if len_n_files + len_t_files == len(filenames_list):
+            sys.stderr.write('Pattern %s divided up the files evenly\n' % str(pattern))
             return n_files, t_files
+
+    # Files were divided unevenly
+    elif len_n_files > 0 and len_t_files > 0:
+        if len_n_files + len_t_files == len(filenames_list):
+            sys.stderr.write('Pattern %s divided up the files unevenly\n' % str(pattern))
+            return n_files, t_files
+    
+    return False
+
+def search_matching_tumorfile(normalfile, tumorfiles, pattern):
+    '''
+    Given a normal filename, find the matching tumor file
+    '''
+    nf = normalfile.replace(pattern[0], pattern[1])
+    nf = re.sub(r'_[ACGT]{6}_', '_.{4}_', nf)
+    nf = re.sub(r'_L.{3}_', '_L..._', nf)
+    for tf in tumorfiles:        
+        result = re.search(nf, tf)
+        if result:
+            return tf
     return False
 
 def detect_pairs(samplenames):
@@ -66,31 +89,23 @@ def detect_pairs(samplenames):
     for pattern in PATTERNS:
         check_result = check_pattern(pattern, samplenames)
 
-        # Files divided up evenly
+        # Files divided up either evenly or unevenly
         if check_result:
-            normal_files = check_result[0]
-            tumor_files = check_result[1]
+            normal_files = sorted(check_result[0])
+            tumor_files = sorted(check_result[1])
 
-            # Order the pairs correctly
-            ordered_normal_files = sorted(normal_files)
-            ordered_tumor_files = []
-            for n_file in ordered_normal_files:
-                t_file = n_file.replace(pattern[0], pattern[1])
-                if t_file in tumor_files:
-                    ordered_tumor_files.append(t_file)
-                else:
-                    break
+            # Generate the matching pairs
+            matched_pairs = []
+            for n_file in normal_files:
+                t_file = search_matching_tumorfile(n_file, tumor_files, pattern)
+                if t_file:
+                    matched_pairs.append((n_file,t_file))
                 
             # Check to make sure that the ordered files are matched up
-            len_onf = len(ordered_normal_files)
-            len_otf = len(ordered_tumor_files)
-            if len_onf == len_otf:
-                if len_onf + len_otf == len(samplenames):
-                    return zip(ordered_normal_files, ordered_tumor_files)
+            return matched_pairs
 
     # None of the patterns worked
-    if not check_result:
-        return False
+    return False
 
 def main():
     # Set up parameter options
@@ -134,13 +149,13 @@ def main():
     # Could not detect pairs
     if not pairs:
         sys.stderr.write('Could not detect paired files.\n')
-        sys.exit(0)
+        sys.exit(1)
 
     # Output to standard output
     for pair in pairs:
         normal_file = sampleid2filename[pair[0]]
         tumor_file = sampleid2filename[pair[1]]
-        sys.stdout.write('%s\n' % '\t'.join([normal_file, tumor_file]))
+        sys.stdout.write('%s\t%s\n' % (normal_file, tumor_file))
 
 
 if __name__ == '__main__':
