@@ -410,6 +410,16 @@ make
 cd ../..
 
 --------------------------------------------------------
+# BAMTOOLS
+git clone git://github.com/pezmaster31/bamtools.git
+cd bamtools
+mkdir build
+cd build
+cmake ..
+make
+cd ../..
+
+--------------------------------------------------------
 # CUTADAPT
 easy_install --prefix=~ cutadapt
 

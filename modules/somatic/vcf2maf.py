@@ -207,6 +207,14 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  norm
                 if not effect.gene or not effect.transcript:
                     continue
 
+                # If gene name contains a '.', skip
+                if re.search(r'\.', effect.gene):
+                    continue
+
+                # If transcript name contains a '.', skip
+                if re.search(r'\.', effect.transcript):
+                    continue
+
                 # If aa change, add 'p.'
                 aa_change = effect.aa_change
                 if aa_change:
