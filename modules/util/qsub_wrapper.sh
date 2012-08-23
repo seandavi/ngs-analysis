@@ -65,6 +65,8 @@ qsub                                             \
   -sync $SYNC                                    \
   $COMMD
 
+sleep 5
+
 #
 # #$ -cwd
 # #$ -N jobid
