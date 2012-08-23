@@ -1,8 +1,11 @@
 #!/bin/bash
 ## 
 ## DESCRIPTION:   Run MuSiC tools
+## NOTE:          The reference file can cause floating point error if using human_g1k_v37.fasta from GATK resource bundle
+##                because of the multiple words present in each sequence id line.  Must remove those, and provide only a
+##                single-word id per sequence line.  This problem is common in other tools such as VarScan.
 ##
-## USAGE:         ngs.pipe.music.sh bamlist maf_file roi_file out_dir ref.fasta
+## USAGE:         ngs.pipe.music.sh bamlist maf_file roi_file out_dir ref.fa
 ##
 ## OUTPUT:        MuSiC outputs
 ##
