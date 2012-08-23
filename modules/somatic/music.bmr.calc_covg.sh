@@ -40,9 +40,7 @@ genome music bmr calc-covg             \
   &> $OUTPUTLOG
 
 # Check if tool ran successfully
-if [ $? -ne 0 ]; then
-  exit 1
-fi
+assert_normal_exit_status $? "First iteration of bmr calc-covg exited with error"
 
 # Run again to generate total_covgs
 genome music bmr calc-covg             \

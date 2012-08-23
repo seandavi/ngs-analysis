@@ -27,9 +27,7 @@ assert_file_exists_w_content $BAMFILESLIST
 $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/detect_normal_tumor_pairs.py $BAMFILESLIST > $BAMFILESLIST.pairs
 
 # If unable to find the pairs, exit with error
-if [ $? -ne 0 ]; then
-  exit 1
-fi
+assert_normal_exit_status $? "Unable to find bam pairs"
 
 # Get samples column
 for file in `cut -f1 $BAMFILESLIST.pairs`; do

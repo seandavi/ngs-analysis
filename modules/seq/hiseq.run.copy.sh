@@ -41,10 +41,7 @@ for item in `ls $ORIGIN`; do
 done
 
 # Check successful run
-if [ $? -ne 0 ]; then
-  echoerr "Could not copy items in base directory. Exiting"
-  exit 1   
-fi
+assert_normal_exit_status $? "Could not copy items in base directory. Exiting"
 
 # Copy Data directory
 create_dir_nonexist Data
@@ -61,10 +58,7 @@ for item in `ls $ORIGIN/Data`; do
 done
 
 # Check successful run
-if [ $? -ne 0 ]; then
-  echoerr "Could not copy items in 'Data' directory. Exiting"
-  exit 1   
-fi
+assert_normal_exit_status $? "Could not copy items in 'Data' directory. Exiting"
 
 # Copy Intensities directory
 create_dir_nonexist Intensities
@@ -98,10 +92,7 @@ for lane in $LANES; do
 done
 
 # Check successful run
-if [ $? -ne 0 ]; then
-  echoerr "Could not copy items in 'Intensities' directory. Exiting"
-  exit 1   
-fi
+assert_normal_exit_status $? "Could not copy items in 'Intensities' directory. Exiting"
 
 # Copy BaseCalls directory
 create_dir_nonexist BaseCalls

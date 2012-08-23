@@ -37,11 +37,20 @@ mkdir $TMPDIR
 #grep -w -f <(cut -f1 $MAFFILE | sed 1d | sort -u | sed '/^$/d') $ROI_BED > $TMPDIR/roi.bed
 cut -f1 $MAFFILE | sed 1d | sort -u | sed '/^$/d' | $PYTHON $NGS_ANALYSIS_DIR/modules/util/grep_w_column.py - $ROI_BED -k 3 > $TMPDIR/roi.bed
 
+# Check if tool ran successfully
+assert_normal_exit_status $? "Error generating subset of roi pertaining to maf genes. Exiting"
+
 # Compute bases covered
 music.bmr.calc_covg.sh $BAMLIST $TMPDIR/roi.bed $OUT_DIR $REFEREN
 
+# Check if tool ran successfully
+assert_normal_exit_status $? "Error running calc-covg. Exiting"
+
 # Compute background mutation rate
 music.bmr.calc_bmr.sh $BAMLIST $MAFFILE $TMPDIR/roi.bed $OUT_DIR $REFEREN 1
+
+# Check if tool ran successfully
+assert_normal_exit_status $? "Error calculating bmr. Exiting"
 
 # Compute per-gene mutation significance
 # Fix erroreous counts where covered > mutations
@@ -49,8 +58,14 @@ music.bmr.calc_bmr.sh $BAMLIST $MAFFILE $TMPDIR/roi.bed $OUT_DIR $REFEREN 1
 #music.smg.sh $OUT_DIR/gene_mrs.fixed $OUT_DIR 20
 music.smg.sh $OUT_DIR/gene_mrs $OUT_DIR 20
 
+# Check if tool ran successfully
+assert_normal_exit_status $? "Error computing smg. Exiting"
+
 # Mutation relation test
 music.mutation_relation.sh $BAMLIST $MAFFILE $OUT_DIR 200
+
+# Check if tool ran successfully
+assert_normal_exit_status $? "Error computing mutation_relation test. Exiting"
 
 exit
 

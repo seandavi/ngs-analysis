@@ -19,10 +19,9 @@ NUM_THREADS=$3
 
 # Samplesheet sanity check
 $PYTHON $NGS_ANALYSIS_DIR/modules/seq/illumina_samplesheet_sanitycheck.py $SAMPLESHEET
-if [ $? -ne 0 ]; then
-  echoerr 'Invalid samplesheet'
-  exit 1
-fi
+
+# Check if tool ran successfully
+assert_normal_exit_status $? "Invalid samplesheet"
 
 # Run basecall
 $NGS_ANALYSIS_DIR/modules/seq/casava.bcl2fastq.hiseq.sh $OUTPUT_DIR $SAMPLESHEET $NUM_THREADS

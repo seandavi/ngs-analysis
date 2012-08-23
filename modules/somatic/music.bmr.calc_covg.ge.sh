@@ -49,9 +49,7 @@ genome music bmr calc-covg              \
   &> $OUTPUTLOG
 
 # Check if tool ran successfully
-if [ $? -ne 0 ]; then
-  exit 1
-fi
+assert_normal_exit_status $? "First iteration of bmr calc-covg exited with error"
 
 # Run the parallelized jobs
 WUSTL_GENOME=`which genome`

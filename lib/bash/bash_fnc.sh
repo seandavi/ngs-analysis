@@ -68,6 +68,16 @@ create_dir_nonexist() {
     mkdir $1
 }
 
+# Assert that the previous process exited normally
+assert_normal_exit_status() {
+  STATUS=$1
+  MESSAGE=$2
+  if [ $STATUS -ne 0 ]; then
+    echo $MESSAGE
+    exit $STATUS
+  fi
+}
+
 # Check number of input parameters.  If incorrect, output usage information
 # Checks to see if the number of parameters is == number of needed parameters
 usage() {

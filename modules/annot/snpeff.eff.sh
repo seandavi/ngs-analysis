@@ -47,9 +47,7 @@ $JAVAJAR4G $SNPEFF                     \
   2> $OUTERR
 
 # # Check if tool ran successfully
-# if [ $? -ne 0 ]; then
-#   exit 1
-# fi
+# assert_normal_exit_status $? "SNPEff exited with error"
 
 # # Create output directory to contain all output
 # mkdir $OUTDIR
