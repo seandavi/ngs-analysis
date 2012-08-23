@@ -34,19 +34,22 @@ mkdir $TMPDIR
 #==[ Run MuSiC ]===============================================================================#
 
 # Select genes from ensembl exons that are in maf file
+echo 'Generating roi subset for genes in the maf file'
 #grep -w -f <(cut -f1 $MAFFILE | sed 1d | sort -u | sed '/^$/d') $ROI_BED > $TMPDIR/roi.bed
 cut -f1 $MAFFILE | sed 1d | sort -u | sed '/^$/d' | $PYTHON $NGS_ANALYSIS_DIR/modules/util/grep_w_column.py - $ROI_BED -k 3 > $TMPDIR/roi.bed
 
 # Check if tool ran successfully
-assert_normal_exit_status $? "Error generating subset of roi pertaining to maf genes. Exiting"
+assert_normal_exit_status $? "Error generating subset of roi for genes in the maf file. Exiting"
 
 # Compute bases covered
+echo 'Running bmr calc-covg'
 music.bmr.calc_covg.sh $BAMLIST $TMPDIR/roi.bed $OUT_DIR $REFEREN
 
 # Check if tool ran successfully
 assert_normal_exit_status $? "Error running calc-covg. Exiting"
 
 # Compute background mutation rate
+echo 'Running bmr calc-bmr'
 music.bmr.calc_bmr.sh $BAMLIST $MAFFILE $TMPDIR/roi.bed $OUT_DIR $REFEREN 1
 
 # Check if tool ran successfully
@@ -56,12 +59,14 @@ assert_normal_exit_status $? "Error calculating bmr. Exiting"
 # Fix erroreous counts where covered > mutations
 #$PYTHON $NGS_ANALYSIS_DIR/modules/somatic/music_fix_gene_mrs.py $OUT_DIR/gene_mrs > $OUT_DIR/gene_mrs.fixed
 #music.smg.sh $OUT_DIR/gene_mrs.fixed $OUT_DIR 20
+echo 'Running smg'
 music.smg.sh $OUT_DIR/gene_mrs $OUT_DIR 20
 
 # Check if tool ran successfully
 assert_normal_exit_status $? "Error computing smg. Exiting"
 
 # Mutation relation test
+echo 'Running mutation_relation test'
 music.mutation_relation.sh $BAMLIST $MAFFILE $OUT_DIR 200
 
 # Check if tool ran successfully
