@@ -331,7 +331,7 @@ def report_pos_count_samples(sampleid, fin, effects, effects2impact, variant_ext
         alt = la[colname2colnum['ALT']]
         qual = la[colname2colnum['QUAL']]
         filtr = la[colname2colnum['FILTER']]
-        total_dp = info_field2val['DP']
+        #total_dp = info_field2val['DP']
         
         # Parse effects
         if all_transcripts: # Report all transcript effects per variant
