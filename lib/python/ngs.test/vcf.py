@@ -91,6 +91,25 @@ class TestVcfFileFunctions(unittest.TestCase):
             self.assertEqual(variant['FORMAT'], 'GT:GQ:DP:HQ')
             self.assertEqual(variant['NA00003'], '0/0:41:3')
 
+    def test_parse_line(self):
+        with vcf.VcfFile(self.example_vcf, 'r') as vcffile:
+            vcffile.jump2variants()
+            i = 0
+            for line in vcffile:
+                variant = vcffile.parse_line(line)
+                if i == 0:
+                    self.assertEqual(variant['CHROM'], '20')
+                    self.assertEqual(variant['ID'], 'rs6054257')
+                    self.assertEqual(variant['NA00003'] , '1/1:43:5:.,.')
+                elif i == 1:
+                    self.assertEqual(variant['INFO'], 'NS=3;DP=11;AF=0.017')
+                    self.assertEqual(variant['FORMAT'], 'GT:GQ:DP:HQ')
+                    self.assertEqual(variant['NA00003'], '0/0:41:3')
+                    break # exit loop after 2 iterations
+                i += 1
+                    
+            
+
     def test_parse_info(self):
         with vcf.VcfFile(self.example_vcf, 'r') as vcffile:
             # Check that the variant row is read in correctly

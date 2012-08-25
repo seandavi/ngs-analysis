@@ -142,14 +142,12 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  norm
         vcffile.jump2variants()
 
         # Read in the variant lines
-        while True:
-            try:
-                # Get parsed variant data
-                variant = vcffile.read_variant()
-            # EOF is reached
-            except StopIteration:
-                break
+        for line in vcffile:
 
+            # Get parsed variant data
+            variant = vcffile.parse_line(line)
+
+            # Parse the info column
             info_map, info_single = vcffile.parse_info(variant)
             if highest_priority:
                 effects = [vcffile.select_highest_priority_effect(variant)]
@@ -158,8 +156,8 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  norm
                     continue
             else:
                 effects = vcffile.parse_effects(variant)
-
-             # Record columns
+                
+            # Record columns
             chrom = variant['CHROM']
             pos = variant['POS']
             variantid = variant['ID']
@@ -234,13 +232,13 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  norm
                         effect_val = 'FRAME_SHIFT_DEL'
 
                 # Gene name column
-                gene_col_val = '_'.join([effect.gene, effect.transcript]
+                gene_col_val = '_'.join([effect.gene, effect.transcript])
                 if highest_priority:
                     gene_col_val = effect.gene
 
                 # Output to standard output
                 UNAVAILABLE=''
-                fout.write('%s\n' % '\t'.join([gene_col_val),
+                fout.write('%s\n' % '\t'.join([gene_col_val,
                                                entrez_id,
                                                'sequencing.center',
                                                '37',

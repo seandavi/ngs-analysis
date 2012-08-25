@@ -86,13 +86,11 @@ class VcfFile(file):
 
     def read_variant(self):
         '''
-        Parse the variant line, and return a dictionary mapping column names
-        to variant values.
+        Parse the variant line, and call the parse_line method and return the
+        resulting output
         NOTE:
           - This function will cause this iterator to move forward, since
             readline() will be called.
-          - If the next line to read in is not a variant line, the function will
-            raise an error.
         '''
         # Read in the next variant line
         line = self.readline()
@@ -101,11 +99,21 @@ class VcfFile(file):
         if not line:
             raise StopIteration
 
+        # Generate dictionary and return it
+        return self.parse_line(line)
+
+    def parse_line(self, line):
+        '''
+        Parse a line of vcf variant and return a dictionary mapping column names
+        to variant values
+        NOTE:
+          - If the next line to read in is not a variant line, the function will
+            raise an error.
+        '''
         # Ensure that the line is a variant line
         if not self.is_variant_line(line):
             raise ValueError('This is not a variant line:\n\t%s\n' % line)
 
-        # Generate dictionary and return it
         return dict(zip(self.column_names, line.strip().split()))
 
     def parse_info(self, variant):
@@ -115,6 +123,7 @@ class VcfFile(file):
         corresponding values and set it as an attribute of this object.
         Return the ones that do not have the = sign in a separate list.
         Input: variant dictionary returned by the read_variant() method
+               or the parse_line(line) method
         '''
         # Separate the fields within the info string
         equal_sign = []
@@ -145,7 +154,8 @@ class VcfFile(file):
         Generate a mapping from format fields to each sample\'s values
         Return a 2D dictionary mapping sample2formatfield2val
 
-        Input: variant dictionary returned by the read_variant() method
+        Input: variant dictionary returned by the read_variant() method or the
+               parse_line(line) method
         '''
         sample2field2val = {}
         formats = variant['FORMAT'].split(':')
@@ -166,7 +176,7 @@ class VcfFile(file):
           |: phased
 
         Input:
-          variant: dictionary returned by the read_variant() method
+          variant: dictionary returned by the read_variant() or the parse_line(line) methods
           sample: sample name
           phased: True | False, default False
           
@@ -325,7 +335,8 @@ class SnpEffVcfFile(VarscanVcfFile):
         Parse the info column string in the vcf file, and extract
         a list of Effects objects sorted by their priority
         Inputs
-          variant: dictionary returned by the read_variant() method
+          variant: dictionary returned by the read_variant() or
+                   the parse_line(line) method
         '''
         # If effect2priority is not set, set it
         if self.effect2priority is None:
@@ -354,7 +365,8 @@ class SnpEffVcfFile(VarscanVcfFile):
         priority effect as defined by the effects_prioritized attribute
 
         Inputs
-          variant: dictionary returned by the read_variant() method
+          variant: dictionary returned by the read_variant() or the
+                   parse_line(line) method
         '''        
         # Parse the effects
         effects = self.parse_effects(variant)
