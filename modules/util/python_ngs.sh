@@ -16,7 +16,11 @@ source $NGS_ANALYSIS_CONFIG
 usage_min 1 $# $0
 
 # Process input params
-TOOL=$1
+PARAMS=($@)
+TOOL=${PARAMS[0]}
+TOOL_PARAMS=${@:2}
 TOOL_DIR=$(dirname `which $TOOL`)
+TOOL_NAME=$(basename $TOOL)
 
-$PYTHON $TOOL_DIR/$@
+# Run the tool
+$PYTHON $TOOL_DIR/$TOOL_NAME $TOOL_PARAMS
