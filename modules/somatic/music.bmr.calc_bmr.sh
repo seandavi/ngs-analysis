@@ -2,7 +2,13 @@
 ##
 ## DESCRIPTION:   Calulate background mutation rate
 ##
-## USAGE:         music.bmr.calc_bmr.sh bamlist maf_file roi_bed_file out_dir ref.fa [skip_silent_noncoding]
+## USAGE:         music.bmr.calc_bmr.sh
+##                                      bamlist
+##                                      maf_file
+##                                      roi_bed_file
+##                                      out_dir
+##                                      ref.fa
+##                                      [dont_skip_silent_noncoding]
 ##
 ## OUTPUT:        bamlist.music/
 ##                  gene_mrs

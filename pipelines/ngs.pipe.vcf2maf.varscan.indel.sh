@@ -54,5 +54,6 @@ $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf.py                            
           $PREFIX_INDEL.somatic.clean.snpeff.vcf                                           \
           $SAMPLE_ID                                                                       \
           $GENE2ENTREZ                                                                     \
+          -e                                                                               \
           -t varscan                                                                       \
           -o $PREFIX_INDEL.somatic.clean.snpeff.vcf.maf

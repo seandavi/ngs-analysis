@@ -233,9 +233,14 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  norm
                     else:
                         effect_val = 'FRAME_SHIFT_DEL'
 
+                # Gene name column
+                gene_col_val = '_'.join([effect.gene, effect.transcript]
+                if highest_priority:
+                    gene_col_val = effect.gene
+
                 # Output to standard output
                 UNAVAILABLE=''
-                fout.write('%s\n' % '\t'.join(['_'.join([effect.gene, effect.transcript]),
+                fout.write('%s\n' % '\t'.join([gene_col_val),
                                                entrez_id,
                                                'sequencing.center',
                                                '37',
