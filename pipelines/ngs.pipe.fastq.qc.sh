@@ -21,14 +21,17 @@ SAMPLE_PREFIX=`$PYTHON $NGS_ANALYSIS_DIR/modules/util/illumina_fastq_extract_sam
 
 #==[ Get fastq stats ]=========================================================================#
 
-$PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_stats.py $FASTQ_R1
-$PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_stats.py $FASTQ_R2
+$PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_stats.py $FASTQ_R1 &
+$PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_stats.py $FASTQ_R2 &
+wait
 
 #==[ Get fastq quality score summmary ]========================================================#
 
-$PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_scores.py $FASTQ_R1
-$PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_scores.py $FASTQ_R2
+$PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_scores.py $FASTQ_R1 &
+$PYTHON $NGS_ANALYSIS_DIR/modules/seq/fastq_scores.py $FASTQ_R2 &
+wait
 
 #==[ Run FastQC ]==============================================================================#
-$NGS_ANALYSIS_DIR/modules/seq/fastqc.sh $FASTQ_R1 1
-$NGS_ANALYSIS_DIR/modules/seq/fastqc.sh $FASTQ_R2 1
+$NGS_ANALYSIS_DIR/modules/seq/fastqc.sh $FASTQ_R1 1 &
+$NGS_ANALYSIS_DIR/modules/seq/fastqc.sh $FASTQ_R2 1 &
+wait
