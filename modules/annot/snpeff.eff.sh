@@ -25,6 +25,11 @@ SNPEFF_OPTIONS=${PARAMS[@]:2:$NUM_OPTIONS}
 # Set default genome version
 GENOME_VERSION=${GENOME_VERSION:=GRCh37.64}
 
+# If only genome version is provided, prefix GRCh
+if [[ $GENOME_VERSION =~ '^[0-9]{2}\.[0-9]{2}$' ]]; then
+  GENOME_VERSION='GRCh'$GENOME_VERSION
+fi
+
 # Format outputs
 OUTPREFIX=`filter_ext $VCFFILE 1`
 OUTVCF=$OUTPREFIX.snpeff.vcf

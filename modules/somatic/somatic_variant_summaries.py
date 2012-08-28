@@ -3,15 +3,18 @@ description = '''
 Read in multiple varscan vcf files annotated by SNPEff
 Generate summaries about each variant by position, as well
 as about each gene that contains the variants.
-When selecting which transcript to use for each variant,
+By default, when selecting which transcript to use for each variant,
 select the transcript with the highest priority effect.
-When reporting for each gene, select the transcript with the
-most number of (interesting) variants.
+If all-transcripts flat is set, use all transcript for each variant.
+If select-highest-transcript is set, select the transcript with the
+highest number of mutations for the gene report.  Otherwise, will
+exclude the transcripts and report only on the gene.
 '''
 
 import argparse
 import re
 import sys
+from ngs import vcf
 
 REPORT_POS_COLNAMES=['chrom',
                      'pos',
@@ -32,197 +35,6 @@ REPORT_POS_COLNAMES=['chrom',
                      'exon',
                      'num_samples',
                      'samples']
-
-def get_effects_categories():
-    effects_cats = [['High','SPLICE_SITE_ACCEPTOR'],
-                    ['High','SPLICE_SITE_DONOR'],
-                    ['High','START_LOST'],
-                    ['High','EXON_DELETED'],
-                    ['High','FRAME_SHIFT'],
-                    ['High','STOP_GAINED'],
-                    ['High','STOP_LOST'],
-                    ['Moderate','NON_SYNONYMOUS_CODING'],
-                    ['Moderate','CODON_CHANGE'],
-                    ['Moderate','CODON_INSERTION'],
-                    ['Moderate','CODON_CHANGE_PLUS_CODON_INSERTION'],
-                    ['Moderate','CODON_DELETION'],
-                    ['Moderate','CODON_CHANGE_PLUS_CODON_DELETION'],
-                    ['Moderate','UTR_5_DELETED'],
-                    ['Moderate','UTR_3_DELETED'],
-                    ['Low','SYNONYMOUS_START'],
-                    ['Low','NON_SYNONYMOUS_START'],
-                    ['Low','START_GAINED'],
-                    ['Low','SYNONYMOUS_CODING'],
-                    ['Low','SYNONYMOUS_STOP'],
-                    ['Low','NON_SYNONYMOUS_STOP'],
-                    ['Modifier','UTR_5_PRIME'],
-                    ['Modifier','UTR_3_PRIME'],
-                    ['Modifier','REGULATION'],
-                    ['Modifier','UPSTREAM'],
-                    ['Modifier','DOWNSTREAM'],
-                    ['Modifier','GENE'],
-                    ['Modifier','TRANSCRIPT'],
-                    ['Modifier','EXON'],
-                    ['Modifier','INTRON_CONSERVED'],
-                    ['Modifier','INTRON'],
-                    ['Modifier','INTRAGENIC'],
-                    ['Modifier','INTERGENIC'],
-                    ['Modifier','INTERGENIC_CONSERVED'],
-                    ['Modifier','NONE'],
-                    ['Modifier','CHROMOSOME'],
-                    ['Modifier','CUSTOM'],
-                    ['Modifier','CDS']]
-    effects2impact = {}
-    effects = []
-    for row in effects_cats:
-        impact = row[0]
-        effect = row[1]
-        effects2impact[effect] = impact
-        effects.append(effect)
-    return effects, effects2impact
-
-def build_sampleinfo_field2indx(field_str):
-    '''
-    Generate a dictionary that maps the sample genotype field to their corresponding index
-    '''
-    fields = field_str.split(':')
-    field2indx = {}
-    for i,fieldname in enumerate(fields):
-        field2indx[fieldname] = i
-    return field2indx
-
-def build_colname2colnum(colname_str):
-    '''
-    Generate a dictionary that maps column name to the column index number
-    Also generates a list of all the sample ids separately, which is a subset of the column names
-    Also generates a sorted list of all the sample ids' indexes
-    Assumes that sample ids are located to the right of the FORMAT column
-    '''
-    colnames = colname_str.split()
-    colname2colnum = {}
-    for i,colname in enumerate(colnames):
-        colname2colnum[colname] = i
-
-    # Sample ids
-    first_sample_index = colname2colnum['FORMAT'] + 1
-    sample_names = colnames[first_sample_index:]
-    sample_indexes = sorted([colname2colnum[sn] for sn in sample_names])
-    return colname2colnum, sample_names, sample_indexes
-
-def build_info_field2val(field_str):
-    '''
-    Generate a dictionary that maps the info column fields to their corresponding values
-    '''
-    field_str_array = field_str.split(';')
-    field2val = {}
-    for p in field_str_array:
-        pa = p.split('=')
-        if len(pa) == 2:
-            field2val[pa[0]] = pa[1]
-    return field2val
-
-def convert_allele2bases(allele_str, ref, alt):
-    '''
-    Given an allele string i.e. 0/0, 0/1, 1/1, convert to genotype string i.e. A/A, C/G
-    '''
-    alleles = allele_str.split('/')
-    bases = []
-    for a in alleles:
-        if a == '0':
-            bases.append(ref)
-        elif a == '1':
-            bases.append(alt)
-        elif a == '.':
-            bases.append('N')
-        else:
-            sys.stderr.write('Could not recognize allele %s\nExiting\n\n' % allele_str)
-            sys.exit(1)
-    return '/'.join(bases)
-
-def parse_effect(info_str, effects):
-    '''
-    Parse the info column string in the vcf file, and extract the highest-priority effect, impact,
-    and the corresponding gene name
-    '''
-    # Extract out the effects information string
-    effect_info = re.search('EFF=(.*)', info_str).group(1)
-
-    # Prioritize each effect information based on the effects list
-    locus_effects = effect_info.split(',')
-    locus_effects_priorities = []
-    for le_string in locus_effects:
-        locus_effect = re.search('(.+)\(', le_string).group(1)
-        for i,e in enumerate(effects):
-            if locus_effect == e:
-                locus_effects_priorities.append(i)
-                break
-
-    # Extract out the effect, impact, and gene name
-    highest_priority_num = min(locus_effects_priorities)
-    for i,n in enumerate(locus_effects_priorities):
-        if n == highest_priority_num:
-            effect = re.search('(.+)\(', locus_effects[i]).group(1)
-            effect_array = re.search('\((.+)\)', locus_effects[i]).group(1).split('|')
-            effect_impact = effect_array[0]
-            functional_class = effect_array[1]
-            codon_change = effect_array[2]
-            aa_change = effect_array[3]
-            gene_name = effect_array[4]
-            gene_biotype = effect_array[5]
-            coding = effect_array[6]
-            transcript = effect_array[7]
-            exon = effect_array[8]
-            return (effect, 
-                    effect_impact,
-                    functional_class,
-                    codon_change,
-                    aa_change,
-                    gene_name,
-                    gene_biotype,
-                    coding,
-                    transcript,
-                    exon)
-
-def parse_effect_all(info_str, effects):
-    '''
-    Parse the info column string in the vcf file, and extract all trancript effects, impact,
-    and the corresponding gene name
-    '''
-    # Extract out the effects information string
-    effect_info = re.search('EFF=(.*)', info_str).group(1)
-
-    # Collect all effects tuples
-    locus_effects = effect_info.split(',')
-    all_transcript_effects = []
-    for le_string in locus_effects:
-        locus_effect = re.search('(.+)\(', le_string).group(1)
-        effect_array = re.search('\((.+)\)', le_string).group(1).split('|')
-        effect_impact = effect_array[0]
-        functional_class = effect_array[1]
-        codon_change = effect_array[2]
-        aa_change = effect_array[3]
-        gene_name = effect_array[4]
-        gene_biotype = effect_array[5]
-        coding = effect_array[6]
-        transcript = effect_array[7]
-        exon = effect_array[8]
-        all_transcript_effects.append((locus_effect, 
-                                       effect_impact,
-                                       functional_class,
-                                       codon_change,
-                                       aa_change,
-                                       gene_name,
-                                       gene_biotype,
-                                       coding,
-                                       transcript,
-                                       exon))
-    return all_transcript_effects
-
-def append_to_sample_names(sampleslist, append_str):
-    '''
-    Input a list of sample names, and postfix them with additional string
-    '''
-    return ['_'.join([sample, append_str]) for sample in sampleslist]
 
 def load_dbsnp(dbsnp_file):
     '''
@@ -267,7 +79,7 @@ def variant_ext2variant(ve):
     '''
     return ':'.join(ve.split(':')[:4])
 
-def report_pos(sample_vcf, effects, effects2impact, variant2rsid, outfilename, all_transcripts):
+def report_pos(sample_vcf, variant2rsid, outfilename, all_transcripts):
     '''
     Generate variant report, each row a variant position
     '''
@@ -277,9 +89,11 @@ def report_pos(sample_vcf, effects, effects2impact, variant2rsid, outfilename, a
         sampleid = s_v[0]
         vcffile = s_v[1]
         sys.stderr.write('\tProcessing sample %s, vcf file %s\n' % (sampleid,vcffile))
-        f = open(vcffile, 'r')
-        report_pos_count_samples(sampleid, f, effects, effects2impact, variant_ext2annots, variant_ext2samples, all_transcripts)
-        f.close()
+        report_pos_count_samples(sampleid,
+                                 vcffile,
+                                 variant_ext2annots,
+                                 variant_ext2samples,
+                                 all_transcripts)
 
     # Output results to file
     f = open(outfilename, 'w')
@@ -296,107 +110,73 @@ def report_pos(sample_vcf, effects, effects2impact, variant2rsid, outfilename, a
         # Output records for each annotation for each variant_ext
         for annot in variant_ext2annots[variant_ext]:
             f.write('%s\n' % '\t'.join([variant_ext.replace(':','\t'),
-                                                 rsid,
-                                                 annot,
-                                                 str(len(variant_ext2samples[variant_ext])),
-                                                 ','.join(sorted(variant_ext2samples[variant_ext]))]))
+                                        rsid,
+                                        annot,
+                                        str(len(variant_ext2samples[variant_ext])),
+                                        ','.join(sorted(variant_ext2samples[variant_ext]))]))
     f.close()
 
-def report_pos_count_samples(sampleid, fin, effects, effects2impact, variant_ext2annots, variant_ext2samples, all_transcripts):
+def report_pos_count_samples(sampleid,
+                             vcfin,
+                             variant_ext2annots,
+                             variant_ext2samples,
+                             all_transcripts):
     '''
     Read through vcf file, and update counts for variant_ext
     '''
 
-    for line in fin:
-        # Headers
-        if line[0:2] == '##':
-            continue
+    with vcf.SnpEffVcfFile(vcfin, 'r') as vcffile:
 
-        # Column Labels: build column-to-column_number mapping
-        if line[0] == '#':
-            colname2colnum, sample_names, sample_indexes = build_colname2colnum(line[1:].strip())
-            continue
+        # Skip to the variants section of the vcf file
+        vcffile.jump2variants()
         
-        # Parse each row of data
-        la = line.strip().split()
+        # Read in the variant lines
+        for line in vcffile:
+            
+            # Get parsed variant data
+            variant = vcffile.parse_line(line)
 
-        # Build info column field2val mapping
-        info_field2val = build_info_field2val(la[colname2colnum['INFO']])
+            # Parse the info column
+            info_map, info_single = vcffile.parse_info(variant)
 
-        # Record columns
-        chrom = la[colname2colnum['CHROM']].replace('chr','')
-        pos = la[colname2colnum['POS']]
-        variantid = la[colname2colnum['ID']]
-        ref = la[colname2colnum['REF']]
-        alt = la[colname2colnum['ALT']]
-        qual = la[colname2colnum['QUAL']]
-        filtr = la[colname2colnum['FILTER']]
-        #total_dp = info_field2val['DP']
-        
-        # Parse effects
-        if all_transcripts: # Report all transcript effects per variant
-            parse_effect_results = parse_effect_all(la[colname2colnum['INFO']], effects)
-        else: # Select highest priority effect transcript
-            parse_effect_results = [parse_effect(la[colname2colnum['INFO']], effects)]
-            # (effect, 
-            #  effect_impact,
-            #  functional_class,
-            #  codon_change,
-            #  aa_change,
-            #  gene_name,
-            #  gene_biotype,
-            #  coding,
-            #  transcript,
-            #  exon) = parse_effect(la[colname2colnum['INFO']], effects)
-        
-        # Build sample info string format mapping
-        format_string = la[colname2colnum['FORMAT']]
-        sample_field2indx = build_sampleinfo_field2indx(format_string)
-        sample2gt = {}
-        for sample_name in sample_names:
-            sample_i = colname2colnum[sample_name]
-            sample_info_str = la[sample_i]
+            # Record columns
+            chrom = variant['CHROM'].replace('chr','')
+            pos = variant['POS']
+            variantid = variant['ID']
+            ref = variant['REF']
+            alt = variant['ALT']
 
-            # Check if 'no call'
-            if sample_info_str == './.':
-                sample_info_str = './.::::'
+            # Parse effects
+            if all_transcripts:
+                effects = vcffile.parse_effects(variant)
+            # Select single highest priority effect
+            else:
+                effects = [vcffile.select_highest_priority_effect(variant)]
+                if effects[0] is None:
+                    continue
+            
+            # Generate key, variant_ext
+            normal_gt = vcffile.get_sample_gt(variant, 'NORMAL')
+            tumor_gt = vcffile.get_sample_gt(variant, 'TUMOR')
+            variant_ext = ':'.join([chrom, pos, ref, alt, normal_gt, tumor_gt])
 
-            sample_info_list = sample_info_str.split(':')
-            sample_gt = sample_info_list[sample_field2indx['GT']]
-            sample2gt[sample_name] = convert_allele2bases(sample_gt, ref, alt)
-
-        # Generate key, variant_ext
-        normal_gt = sample2gt['NORMAL']
-        tumor_gt = sample2gt['TUMOR']
-        variant_ext = ':'.join([chrom, pos, ref, alt, normal_gt, tumor_gt])
-
-        # Update counts
-        if variant_ext not in variant_ext2annots:
-            variant_ext2annots[variant_ext] = set()
-        for per in parse_effect_results:
-            effect_impact = per[1]
-            effect = per[0]
-            functional_class = per[2]
-            codon_change = per[3]
-            aa_change = per[4]
-            gene_biotype = per[6]
-            coding = per[7]
-            gene_name = per[5]
-            transcript = per[8]
-            exon = per[9]
-            variant_ext2annots[variant_ext].add('\t'.join([effect_impact,
-                                                           effect,
-                                                           functional_class,
-                                                           codon_change,
-                                                           aa_change,
-                                                           gene_biotype,
-                                                           coding,
-                                                           gene_name,
-                                                           transcript,
-                                                           exon]))
-        if variant_ext not in variant_ext2samples:
-            variant_ext2samples[variant_ext] = set()
-        variant_ext2samples[variant_ext].add(sampleid)
+            # Update counts
+            if variant_ext not in variant_ext2annots:
+                variant_ext2annots[variant_ext] = set()
+            for effect in effects:
+                variant_ext2annots[variant_ext].add('\t'.join([effect.impact,
+                                                               effect.effect,
+                                                               effect.functional_class,
+                                                               effect.codon_change,
+                                                               effect.aa_change,
+                                                               effect.gene_biotype,
+                                                               effect.coding,
+                                                               effect.gene,
+                                                               effect.transcript,
+                                                               effect.exon]))
+            if variant_ext not in variant_ext2samples:
+                variant_ext2samples[variant_ext] = set()
+            variant_ext2samples[variant_ext].add(sampleid)
 
 def increment_count(mapping, key, val):
     if key not in mapping:
@@ -427,8 +207,16 @@ def find_maximum_nonsilent_transcript(transcripts, transcript2missense, transcri
     transcripts = list(transcripts)
     mt = transcripts[0]
     for t in transcripts:
-        mt_score = get_num_nonsilent(mt, transcript2missense, transcript2nonsense, transcript2splice_acceptor, transcript2splice_donor)
-        t_score = get_num_nonsilent(t, transcript2missense, transcript2nonsense, transcript2splice_acceptor, transcript2splice_donor)
+        mt_score = get_num_nonsilent(mt,
+                                     transcript2missense,
+                                     transcript2nonsense,
+                                     transcript2splice_acceptor,
+                                     transcript2splice_donor)
+        t_score = get_num_nonsilent(t,
+                                    transcript2missense,
+                                    transcript2nonsense,
+                                    transcript2splice_acceptor,
+                                    transcript2splice_donor)
         if mt_score < t_score:
             mt = t
     return mt, t_score
@@ -447,10 +235,192 @@ def find_maximum_mutated_transcript(transcripts, transcript2totalmut):
             mt = t
     return mt, t_score
 
-def report_gene(report_pos_filename, report_gene_filename):
+def report_gene(report_pos_filename, report_gene_filename, most_mutated_transcript=False):
     '''
-    Read in the report_pos file and generate a report on the variants
-    where each row represents a gene name
+    Read in the report_pos file and generate a report on the variants where each row
+    represents a gene
+    '''
+    if most_mutated_transcript:
+        report_gene_highest(report_pos_filename, report_gene_filename)
+        return
+
+    gene2missense = {}
+    gene2missense_stop_lost = {}
+    gene2missense_start_lost = {}
+    gene2missense_nonsyn_coding = {}
+    gene2missense_nonsyn_start = {}
+    gene2nonsense = {}
+    gene2splice_acceptor = {}
+    gene2splice_donor = {}
+    gene2silent = {}
+    gene2silent_syn_coding = {}
+    gene2silent_syn_stop = {}
+    gene2silent_start_lost = {}
+    gene2totalmut = {}
+    gene2samples = {}
+    gene2samplepos = {}
+    # Low effects
+    gene2downstream = {}
+    gene2exon = {}
+    gene2intergenic = {}
+    gene2intragenic = {}
+    gene2intron = {}
+    gene2start_gained = {}
+    gene2upstream = {}
+    gene2utr_3_prime = {}
+    gene2utr_5_prime = {}
+
+    with open(report_pos_filename, 'r') as f:
+        for line in f:
+            la = line.strip().split('\t')
+            chrom = la[0]
+            pos = la[1]
+            impact = la[7]
+            effect = la[8]
+            func_class = la[9]
+            gene = la[14]
+            transcript = la[15]
+            samples = la[-1].split(',')
+            num_samples = len(samples)
+
+            if not gene and not transcript:
+                continue
+            if gene and not transcript:
+                transcript = gene
+            if not gene and transcript:
+                gene = transcript
+
+            added = False
+            if func_class == 'MISSENSE':
+                added = True
+                increment_count(gene2missense, gene, num_samples)
+                if effect == 'STOP_LOST':
+                    increment_count(gene2missense_stop_lost, gene, num_samples)
+                elif effect == 'START_LOST':
+                    increment_count(gene2missense_start_lost, gene, num_samples)
+                elif effect == 'NON_SYNONYMOUS_CODING':
+                    increment_count(gene2missense_nonsyn_coding, gene, num_samples)
+                elif effect == 'NON_SYNONYMOUS_START':
+                    increment_count(gene2missense_nonsyn_start, gene, num_samples)
+            elif func_class == 'NONSENSE':
+                added = True
+                increment_count(gene2nonsense, gene, num_samples)
+            elif effect == 'SPLICE_SITE_ACCEPTOR':
+                added = True
+                increment_count(gene2splice_acceptor, gene, num_samples)
+            elif effect == 'SPLICE_SITE_DONOR':
+                added = True
+                increment_count(gene2splice_donor, gene, num_samples)
+            elif func_class == 'SILENT':
+                added = True
+                increment_count(gene2silent, gene, num_samples)
+                if effect == 'SYNONYMOUS_CODING':
+                    increment_count(gene2silent_syn_coding, gene, num_samples)
+                elif effect == 'SYNONYMOUS_STOP':
+                    increment_count(gene2silent_syn_stop, gene, num_samples)
+                elif effect == 'START_LOST':
+                    increment_count(gene2silent_start_lost, gene, num_samples)
+            elif effect == 'DOWNSTREAM':
+                added = True
+                increment_count(gene2downstream, gene, num_samples)
+            elif effect == 'EXON':
+                added = True
+                increment_count(gene2exon, gene, num_samples)
+            elif effect == 'INTERGENIC':
+                added = True
+                increment_count(gene2intergenic, gene, num_samples)
+            elif effect == 'INTRAGENIC':
+                added = True
+                increment_count(gene2intragenic, gene, num_samples)
+            elif effect == 'INTRON':
+                added = True
+                increment_count(gene2intron, gene, num_samples)
+            elif effect == 'START_GAINED':
+                added = True
+                increment_count(gene2start_gained, gene, num_samples)
+            elif effect == 'UPSTREAM':
+                added = True
+                increment_count(gene2upstream, gene, num_samples)
+            elif effect == 'UTR_3_PRIME':
+                added = True
+                increment_count(gene2utr_3_prime, gene, num_samples)
+            elif effect == 'UTR_5_PRIME':
+                added = True
+                increment_count(gene2utr_5_prime, gene, num_samples)
+
+            if added:
+                # Maintain total mutations added
+                increment_count(gene2totalmut, gene, num_samples)
+
+                # Maintain track of samples added for gene
+                if gene not in gene2samples:
+                    gene2samples[gene] = set()
+                gene2samples[gene] = gene2samples[gene].union(set(samples))
+
+                # Maintain track of sample_coords added for this gene
+                if gene not in gene2samplepos:
+                    gene2samplepos[gene] = set()
+                for s in samples:
+                    samplepos = ':'.join([s, chrom, pos])
+                    gene2samplepos[gene].add(samplepos)
+
+    # Output to file
+    with open(report_gene_filename, 'w') as f:
+        f.write('%s\n' % '\t'.join(['gene',
+                                    'missense',
+                                    'stop_lost',
+                                    'start_lost',
+                                    'nonsyn_coding',
+                                    'nonsyn_start',
+                                    'nonsense',
+                                    'splice_acceptor',
+                                    'splice_donor',
+                                    'silent',
+                                    'syn_coding',
+                                    'syn_stop',
+                                    'start_lost',
+                                    'downstream',
+                                    'exon',
+                                    'intergenic',
+                                    'intragenic',
+                                    'intron',
+                                    'start_gained',
+                                    'upstream',
+                                    'utr_3_prime',
+                                    'utr_5_prime',
+                                    'total',
+                                    'num_samples',
+                                    'sample:chr:pos']))
+        for g in gene2samples:
+            f.write('%s\n' % '\t'.join([g,
+                                        str(get_dict_count(gene2missense, g)),
+                                        str(get_dict_count(gene2missense_stop_lost, g)),
+                                        str(get_dict_count(gene2missense_start_lost, g)),
+                                        str(get_dict_count(gene2missense_nonsyn_coding, g)),
+                                        str(get_dict_count(gene2missense_nonsyn_start, g)),
+                                        str(get_dict_count(gene2nonsense, g)),
+                                        str(get_dict_count(gene2splice_acceptor, g)),
+                                        str(get_dict_count(gene2splice_donor, g)),
+                                        str(get_dict_count(gene2silent, g)),
+                                        str(get_dict_count(gene2silent_syn_coding, g)),
+                                        str(get_dict_count(gene2silent_syn_stop, g)),
+                                        str(get_dict_count(gene2silent_start_lost, g)),
+                                        str(get_dict_count(gene2downstream, g)),
+                                        str(get_dict_count(gene2exon, g)),
+                                        str(get_dict_count(gene2intergenic, g)),
+                                        str(get_dict_count(gene2intragenic, g)),
+                                        str(get_dict_count(gene2intron, g)),
+                                        str(get_dict_count(gene2start_gained, g)),
+                                        str(get_dict_count(gene2upstream, g)),
+                                        str(get_dict_count(gene2utr_3_prime, g)),
+                                        str(get_dict_count(gene2utr_5_prime, g)),
+                                        str(get_dict_count(gene2totalmut, g)),
+                                        str(len(gene2samples[g])),
+                                        ','.join(sorted(gene2samplepos[g]))]))
+            
+def report_gene_highest(report_pos_filename, report_gene_filename):
+    '''
+    Generate gene report with each gene represented by its most mutated transcript
     '''
     # Counters
     gene2transcript = {}
@@ -650,8 +620,11 @@ def main():
     ap.add_argument('dbsnp_file',
                     help='dbsnp13x.txt file',
                     type=str)
-    ap.add_argument('--all-transcripts',
+    ap.add_argument('-a', '--all-transcripts',
                     help='If this flag is set, instead of selecting the highest priority effect transcript for each variant, all transcripts will be counted',
+                    action='store_true')
+    ap.add_argument('-m', '--most-mutated-transcript',
+                    help='If this flag is set, report the transcript id in the gene report.  For each gene, select the transcript with the highest mutation count',
                     action='store_true')
     ap.add_argument('-o','--out-prefix',
                     help='Output prefix for the report files',
@@ -666,9 +639,6 @@ def main():
     # Generate [(sample_x, sample_x.vcf),(sample_y, sample_y.vcf),...]
     sample_vcf = load_vcflist(params.vcf_files_list)
 
-    # Load effects
-    effects, effects2impact = get_effects_categories()
-
     # Load dbsnp file to memory
     sys.stderr.write('Loading dbsnp file...')
     variant2rsid = load_dbsnp(params.dbsnp_file)
@@ -676,12 +646,12 @@ def main():
 
     # Generate positional report
     sys.stderr.write('Generating pos report...\n')
-    report_pos(sample_vcf, effects, effects2impact, variant2rsid, out_report_pos, params.all_transcripts)
+    report_pos(sample_vcf, variant2rsid, out_report_pos, params.all_transcripts)
     sys.stderr.write('Done\n')
 
     # Generate gene report
     sys.stderr.write('Generating gene report...')
-    report_gene(out_report_pos, out_report_gene)
+    report_gene(out_report_pos, out_report_gene, params.most_mutated_transcript)
     sys.stderr.write('Done\n')
 
 

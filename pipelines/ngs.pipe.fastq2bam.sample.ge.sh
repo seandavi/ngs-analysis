@@ -38,13 +38,13 @@ for pe in `sed 's/\t/:/' $FASTQ_PE_LIST_FILE`; do
   FASTQ_R1=`echo $pe | cut -f1 -d :`
   FASTQ_R2=`echo $pe | cut -f2 -d :`
   qsub_wrapper.sh                                             \
-    $SAMPLE.fastq2bam.pe                                      \
+    $SAMPLE.fastq2rawbam.pe                                   \
     all.q                                                     \
     2                                                         \
     16G                                                       \
     none                                                      \
     n                                                         \
-    $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq2bam.pe.sh      \
+    $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq2rawbam.pe.sh   \
       $FASTQ_R1                                               \
       $FASTQ_R2                                               \
       $REFERENCE
@@ -56,7 +56,7 @@ qsub_wrapper.sh                                               \
   all.q                                                       \
   1                                                           \
   24G                                                         \
-  $SAMPLE.fastq2bam.pe                                        \
+  $SAMPLE.fastq2rawbam.pe                                     \
   n                                                           \
   $NGS_ANALYSIS_DIR/modules/align/samtools.mergebam.sh        \
     $SAMPLEDIR/$SAMPLE.mergelanes                             \

@@ -2,10 +2,10 @@
 ## 
 ## DESCRIPTION:   Given a pair of PE fastq files, generate raw (unprocessed by GATK) bam
 ##
-## USAGE:         ngs.pipe.fastq2bam.pe.sh
-##                                          Sample_AAAAAA_L00N_R1_NNN.fastq.gz
-##                                          Sample_AAAAAA_L00N_R2_NNN.fastq.gz
-##                                          ref.fa
+## USAGE:         ngs.pipe.fastq2rawbam.pe.sh
+##                                            Sample_AAAAAA_L00N_R1_NNN.fastq.gz
+##                                            Sample_AAAAAA_L00N_R2_NNN.fastq.gz
+##                                            ref.fa
 ##
 ## OUTPUT:        Sample_AAAAAA_L00N_R1_NNN.fastq.gz.trim.fastq.sai.sort.mergepe.sort.rg.bam
 ##
