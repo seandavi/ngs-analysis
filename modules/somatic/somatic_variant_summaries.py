@@ -269,12 +269,20 @@ def report_gene(report_pos_filename, report_gene_filename, most_mutated_transcri
     gene2upstream = {}
     gene2utr_3_prime = {}
     gene2utr_5_prime = {}
+    # Deletion
+    gene2exon_del = {}
+    gene2frameshift_ins = {}
+    gene2frameshift_del = {}
+    gene2codon_ins = {}
+    gene2codon_del = {}
 
     with open(report_pos_filename, 'r') as f:
         for line in f:
             la = line.strip().split('\t')
             chrom = la[0]
             pos = la[1]
+            ref = la[2]
+            alt = la[3]
             impact = la[7]
             effect = la[8]
             func_class = la[9]
@@ -347,6 +355,21 @@ def report_gene(report_pos_filename, report_gene_filename, most_mutated_transcri
             elif effect == 'UTR_5_PRIME':
                 added = True
                 increment_count(gene2utr_5_prime, gene, num_samples)
+            elif effect == 'EXON_DELETED':
+                added = True
+                increment_count(gene2exon_del, gene, num_samples)
+            elif effect == 'FRAME_SHIFT':
+                added = True
+                if len(ref) < len(alt):
+                    increment_count(gene2frameshift_ins, gene, num_samples)
+                else:
+                    increment_count(gene2frameshift_del, gene, num_samples)
+            elif effect in ['CODON_INSERTION','CODON_CHANGE_PLUS_CODON_INSERTION']:
+                added = True
+                increment_count(gene2codon_ins, gene, num_samples)
+            elif effect in ['CODON_DELETION', 'CODON_CHANGE_PLUS_CODON_DELETION']:
+                added = True
+                increment_count(gene2codon_del, gene, num_samples)
 
             if added:
                 # Maintain total mutations added
@@ -381,6 +404,11 @@ def report_gene(report_pos_filename, report_gene_filename, most_mutated_transcri
                                     'start_lost',
                                     'downstream',
                                     'exon',
+                                    'exon_del',
+                                    'frameshift_ins',
+                                    'frameshift_del',
+                                    'codon_ins',
+                                    'codon_del',
                                     'intergenic',
                                     'intragenic',
                                     'intron',
@@ -407,6 +435,11 @@ def report_gene(report_pos_filename, report_gene_filename, most_mutated_transcri
                                         str(get_dict_count(gene2silent_start_lost, g)),
                                         str(get_dict_count(gene2downstream, g)),
                                         str(get_dict_count(gene2exon, g)),
+                                        str(get_dict_count(gene2exon_del, g)),
+                                        str(get_dict_count(gene2frameshift_ins, g)),
+                                        str(get_dict_count(gene2frameshift_del, g)),
+                                        str(get_dict_count(gene2codon_ins, g)),
+                                        str(get_dict_count(gene2codon_del, g)),
                                         str(get_dict_count(gene2intergenic, g)),
                                         str(get_dict_count(gene2intragenic, g)),
                                         str(get_dict_count(gene2intron, g)),
