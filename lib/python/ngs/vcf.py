@@ -378,5 +378,64 @@ class SnpEffVcfFile(VarscanVcfFile):
         # Return the first element, which has the highest priority
         return effects[0]
 
+# ------------------------------------------------------------------------------------- #
+# Classes to handle a list of vcf files
 
+class VcfFiles(list):
+    '''
+    Class to manage multiple VcfFile objects
+    '''
+    pass
 
+class SnpEffVcfFiles(VcfFiles):
+    '''
+    Class to manage multiple SnpEffVcfFile objects
+    Generate gene2transcript2effect2counts (g2t2e2c)
+    Also updates a dictionary of effects to impacts
+    '''
+    def count_transcript_effects_single(self, vcffile, g2t2e2c, effect2impact, highest_priority=False):
+        '''
+        For a single vcf file, update the counts of the total number of transcripts and their effects
+        g2t2e2c is a dictionary of counts for the transcript effects counts.
+        effect22impact is a dictionary mapping effect to their corresponding impact.
+        If highest_priority is set to True, count only the highest priority effect per variant.
+        By default, will count all the transcript effects for each variant.
+        '''
+        with vcffile:
+            vcffile.jump2variants()
+            for line in vcffile:
+                variant = vcffile.parse_line(line)
+
+                # Use single highest priority, or all the transcript effects for the variant
+                if highest_priority:
+                    effects = [vcffile.select_highest_priority_effect(variant)]
+                else:
+                    effects = vcffile.parse_effects(variant)
+                    
+                # Update the counts
+                for eff in effects:
+                    a = eff.gene
+                    b = eff.transcript
+                    c = eff.effect
+                    g2t2e2c[a][b][c] = g2t2e2c.setdefault(a, {}).setdefault(b, {}).setdefault(c, 0) + 1
+                    
+                    # Update effect to impact mapping
+                    if eff.effect not in effect2impact:
+                        effect2impact[eff.effect] = eff.impact
+
+                    # Impact already set for effect but does not match current impact
+                    elif effect2impact[eff.effect] != eff.impact:
+                        exit_message = 'Multiple impacts for effect %s: %s, %s\nExiting.'
+                        sys.stderr.write(exit_message % (eff.effect, eff.impact, effect2impact[eff.effect]))
+                        sys.exit(1)
+        return g2t2e2c, effect2impact
+        
+    def count_transcript_effects_all(self, highest_priority=False):
+        '''
+        For all vcf files in the list, count the transcript effects.
+        '''
+        g2t2e2c = {}
+        effect2impact = {}
+        for vcffile in self:
+            self.count_transcript_effects_single(vcffile, g2t2e2c, effect2impact, highest_priority=highest_priority)
+        return g2t2e2c, effect2impact

@@ -287,6 +287,8 @@ def main():
     ap.add_argument('-e', '--highest-priority-effect',
                     help='If this flag is set, the highest-priority effect transcript will be selected from each variant annotation',
                     action='store_true')
+    ap.add_argument('-s', '--single-transcript-per-gene',
+                    help='If this flag is set, a single transcript will be selected for each gene.  This means that some of the variants will not result in the output maf file.  When selecting each transcript, count up all the mutations for each transcript across all samples, and select the transcript with the highest variant count in the high priority categories.  If there is a tie, select the transcript with the longest cds.  Output maf will contain gene_transcriptid for the gene field.',
     ap.add_argument('--normal',
                     help='Normal sample name in the vcf file normal column',
                     type=str,

@@ -145,4 +145,3 @@ class FastqStats(object):
             length_hist[int(read_length)] = int(counts)
 
         return int(readcount), int(basecount), length_hist
-

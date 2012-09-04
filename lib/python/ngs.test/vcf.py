@@ -7,6 +7,7 @@ from ngs import vcf
 RESOURCE_DIR = 'resources'
 EXAMPLE_VCF = 'example.vcf'
 EXAMPLE_VARSCAN_SNPEFF_VCF = 'example.varscan.snpeff.vcf'
+EXAMPLE2_VARSCAN_SNPEFF_VCF = 'example2.varscan.snpeff.vcf'
 
 class TestVcfFileFunctions(unittest.TestCase):
     
@@ -290,6 +291,64 @@ class TestSnpEffVcfFileFunctions(unittest.TestCase):
             effects = vcffile.parse_effects(variant)
             self.assertEqual(str(effects[0]), str(vcffile.select_highest_priority_effect(variant)))
             
-            
+    
+#class TestVcfFilesFunctions(unittest.TestCase):
+#    
+#    def setUp(self):
+#        self.vcffiles = vcf.VcfFiles()
+
+class TestSnpEffVcfFiles(unittest.TestCase):
+
+    def setUp(self):
+        self.example_vcf = os.path.join(RESOURCE_DIR, EXAMPLE_VARSCAN_SNPEFF_VCF)
+        self.example2_vcf = os.path.join(RESOURCE_DIR, EXAMPLE2_VARSCAN_SNPEFF_VCF)
+        self.vcffiles = vcf.SnpEffVcfFiles()
+
+    def test_count_transcript_effects_single(self):
+
+        # Test high priority = True
+        vcffile = vcf.SnpEffVcfFile(self.example_vcf, 'r')
+        g2t2e2c = {}
+        effect2impact = {}
+        self.vcffiles.count_transcript_effects_single(vcffile, g2t2e2c, effect2impact, highest_priority=True)
+        self.assertEqual(len(g2t2e2c.keys()), 2)
+        self.assertTrue('WASH2P' in g2t2e2c)
+        self.assertEqual(g2t2e2c['WASH2P']['ENST00000542901']['SPLICE_SITE_ACCEPTOR'], 1)
+        vcffile.close()
+        
+        # Test high priority = False
+        vcffile = vcf.SnpEffVcfFile(self.example_vcf, 'r')
+        g2t2e2c = {}
+        effect2impact = {}
+        self.vcffiles.count_transcript_effects_single(vcffile, g2t2e2c, effect2impact, highest_priority=False)
+        self.assertTrue(len(g2t2e2c.keys()), 5)
+        vcffile.close()
+
+    def test_count_transcript_effects_all(self):
+        # Test 2 vcf files, priority = False
+        vcffile1 = vcf.SnpEffVcfFile(self.example_vcf, 'r')
+        vcffile2 = vcf.SnpEffVcfFile(self.example_vcf, 'r')
+        self.vcffiles.append(vcffile1)
+        self.vcffiles.append(vcffile2)
+        g2t2e2c, effect2impact = self.vcffiles.count_transcript_effects_all(False)
+        self.assertEqual(g2t2e2c['WASH2P']['ENST00000542901']['SPLICE_SITE_ACCEPTOR'], 2)
+        self.assertEqual(effect2impact['DOWNSTREAM'], 'MODIFIER')
+        self.assertEqual(effect2impact['TRANSCRIPT'], 'MODIFIER')
+        self.assertEqual(effect2impact['SPLICE_SITE_ACCEPTOR'], 'HIGH')
+        self.assertEqual(effect2impact['UTR_5_PRIME'], 'MODIFIER')
+        self.assertEqual(effect2impact['NON_SYNONYMOUS_CODING'], 'MODERATE')
+
+        self.vcffiles = vcf.SnpEffVcfFiles()
+        vcffile1 = vcf.SnpEffVcfFile(self.example_vcf, 'r')
+        vcffile2 = vcf.SnpEffVcfFile(self.example2_vcf, 'r')
+        self.vcffiles.append(vcffile1)
+        self.vcffiles.append(vcffile2)
+        g2t2e2c, effect2impact = self.vcffiles.count_transcript_effects_all(False)
+        self.assertEqual(g2t2e2c['WASH2P']['ENST00000542901']['SPLICE_SITE_ACCEPTOR'], 4)
+        self.assertEqual(g2t2e2c['MMP23B']['ENST00000356026']['DOWNSTREAM'], 5)
+        self.assertEqual(g2t2e2c['CYP4B1']['ENST00000468637']['NON_SYNONYMOUS_CODING'], 4)
+        self.assertEqual(g2t2e2c['AL691432.2']['ENST00000340677']['TRANSCRIPT'], 2)
+
+
 if __name__ == '__main__':
     unittest.main()
