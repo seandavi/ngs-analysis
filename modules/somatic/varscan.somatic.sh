@@ -2,7 +2,12 @@
 ##
 ## DESCRIPTION:   Run varscan somatic on normal/tumor pair of mpileups
 ##
-## USAGE:         varscan.somatic.sh normal.mpileup tumor.mpileup out_prefix somatic_pval tumor_purity 
+## USAGE:         varscan.somatic.sh
+##                                   normal.mpileup
+##                                   tumor.mpileup
+##                                   sample_name
+##                                   somatic_pval
+##                                   tumor_purity 
 ##
 ## OUTPUT:        out_prefix.snp out_prefix.indel
 ##
@@ -15,9 +20,12 @@ usage 5 $# $0
 
 PILEUP_NORM=$1
 PILEUP_TUMOR=$2
-OUT_PREFIX=$3
+SAMPLE_NAME=$3
 SOMATIC_PVAL=$4
 TUMOR_PURITY=$5
+
+# Format output
+OUT_PREFIX=$SAMPLE_NAME.varscan
 
 # If output file already exists and has content, then don't run
 assert_file_not_exists_w_content $OUT_PREFIX.snp

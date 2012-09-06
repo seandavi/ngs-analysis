@@ -40,7 +40,8 @@ from ngs import vcf
 SOMATIC_CALLER = {'VARSCAN': 'varscan',
                   'GATK_SOMATIC_INDEL_DETECTOR': 'gatk_somatic_indel_detector'}
 
-SNPEFF2TCGA = {'SPLICE_SITE_ACCEPTOR': 'Splice_Site',
+SNPEFF2TCGA = {'RARE_AMINO_ACID': '',
+               'SPLICE_SITE_ACCEPTOR': 'Splice_Site',
                'SPLICE_SITE_DONOR': 'Splice_Site',
                'START_LOST': 'Missense_Mutation',
                'EXON_DELETED': 'Frame_Shift_Del',
@@ -252,6 +253,11 @@ def parse_vcf(vcf_in,
                     else:
                         effect_val = 'FRAME_SHIFT_DEL'
 
+                # Variant class
+                var_class = ''
+                if effect_val in SNPEFF2TCGA:
+                    var_class = SNPEFF2TCGA[effect_val]
+
                 # Gene name column
                 gene_col_val = '_'.join([effect.gene, effect.transcript])
                 if highest_priority:
@@ -269,7 +275,7 @@ def parse_vcf(vcf_in,
                                                pos,
                                                str(int(pos) + len(ref) - 1),
                                                '+',
-                                               SNPEFF2TCGA[effect_val],
+                                               var_class,
                                                variant_type,
                                                ref,
                                                tumor_gt[0],
