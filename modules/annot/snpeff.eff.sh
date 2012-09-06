@@ -5,7 +5,8 @@
 ## USAGE:         snpeff.eff.sh sample.vcf [genome_version(default GRCh37.64) ["other_snpeff_options"]]
 ##
 ## OUTPUT:        sample.snpeff.vcf
-##                sample.snpeff directory containing genes, and summary html
+##                sample.snpeff.snpEff_summary.html
+##                sample.snpeff.snpEff_summary.genes.txt
 ##
 
 # Load analysis config
@@ -38,7 +39,7 @@ OUTERR=$OUTVCF.err
 #OUTDIR=$OUTPREFIX.snpeff
 
 # Run tool
-$JAVAJAR4G $SNPEFF                     \
+$JAVAJAR4G $SNPEFF                      \
   eff                                   \
   $GENOME_VERSION                       \
   -c $SNPEFF_CONFIG                     \
