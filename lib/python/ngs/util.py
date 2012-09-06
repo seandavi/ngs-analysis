@@ -3,6 +3,23 @@
 import re
 import xml.dom.minidom
 
+
+def load_dict(fin, key_col=0, val_col=1, delim='\t'):
+    '''
+    From a multiple-column file, build a dictionary
+    '''
+    d = {}
+    with fin:
+        for line in fin:
+            la = line.strip().split(delim)
+            k = la[key_col]
+            v = la[val_col]
+            d[k] = v
+    return d    
+
+#------------------------------------------------------------------------------------------------
+# XML
+
 # Prefixes to prepend to each key or value in order to ensure proper conversion back to dictionary
 DATA_PREFIX = {'INTEGER': '__int',
                'NUMERIC': '__num',}
@@ -36,7 +53,7 @@ def remove_value_type_and_convert(prefixed_val):
             return convert_fnc[prefx](prefixed_val.replace(prefx, ''))
     return str(prefixed_val)
 
-def dict2xml(d, name, pretty=False):
+def dict2xml(d, name='data', pretty=False):
     '''
     Convert a multi-level dictionary to xml using recursion
     Inputs

@@ -32,6 +32,7 @@ De_novo_Start_OutOfFrame
 '''
 
 import argparse
+import pickle
 import re
 import sys
 from ngs import vcf
@@ -95,7 +96,15 @@ def load_gene2entrez(filename):
     g2e_fin.close()
     return gene2entrez
 
-def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  normal_sample='NORMAL', tumor_sample='TUMOR', tool=SOMATIC_CALLER['VARSCAN']):
+def parse_vcf(vcf_in,
+              sampleid,
+              gene2entrez,
+              fout,
+              highest_priority=False,
+              gene2transcript=None,
+              normal_sample='NORMAL',
+              tumor_sample='TUMOR',
+              tool=SOMATIC_CALLER['VARSCAN']):
     '''
     Read through the vcf file, and parse it.
     Output the columns as defined by TCGA maf format
@@ -149,11 +158,23 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  norm
 
             # Parse the info column
             info_map, info_single = vcffile.parse_info(variant)
+
+            # Control the number of transcript-effects to output for each variant
+            # Select single highest priority
             if highest_priority:
                 effects = [vcffile.select_highest_priority_effect(variant)]
                 # Check if there were no effects
                 if effects[0] is None:
                     continue
+            # Select gene_transcript with the most variants
+            elif gene2transcript is not None:
+                selected_transcript_effects = vcffile.find_selected_transcript_effects(variant, gene2transcript)
+                # If non were found, continue
+                if not selected_transcript_effects:
+                    continue
+                effects = [selected_transcript_effects[0]]
+                
+            # By default, use all variants
             else:
                 effects = vcffile.parse_effects(variant)
                 
@@ -235,6 +256,8 @@ def parse_vcf(vcf_in, sampleid, gene2entrez, fout, highest_priority=False,  norm
                 gene_col_val = '_'.join([effect.gene, effect.transcript])
                 if highest_priority:
                     gene_col_val = effect.gene
+                # elif single_transcript:
+                #    gene_col_val = '_'.join([effect.gene, effect.transcript])
 
                 # Output to standard output
                 UNAVAILABLE=''
@@ -287,8 +310,18 @@ def main():
     ap.add_argument('-e', '--highest-priority-effect',
                     help='If this flag is set, the highest-priority effect transcript will be selected from each variant annotation',
                     action='store_true')
-    ap.add_argument('-s', '--single-transcript-per-gene',
-                    help='If this flag is set, a single transcript will be selected for each gene.  This means that some of the variants will not result in the output maf file.  When selecting each transcript, count up all the mutations for each transcript across all samples, and select the transcript with the highest variant count in the high priority categories.  If there is a tie, select the transcript with the longest cds.  Output maf will contain gene_transcriptid for the gene field.',
+    ap.add_argument('-s', '--single-transcript',
+                    help='Pickle (.pkl) file containing selected transcripts for each gene.  If this param is given, a single transcript will be selected for each gene.  This means that some of the variants will not result in the output maf file.',
+                    type=str)
+#    ap.add_argument('-c', '--count-file',
+#                    help='Xml output file from the vcf_snpeff_count_transcript_effects.py containing the transcription effect counts',
+#                    type=str)
+#    ap.add_argument('-l', '--transcript-lengths',
+#                    help='File containing the lengths of the transcripts',
+#                    type=str)
+#    ap.add_argument('-m', '--eff2imp',
+#                    help='Xml output file from the vcf_snpeff_count_transcript_effects.py containing the effect to impact mapping',
+#                    type=str)
     ap.add_argument('--normal',
                     help='Normal sample name in the vcf file normal column',
                     type=str,
@@ -307,6 +340,26 @@ def main():
                     default=sys.stdout)
     params = ap.parse_args()
 
+#    # If the option single-transcript-per-gene is set
+#    if params.single_transcript_per_gene:
+#        # If the --eff2imp and --count-file is not set, raise error
+#        if not params.count_file or not params.eff2imp or not params.transcript_lengths:
+#            sys.stderr.write('Please set the --count-file, --eff2imp and --transcript-lengths arguments\nExiting')
+#            sys.exit(1)
+#        # Load count file and eff2imp
+#        with open(params.count_file, 'r') as f:
+#            g2t2e2c = util.xml2dict(f.read())
+#        with open(params.eff2imp, 'r') as f:
+#            eff2imp = util.xml2dict(f.read())
+#        with open(params.transcript_lengths, 'r') as f:
+#            trs2len = util.xml2dict(f.read())
+
+    # If single transcript has been selected for each gene, read in the gene2transcript mapping
+    g2t = None
+    if params.single_transcript:
+        with open(params.single_transcript, 'rb') as f:
+            g2t = pickle.load(f)
+
     # Load gene2entrez id mapping
     gene2entrez = load_gene2entrez(params.gene2entrez)
 
@@ -316,6 +369,7 @@ def main():
               gene2entrez,
               params.outfile,
               highest_priority=params.highest_priority_effect,
+              gene2transcript=g2t,
               normal_sample=params.normal,
               tumor_sample=params.tumor,
               tool=params.somatic_caller)

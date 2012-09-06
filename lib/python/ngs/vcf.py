@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import re
+import sys
 from collections import namedtuple
 
 class VcfFile(file):
@@ -261,7 +262,8 @@ class SnpEffVcfFile(VarscanVcfFile):
                       ('Modifier','CHROMOSOME'),
                       ('Modifier','CUSTOM'),
                       ('Modifier','CDS')]
-    effects_prioritized = ['SPLICE_SITE_ACCEPTOR',
+    effects_prioritized = ['RARE_AMINO_ACID',
+                           'SPLICE_SITE_ACCEPTOR',
                            'SPLICE_SITE_DONOR',
                            'START_LOST',
                            'EXON_DELETED',
@@ -378,6 +380,18 @@ class SnpEffVcfFile(VarscanVcfFile):
         # Return the first element, which has the highest priority
         return effects[0]
 
+    def find_selected_transcript_effects(self, variant, g2t):
+        '''
+        Given a variant (output of parse_line) and a mapping from gene to selected transcripts (g2t)
+        find all transcripts within the variant annotation that were selected for the annotated genes
+        '''
+        found_effects = []
+        for effect in self.parse_effects(variant):
+            if effect.gene in g2t:
+                if effect.transcript == g2t[effect.gene]:
+                    found_effects.append(effect)
+        return found_effects
+
 # ------------------------------------------------------------------------------------- #
 # Classes to handle a list of vcf files
 
@@ -393,6 +407,10 @@ class SnpEffVcfFiles(VcfFiles):
     Generate gene2transcript2effect2counts (g2t2e2c)
     Also updates a dictionary of effects to impacts
     '''
+#     g2t2e2c = None
+#     eff2imp = None
+#     transcript2len = None
+    
     def count_transcript_effects_single(self, vcffile, g2t2e2c, effect2impact, highest_priority=False):
         '''
         For a single vcf file, update the counts of the total number of transcripts and their effects
@@ -428,6 +446,7 @@ class SnpEffVcfFiles(VcfFiles):
                         exit_message = 'Multiple impacts for effect %s: %s, %s\nExiting.'
                         sys.stderr.write(exit_message % (eff.effect, eff.impact, effect2impact[eff.effect]))
                         sys.exit(1)
+
         return g2t2e2c, effect2impact
         
     def count_transcript_effects_all(self, highest_priority=False):
@@ -438,4 +457,85 @@ class SnpEffVcfFiles(VcfFiles):
         effect2impact = {}
         for vcffile in self:
             self.count_transcript_effects_single(vcffile, g2t2e2c, effect2impact, highest_priority=highest_priority)
+
+        #self.register_transcript_counts(g2t2e2c, effect2impact, None)
         return g2t2e2c, effect2impact
+
+    def select_transcript_for_gene(self, g2t2e2c, effect2impact, transcript2len):
+        '''
+        For a gene, select transcript with highest mutation count with effects that have
+        "HIGH" impact.
+        If multiple transcripts result, select one with the longest transcript.
+        If selected transcripts have the same length, then select randomly.
+        '''
+        def get_high_impact_count(_e2c):
+            '''
+            Given an effect to count mapping, sum up the counts of effects that have HIGH impact
+            '''
+            high_impact_count = 0
+            for _e,_c in _e2c.iteritems():
+                if effect2impact[_e] == 'HIGH':
+                    high_impact_count += int(_c)
+            return high_impact_count
+
+        def get_transcript_w_most_high_impact(_t2e2c, _transcript2len):
+            '''
+            Given a set of transcript to effect to counts mapping, return transcript with the
+            highest HIGH impact effects.  If more than 1 transcript results, select the longest.
+            If still more than 1 transcript results, select randomly
+            If no transcript results, return False
+            '''
+
+            # Filter by transcript2len mapping.  Those that do not have length data cannot be used
+            usable_t2e2c = {}
+            for _t,_e2c in _t2e2c.iteritems():
+                if _t in _transcript2len:
+                    usable_t2e2c[_t] = _e2c
+            if len(usable_t2e2c) == 0:
+                return False
+            
+            # Generate tuples (transcript, count) sorted from highest to lowest counts
+            t_counts = sorted([(_t, get_high_impact_count(_e2c)) for _t,_e2c in usable_t2e2c.iteritems()],
+                              key=lambda x: x[1], reverse=True)
+
+            # Select the transcripts that have equal highest counts (could be one or more)
+            highest_count = t_counts[0][1]
+            transcripts_w_most_high_impact = [_t_c for _t_c in t_counts if _t_c[1] == highest_count]
+            if len(transcripts_w_most_high_impact) == 1:
+                return transcripts_w_most_high_impact[0][0]
+            
+            # Select longer transcript
+            return sorted([(_t_c[0], _transcript2len[_t_c[0]]) for _t_c in transcripts_w_most_high_impact],
+                          key=lambda x: x[1], reverse=True)[0][0]
+
+        g2highestt = {}
+        for g in g2t2e2c:
+            # Find total HIGH impact mutation counts
+            t = get_transcript_w_most_high_impact(g2t2e2c[g], transcript2len)
+            if not t:
+                continue
+            g2highestt[g] = t
+        
+        return g2highestt
+
+#     def register_transcript_counts(self, g2t2e2c, eff2imp, transcript2len):
+#         '''
+#         Set the following as instance variables:
+#         transcript effect counts
+#         effect to impact mapping
+#         transcript2length mapping
+#         '''
+#         self.g2t2e2c = g2t2e2c
+#         self.eff2imp = eff2imp
+#         self.transcript2len = transcript2len
+
+#     def select_single_gene_transcript(self, effects):
+#         '''
+#         Select the gene transcript with the most variants using the transcript effect counts
+#         g2t2e2c, eff2imp and transcript2len  must be set using the register_transcript_counts method.
+#         Input must be the output of VcfFile.parse_effects method
+#         '''
+#         # If the necessary variables are not set, return 
+#         if self.g2t2e2c is None or self.eff2imp is None or self.transcript2len is None:
+#             raise Exception("g2t2e2c, eff2imp, and transcript2len are not set!")
+        

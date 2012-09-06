@@ -1,13 +1,23 @@
 #!/usr/bin/env python
 
+import os
 import sys
 import unittest
 from ngs import util
+
+RESOURCE_DIR = 'resources'
+EXAMPLE_TSV = 'data.tsv'
 
 class TestUtilFunctions(unittest.TestCase):
     
     def setUp(self):
         pass
+
+    def test_load_dict(self):
+        example_tsv = os.path.join(RESOURCE_DIR, EXAMPLE_TSV)
+        with open(example_tsv,'r') as f:
+            d = util.load_dict(f)
+        self.assertEqual(d, {'a':'1','b':'2','c':'3'})
 
     def test_prepend_value_type(self):
         self.assertEqual(util.prepend_value_type(1), '__int1')
@@ -22,14 +32,14 @@ class TestUtilFunctions(unittest.TestCase):
 
     def test_dict2xml_and_xml2dict(self):
         d = {}
-        generated_xml = util.dict2xml(d, 'foo', pretty=False)
+        generated_xml = util.dict2xml(d, name='foo', pretty=False)
         self.assertEqual(generated_xml, '<?xml version="1.0" ?><foo/>')
         self.assertEqual(d, util.xml2dict(generated_xml))
         
         d = {'a': 1,
              'b': 2,
              'c': 3,}
-        generated_xml = util.dict2xml(d, 'foobar', pretty=False)
+        generated_xml = util.dict2xml(d, name='foobar', pretty=False)
         desired_output = '<?xml version="1.0" ?><foobar><a>__int1</a><b>__int2</b><c>__int3</c></foobar>'
         generated_d = util.xml2dict(generated_xml)
         self.assertEqual(generated_xml, desired_output)
@@ -38,7 +48,7 @@ class TestUtilFunctions(unittest.TestCase):
 
         d = {'a': {'aa': 1}}
         desired_output = '<?xml version="1.0" ?><foo><a><aa>__int1</aa></a></foo>'
-        generated_xml = util.dict2xml(d, 'foo', pretty=False)
+        generated_xml = util.dict2xml(d, name='foo', pretty=False)
         generated_d = util.xml2dict(generated_xml)
         self.assertEqual(generated_xml, desired_output)
         self.assertEqual(generated_d, d)
@@ -47,7 +57,7 @@ class TestUtilFunctions(unittest.TestCase):
         d = {'a': {'11': 1,
                    12: 1,}}
         desired_output = '<?xml version="1.0" ?><foo><a><__int12>__int1</__int12><__num11>__int1</__num11></a></foo>'
-        generated_xml = util.dict2xml(d, 'foo', pretty=False)
+        generated_xml = util.dict2xml(d, name='foo', pretty=False)
         generated_d = util.xml2dict(generated_xml)
         self.assertEqual(generated_xml, desired_output)
         self.assertEqual(generated_d, d)
@@ -57,7 +67,7 @@ class TestUtilFunctions(unittest.TestCase):
              'b': {'ba': 2,
                    'bb': 2,},}
         desired_output = '<?xml version="1.0" ?><foo><a><aa>__int1</aa><ab>__int1</ab></a><b><ba>__int2</ba><bb>__int2</bb></b></foo>'
-        generated_xml = util.dict2xml(d, 'foo', pretty=False)
+        generated_xml = util.dict2xml(d, name='foo', pretty=False)
         generated_d = util.xml2dict(generated_xml)
         self.assertEqual(generated_xml, desired_output)
         self.assertEqual(generated_d, d)
