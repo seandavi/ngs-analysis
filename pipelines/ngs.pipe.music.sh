@@ -5,7 +5,12 @@
 ##                because of the multiple words present in each sequence id line.  Must remove those, and provide only a
 ##                single-word id per sequence line.  This problem is common in other tools such as VarScan.
 ##
-## USAGE:         ngs.pipe.music.sh bamlist maf_file roi_file out_dir ref.fa
+## USAGE:         ngs.pipe.music.sh
+##                                  bamlist
+##                                  maf_file
+##                                  roi_file
+##                                  out_dir
+##                                  ref.fa
 ##
 ## OUTPUT:        MuSiC outputs
 ##
@@ -46,7 +51,7 @@ assert_normal_exit_status $? "Error generating subset of roi for genes in the ma
 
 # Compute bases covered
 echo 'Running bmr calc-covg'
-music.bmr.calc_covg.sh $BAMLIST $TMPDIR/roi.bed $OUT_DIR $REFEREN
+music.bmr.calc_covg.sn.sh $BAMLIST $TMPDIR/roi.bed $OUT_DIR $REFEREN 20
 
 # Check if tool ran successfully
 assert_normal_exit_status $? "Error running calc-covg. Exiting"

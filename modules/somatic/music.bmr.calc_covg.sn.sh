@@ -1,9 +1,16 @@
 #!/bin/bash
 ##
 ## DESCRIPTION:   Count covered bases for normal/tumor pair of bam files using a single node
-##                with multiple background processes
+##                with multiple background processes (num_parallel number of concurrent processes)
+##                Note: num_parallel is the maximum.  In reality, less than num_parallel processes
+##                      may be used.
 ##
-## USAGE:         music.bmr.calc_covg.sh bamlist roi_bed_file out_dir ref.fa num_parallel
+## USAGE:         music.bmr.calc_covg.sn.sh
+##                                          bamlist
+##                                          roi_bed_file
+##                                          out_dir
+##                                          ref.fa
+##                                          num_parallel
 ##
 ## OUTPUT:        bamlist.music/
 ##                  gene_covgs
@@ -27,13 +34,13 @@ N_PROCS=$5
 # Format output filenames
 OUTPUTPREFIX=$OUT_DIR.calc-covg
 OUTPUTLOG=$OUTPUTPREFIX.log
+OUTPUTLOG2=$OUTPUTPREFIX.2.log
 
 # Create output directory
 assert_dir_not_exists $OUT_DIR
 mkdir $OUT_DIR
 
 # Run tool
-OPTION_V='PERL5LIB='$PERL5LIB',PERL_LOCAL_LIB_ROOT='$PERL_LOCAL_LIB_ROOT
 genome music bmr calc-covg              \
   --roi-file $ROI_BED                   \
   --reference-sequence $REFEREN         \
@@ -49,12 +56,18 @@ assert_normal_exit_status $? "First iteration of bmr calc-covg exited with error
 # Run the parallelized jobs
 WUSTL_GENOME=`which genome`
 sed "s,gmt,$WUSTL_GENOME," $OUTPUTPREFIX.cmds > $OUTPUTPREFIX.cmds.fixed
-/bin/bash $OUTPUTPREFIX.cmds.fixed
+NLINES=`wc -l $OUTPUTPREFIX.cmds.fixed | cut -f1 -d ' '`
+NLINES_SPLIT=`$PYTHON -c "import math; print int(math.ceil("$NLINES"/float("$N_PROCS")))"`
+split -l $NLINES_SPLIT $OUTPUTPREFIX.cmds.fixed $OUTPUTPREFIX.cmds.fixed.split_
+for file in `ls *cmds.fixed.split_*`; do
+  bash $file &
+done
+wait
 
 # Run again to generate total_covgs
-qsub -cwd -N music.bmr.calc-covg2 -S /bin/bash -j y -o . -e . -q all.q -hold_jid music.bmr.calc-covg -v $OPTION_V \
 $WUSTL_GENOME music bmr calc-covg      \
   --roi-file $ROI_BED                  \
   --reference-sequence $REFEREN        \
   --bam-list $BAMLIST                  \
   --output-dir $OUT_DIR                \
+  &> $OUTPUTLOG2
