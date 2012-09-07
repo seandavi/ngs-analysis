@@ -82,7 +82,7 @@ $NGS_ANALYSIS_DIR/modules/util/qsub_wrapper.sh      \
   1M                                                \
   music.calc_covg                                   \
   y                                                 \
-  modules/util/hello_world.sh
+  $NGS_ANALYSIS_DIR/modules/util/hello_world.sh
 
 # Run again to generate total_covgs
 $WUSTL_GENOME music bmr calc-covg      \

@@ -40,7 +40,7 @@ from ngs import vcf
 SOMATIC_CALLER = {'VARSCAN': 'varscan',
                   'GATK_SOMATIC_INDEL_DETECTOR': 'gatk_somatic_indel_detector'}
 
-SNPEFF2TCGA = {'RARE_AMINO_ACID': '',
+SNPEFF2TCGA = {'RARE_AMINO_ACID': 'Missense_Mutation',
                'SPLICE_SITE_ACCEPTOR': 'Splice_Site',
                'SPLICE_SITE_DONOR': 'Splice_Site',
                'START_LOST': 'Missense_Mutation',
