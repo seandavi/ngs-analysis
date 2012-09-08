@@ -145,6 +145,6 @@ $QSUB merge.maf                                                                 
 
 
 # Generate summaries about the maf file
-maf_summaries.py $OUT_PRE.maf -t pos_simple   -o $OUT_PRE.maf.summary.pos.simple
-maf_summaries.py $OUT_PRE.maf -t pos_detailed -o $OUT_PRE.maf.summary.pos.detailed
-maf_summaries.py $OUT_PRE.maf -t gene         -o $OUT_PRE.maf.summary.gene
+python_ngs.sh maf_summaries.py $OUT_PRE.maf -t pos_simple   -o $OUT_PRE.maf.summary.pos.simple
+python_ngs.sh maf_summaries.py $OUT_PRE.maf -t pos_detailed -o $OUT_PRE.maf.summary.pos.detailed
+python_ngs.sh maf_summaries.py $OUT_PRE.maf -t gene         -o $OUT_PRE.maf.summary.gene
