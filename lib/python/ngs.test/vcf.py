@@ -195,9 +195,9 @@ class TestSnpEffVcfFileFunctions(unittest.TestCase):
             vcffile._set_effect2priority()
             # Ensure that the effect2priority attribute is set correctly
             self.assertTrue(vcffile.effect2priority is not None)
-            self.assertEqual(vcffile.effect2priority['SPLICE_SITE_ACCEPTOR'], 0)
-            self.assertEqual(vcffile.effect2priority['STOP_GAINED'], 5)
-            self.assertEqual(vcffile.effect2priority['CODON_CHANGE_PLUS_CODON_INSERTION'], 10)
+            self.assertEqual(vcffile.effect2priority['SPLICE_SITE_ACCEPTOR'], 1)
+            self.assertEqual(vcffile.effect2priority['STOP_GAINED'], 6)
+            self.assertEqual(vcffile.effect2priority['CODON_CHANGE_PLUS_CODON_INSERTION'], 11)
 
     def test_set_prioritized_effects(self):
         with vcf.SnpEffVcfFile(self.example_vcf, 'r') as vcffile:

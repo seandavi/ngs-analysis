@@ -1,0 +1,4 @@
+Gene	Frame_Shift_Del	Frame_Shift_Del_Num_Samples	Frame_Shift_Del_Sample_Chrom_Pos	Intron	Intron_Num_Samples	Intron_Sample_Chrom_Pos	Missense_Mutation	Missense_Mutation_Num_Samples	Missense_Mutation_Sample_Chrom_Pos	Nonsense_Mutation	Nonsense_Mutation_Num_Samples	Nonsense_Mutation_Sample_Chrom_Pos	Splice_Site	Splice_Site_Num_Samples	Splice_Site_Sample_Chrom_Pos	Total	Total_Num_Samples	Total_Sample_Chrom_Pos
+GENE_A	0	0		1	1	s2:1:200	0	0		0	0		1	1	s1:1:100	2	2	s1:1:100,s2:1:200
+GENE_B	0	0		0	0		1	1	s2:1:300	2	2	s1:1:150,s2:1:150	0	0		3	2	s1:1:150,s2:1:150,s2:1:300
+GENE_C	2	2	s2:2:500,s3:2:500	0	0		0	0		0	0		0	0		2	2	s2:2:500,s3:2:500

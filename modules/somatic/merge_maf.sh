@@ -4,7 +4,7 @@
 ##
 ## USAGE:         merge_maf.sh out_prefix sample1.maf sample2.maf [...]
 ##
-## OUTPUT:        samples.maf
+## OUTPUT:        out_prefix.maf
 ##
 
 # Load analysis config

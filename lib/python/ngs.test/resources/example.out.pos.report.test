@@ -1,0 +1,7 @@
+Hugo_Symbol	Entrez_Gene_Id	Chromosome	Start_position	End_position	Variant_Classification	Variant_Type	Reference_Allele	Tumor_Seq_Allele1	Tumor_Seq_Allele2	Match_Norm_Seq_Allele1	Match_Norm_Seq_Allele2	Num_Samples	Samples
+GENE_A	1	chr1	100	100	Splice_Site	SNP	A	A	T	A	T	1	s1
+GENE_A	1	chr1	200	200	Intron	SNP	A	A	C	A	C	1	s2
+GENE_B	2	chr1	150	150	Nonsense_Mutation	SNP	T	C	T	C	T	1	s2
+GENE_B	2	chr1	150	150	Nonsense_Mutation	SNP	T	T	T	T	T	1	s1
+GENE_B	2	chr1	300	300	Missense_Mutation	SNP	A	A	T	A	T	1	s2
+GENE_C	3	chr2	500	500	Frame_Shift_Del	SNP	T	A	C	A	C	2	s2,s3

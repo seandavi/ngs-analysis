@@ -1,0 +1,6 @@
+Chromosome	Start_position	End_position	Variant_Type	Num_Samples	Samples
+chr1	100	100	SNP	1	s1
+chr1	150	150	SNP	2	s1,s2
+chr1	200	200	SNP	1	s2
+chr1	300	300	SNP	1	s2
+chr2	500	500	SNP	2	s2,s3

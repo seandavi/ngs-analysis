@@ -142,3 +142,9 @@ $QSUB merge.maf                                                                 
       vcf2maf                                                                   \
       n                                                                         \
       $NGS_ANALYSIS_DIR/modules/somatic/merge_maf.sh $OUT_PRE varscan/*maf
+
+
+# Generate summaries about the maf file
+maf_summaries.py $OUT_PRE.maf -t pos_simple   -o $OUT_PRE.maf.summary.pos.simple
+maf_summaries.py $OUT_PRE.maf -t pos_detailed -o $OUT_PRE.maf.summary.pos.detailed
+maf_summaries.py $OUT_PRE.maf -t gene         -o $OUT_PRE.maf.summary.gene

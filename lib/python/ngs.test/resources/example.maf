@@ -1,0 +1,8 @@
+Hugo_Symbol	Entrez_Gene_Id	Center	NCBI_Build	Chromosome	Start_position	End_position	Strand	Variant_Classification	Variant_Type	Reference_Allele	Tumor_Seq_Allele1	Tumor_Seq_Allele2	dbSNP_RS	dbSNP_Val_Status	Tumor_Sample_Barcode	Matched_Norm_Sample_Barcode	Match_Norm_Seq_Allele1	Match_Norm_Seq_Allele2	Tumor_Validation_Allele1	Tumor_Validation_Allele2	Match_Norm_Validation_Allele1	Match_Norm_Validation_Allele2	Verification_Status	Validation_Status	Mutation_Status	Sequencing_Phase	Sequence_Source	Validation_Method	Score	BAM_File	Sequencer
+GENE_A	1	sequencing.center	37	chr1	100	100	+	Splice_Site	SNP	A	A	T	novel		s1	s1	A	T							Somatic		WES				Illumina HiSeq
+GENE_A	1	sequencing.center	37	chr1	200	200	+	Intron	SNP	A	A	C	novel		s2	s2	A	C							Somatic		WES				Illumina HiSeq
+GENE_B	2	sequencing.center	37	chr1	150	150	+	Nonsense_Mutation	SNP	T	T	T	novel		s1	s1	T	T							Somatic		WES				Illumina HiSeq
+GENE_B	2	sequencing.center	37	chr1	150	150	+	Nonsense_Mutation	SNP	T	C	T	novel		s2	s2	C	T							Somatic		WES				Illumina HiSeq
+GENE_B	2	sequencing.center	37	chr1	300	300	+	Missense_Mutation	SNP	A	A	T	novel		s2	s2	A	T							Somatic		WES				Illumina HiSeq
+GENE_C	3	sequencing.center	37	chr2	500	500	+	Frame_Shift_Del	SNP	T	A	C	novel		s2	s2	A	C							Somatic		WES				Illumina HiSeq
+GENE_C	3	sequencing.center	37	chr2	500	500	+	Frame_Shift_Del	SNP	T	A	C	novel		s3	s3	A	C							Somatic		WES				Illumina HiSeq
