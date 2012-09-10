@@ -5,27 +5,28 @@
 ## USAGE:         gatk.somaticindeldetector.sh 
 ##                                             normal.bam
 ##                                             tumor.bam
-##                                             ref.fa
 ##                                             sample_name
+##                                             ref.fa
+##                                             out_prefix
 ##
-## OUTPUT:        sample_name.gatk_somaticindel.vcf
-##                sample_name.gatk_somaticindel.indels.txt
+## OUTPUT:        out_prefix.vcf
+##                out_prefix.indels.txt
 ##
 
 # Load analysis config
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 4 $# $0
+usage 5 $# $0
 
 # Process input params
 BAM_N=$1
 BAM_T=$2
-REFER=$3
-SAMPL=$4
+SAMPL=$3
+REFER=$4
+PREFX=$5
 
 # Format output filenames
-PREFX=$SAMPL.gatk_somaticindel
 O_LOG=$PREFX.log
 
 # Run tool

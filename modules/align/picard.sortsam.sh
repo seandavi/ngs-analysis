@@ -20,14 +20,14 @@ MAX_RECORDS_IN_RAM=${MAX_RECORDS_IN_RAM:=1000000}
 # Format output filenames
 OUTPUTPREFIX=`filter_ext $BAMFILE 1`
 OUTPUTFILE=$OUTPUTPREFIX.sort.bam
-OUTPUTERROR=$OUTPUTFILE.err
+OUTPUTLOG=$OUTPUTFILE.log
 
 # Run tool
-$JAVAJAR32G $PICARD_PATH/SortSam.jar                  \
+$JAVAJAR16G $PICARD_PATH/SortSam.jar                  \
   INPUT=$BAMFILE                                      \
   OUTPUT=$OUTPUTFILE                                  \
   SORT_ORDER=coordinate                               \
   MAX_RECORDS_IN_RAM=$MAX_RECORDS_IN_RAM              \
   CREATE_INDEX=true                                   \
   VALIDATION_STRINGENCY=LENIENT                       \
-  &> $OUTPUTERROR
+  &> $OUTPUTLOG

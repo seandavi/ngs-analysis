@@ -8,13 +8,13 @@
 ##                HIGH impact effect mutations.
 ##                If single_transcript is not set, by default will use merged transcripts.
 ##
-## USAGE:         ngs.pipe.bam2maf.ge.sh
-##                                       bamlist
-##                                       ref.fa
-##                                       maf_out_prefix
-##                                       tumor_purity
-##                                       snpeff_genome_version(i.e. 37.64)
-##                                       [single_transcript]
+## USAGE:         ngs.pipe.bam2maf.varscan.ge.sh
+##                                               bamlist
+##                                               ref.fa
+##                                               maf_out_prefix
+##                                               tumor_purity
+##                                               snpeff_genome_version(i.e. 37.64)
+##                                               [single_transcript]
 ##
 ## OUTPUT:        maf_out_prefix.maf
 ##                VarScan output in varscan/ directory
@@ -70,7 +70,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
           $TPURITY
 
   # Convert varscan snp output to maf
-  $QSUB varscan.vcf2maf                                                         \
+  $QSUB vcf2maf                                                                 \
         all.q                                                                   \
         1                                                                       \
         5G                                                                      \
@@ -134,6 +134,9 @@ if [ ! -z $TSINGLE ]; then
   done
 fi
 
+
+exit
+######################################################################################
 # Merge all mafs
 $QSUB merge.maf                                                                 \
       all.q                                                                     \
