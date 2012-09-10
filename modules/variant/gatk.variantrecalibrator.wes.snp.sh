@@ -1,15 +1,16 @@
 #!/bin/bash
 ##
-## DESCRIPTION:   Recalibrate variant quality scores using known variant sites
+## DESCRIPTION:   Recalibrate snp variant quality scores using known variant sites
+##                To be used for WES resulting vcf
 ##
-## USAGE:         gatk.variantrecalibrator.wes.sh 
-##                                                input.vcf
-##                                                ref.fa
-##                                                hapmap.sites.vcf
-##                                                omni.sites.vcf
-##                                                dbsnp.vcf
+## USAGE:         gatk.variantrecalibrator.wes.snp.sh
+##                                                    input.snp.vcf
+##                                                    ref.fa
+##                                                    hapmap.sites.vcf
+##                                                    omni.sites.vcf
+##                                                    dbsnp.vcf
 ##
-## OUTPUT:        input.vcf.recal input.vcf.tranches
+## OUTPUT:        input.snp.vcf.recal input.snp.vcf.recal.tranches input.snp.vcf.recal.plots.R
 ##
 
 # Load analysis config
@@ -27,17 +28,19 @@ DBSNP_VCF=$5
 
 # Format output
 OUTPREFIX=$VCFIN
-OUTTRANCH=$OUTPREFIX.tranches
+OUTTRANCH=$OUTPREFIX.recal.tranches
 OUT_RECAL=$OUTPREFIX.recal
+OUTRSCRIP=$OUTPREFIX.recal.plots.R
 OUTPUTLOG=$OUT_RECAL.log
 
 # Run tool
 $JAVAJAR2G $GATK                                                                                 \
    -T VariantRecalibrator                                                                        \
    -R $REFER                                                                                     \
-   -input $VCFIN                                                                                 \
-   -recalFile $OUT_RECAL                                                                         \
+   -input,VCF    $VCFIN                                                                             \
+   -recalFile    $OUT_RECAL                                                                      \
    -tranchesFile $OUTTRANCH                                                                      \
+   -rscriptFile  $OUTRSCRIP                                                                      \
    --maxGaussians 6                                                                              \
    -resource:hapmap,VCF,known=false,training=true,truth=true,prior=15.0 $HAPMAP_VCF              \
    -resource:omni,VCF,known=false,training=true,truth=false,prior=12.0 $OMNI_VCF                 \

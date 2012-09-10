@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Select snps from a vcf file
 ##
-## USAGE:         gatk.selectvariants.snp.sh input.vcf ref.fasta
+## USAGE:         gatk.selectvariants.snp.sh input.vcf ref.fa
 ##
 ## OUTPUT:        input.snp.vcf
 ##
@@ -23,7 +23,7 @@ VCFOUT=$OUTPRE.snp.vcf
 OUTLOG=$VCFOUT.log
 
 # Run tool
-$JAVAJAR2G $GATK                                          \
+$JAVAJAR1G $GATK                                          \
    -R $REFER                                              \
    -T SelectVariants                                      \
    -V $VCFIN                                              \

@@ -2,11 +2,12 @@
 ##
 ## DESCRIPTION:   Apply the recalibrated variant quality scores to the vcf file
 ##
-## USAGE:         gatk.applyrecalibration.wes.snp.sh 
-##                                                   input.vcf
-##                                                   in.tranches
-##                                                   in.recal
-##                                                   ref.fa
+## USAGE:         gatk.applyrecalibration.sh
+##                                           input.vcf
+##                                           in.tranches
+##                                           in.recal
+##                                           ref.fa
+##                                           mode (SNP|INDEL|BOTH)
 ##
 ## OUTPUT:        input.recal.vcf
 ##
@@ -15,13 +16,14 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 4 $# $0
+usage 5 $# $0
 
 # Process input params
 VCFIN=$1
 TRANC=$2
 RECAL=$3
 REFER=$4
+MODE=$5
 
 # Format output
 OUTPRE=`filter_ext $VCFIN 1`
@@ -36,7 +38,7 @@ $JAVAJAR2G $GATK                                                                
    -recalFile $RECAL                                                                             \
    -tranchesFile $TRANC                                                                          \
    -o $OUTVCF                                                                                    \
-   -mode SNP                                                                                     \
+   -mode $MODE                                                                                   \
    &> $OUTLOG
 
 

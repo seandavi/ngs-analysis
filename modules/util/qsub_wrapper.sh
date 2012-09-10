@@ -65,7 +65,7 @@ qsub                                             \
   -sync $SYNC                                    \
   $COMMD
 
-sleep 5
+sleep 3
 
 #
 # #$ -cwd

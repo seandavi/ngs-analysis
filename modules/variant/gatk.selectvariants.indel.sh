@@ -23,7 +23,7 @@ VCFOUT=$OUTPRE.indel.vcf
 OUTLOG=$VCFOUT.log
 
 # Run tool
-$JAVAJAR2G $GATK                                          \
+$JAVAJAR1G $GATK                                          \
    -R $REFER                                              \
    -T SelectVariants                                      \
    -V $VCFIN                                              \

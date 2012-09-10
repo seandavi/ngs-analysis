@@ -4,11 +4,11 @@
 ##
 ## USAGE:         gatk.combinevariants.snp.indel.sh 
 ##                                                   input.snp.vcf
-##                                                   input.indel.sh
-##                                                   out_prefix
+##                                                   input.indel.vcf
+##                                                   output.vcf
 ##                                                   ref.fa
 ##
-## OUTPUT:        out_prefix.vcf
+## OUTPUT:        output.vcf
 ##
 
 # Load analysis config
@@ -20,11 +20,10 @@ usage 4 $# $0
 # Process input params
 VCFSNP=$1
 VCFIND=$2
-OUTPRE=$3
+OUTVCF=$3
 REFERE=$4
 
 # Format output
-OUTVCF=$OUTPRE.vcf
 OUTLOG=$OUTVCF.log
 
 # Run tool
