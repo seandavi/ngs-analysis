@@ -136,6 +136,10 @@ fi
 
 
 exit
+
+
+
+
 ######################################################################################
 # Merge all mafs
 $QSUB merge.maf                                                                 \
@@ -148,6 +152,7 @@ $QSUB merge.maf                                                                 
 
 
 # Generate summaries about the maf file
-python_ngs.sh maf_summaries.py $OUT_PRE.maf -t pos_simple   -o $OUT_PRE.maf.summary.pos.simple
-python_ngs.sh maf_summaries.py $OUT_PRE.maf -t pos_detailed -o $OUT_PRE.maf.summary.pos.detailed
-python_ngs.sh maf_summaries.py $OUT_PRE.maf -t gene         -o $OUT_PRE.maf.summary.gene
+grep -v "3'Flank" $OUT_PRE.maf | grep -v "5'Flank" > $OUT_PRE.noflank.maf
+python_ngs.sh maf_summaries.py $OUT_PRE.noflank.maf -t pos_simple   -o $OUT_PRE.noflank.maf.summary.pos.simple
+python_ngs.sh maf_summaries.py $OUT_PRE.noflank.maf -t pos_detailed -o $OUT_PRE.noflank.maf.summary.pos.detailed
+python_ngs.sh maf_summaries.py $OUT_PRE.noflank.maf -t gene         -o $OUT_PRE.noflank.maf.summary.gene
