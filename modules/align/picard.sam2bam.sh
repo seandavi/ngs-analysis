@@ -30,7 +30,7 @@ OUTPUTERROR=$OUTPUTPREFIX.bam.err
 
 
 # Run tool
-$JAVAJAR8G $PICARD_PATH/SamFormatConverter.jar   \
+`javajar 8g` $PICARD_PATH/SamFormatConverter.jar \
   INPUT=$SAMFILE                                 \
   OUTPUT=$OUTPUTFILE                             \
   MAX_RECORDS_IN_RAM=$MAX_RECORDS_IN_RAM         \

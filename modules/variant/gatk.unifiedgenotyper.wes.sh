@@ -40,7 +40,7 @@ for bamfile in $BAMFILES; do
 done
 
 # Run tool
-$JAVAJAR128G $GATK                                        \
+`javajar 128g` $GATK                                      \
   -T UnifiedGenotyper                                     \
   -l INFO                                                 \
   -R $REF                                                 \

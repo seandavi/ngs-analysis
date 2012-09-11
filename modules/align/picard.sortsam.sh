@@ -23,7 +23,7 @@ OUTPUTFILE=$OUTPUTPREFIX.sort.bam
 OUTPUTLOG=$OUTPUTFILE.log
 
 # Run tool
-$JAVAJAR16G $PICARD_PATH/SortSam.jar                  \
+`javajar 16g` $PICARD_PATH/SortSam.jar                \
   INPUT=$BAMFILE                                      \
   OUTPUT=$OUTPUTFILE                                  \
   SORT_ORDER=coordinate                               \

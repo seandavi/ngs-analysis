@@ -25,7 +25,7 @@ O_CHART=$OPREFIX.pdf
 OUT_LOG=$OPREFIX.log
 
 # Run tool
-$JAVAJAR16G $PICARD_PATH/CollectInsertSizeMetrics.jar      \
+`javajar 16g` $PICARD_PATH/CollectInsertSizeMetrics.jar    \
   INPUT=$BAMFILE                                           \
   OUTPUT=$OMETRIC                                          \
   H=$O_CHART                                               \

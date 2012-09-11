@@ -23,7 +23,7 @@ VCFOUT=$OUTPRE.mnp.vcf
 OUTLOG=$VCFOUT.log
 
 # Run tool
-$JAVAJAR2G $GATK                                          \
+`javajar 1g` $GATK                                        \
    -R $REFER                                              \
    -T SelectVariants                                      \
    -V $VCFIN                                              \

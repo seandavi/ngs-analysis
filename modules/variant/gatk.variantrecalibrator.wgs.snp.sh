@@ -34,7 +34,7 @@ OUTRSCRIP=$OUTPREFIX.recal.plots.R
 OUTPUTLOG=$OUT_RECAL.log
 
 # Run tool
-$JAVAJAR2G $GATK                                                                                       \
+`javajar 2g` $GATK                                                                                     \
    -T VariantRecalibrator                                                                              \
    -R $REFER                                                                                           \
    -input,VCF    $VCFIN                                                                                \

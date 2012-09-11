@@ -24,7 +24,7 @@ OUTPUTLOG=$OUTPUTBAM.log
 
 
 # Run tool
-$JAVAJAR16G $PICARD_PATH/MarkDuplicates.jar          \
+`javajar 16g` $PICARD_PATH/MarkDuplicates.jar        \
   INPUT=$BAMFILE                                     \
   OUTPUT=$OUTPUTBAM                                  \
   METRICS_FILE=$OUTPUTBAM.metrics                    \

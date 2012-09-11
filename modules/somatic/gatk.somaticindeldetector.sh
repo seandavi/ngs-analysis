@@ -30,7 +30,7 @@ PREFX=$5
 O_LOG=$PREFX.log
 
 # Run tool
-$JAVAJAR2G $GATK                                          \
+`javajar 2g` $GATK                                        \
   -T SomaticIndelDetector                                 \
   -R $REFER                                               \
   -I:normal $BAM_N                                        \

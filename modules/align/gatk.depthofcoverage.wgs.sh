@@ -33,7 +33,7 @@ for bamfile in $BAMFILES; do
 done
 
 # Run tool
-$JAVAJAR128G $GATK              \
+`javajar 128g` $GATK            \
   -T DepthOfCoverage            \
   -R $REF                       \
   $INPUTBAM                     \

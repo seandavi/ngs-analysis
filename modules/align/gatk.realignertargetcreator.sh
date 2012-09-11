@@ -38,7 +38,7 @@ OUTPUTFILE=$OUTPUTPREFIX.realign.intervals
 OUTPUTLOG=$OUTPUTFILE.log
 
 # Run tool
-$JAVAJAR16G $GATK                                         \
+`javajar 16g` $GATK                                       \
   -T RealignerTargetCreator                               \
   -R $REF                                                 \
   -nt $NUM_THREADS                                        \

@@ -25,7 +25,7 @@ OUTVCF=$OUTPRE.filter.vcf
 OUTLOG=$OUTVCF.log
 
 # Run tool
-$JAVAJAR2G $GATK                                                                                 \
+`javajar 2g` $GATK                                                                               \
    -T VariantFiltration                                                                          \
    -R $REFER                                                                                     \
    -V $VCFIN                                                                                     \

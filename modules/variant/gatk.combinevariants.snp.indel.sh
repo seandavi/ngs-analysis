@@ -27,7 +27,7 @@ REFERE=$4
 OUTLOG=$OUTVCF.log
 
 # Run tool
-$JAVAJAR2G $GATK                                                                                 \
+`javajar 2g` $GATK                                                                               \
    -T CombineVariants                                                                            \
    -R $REFERE                                                                                    \
    --variant:snp   $VCFSNP                                                                       \

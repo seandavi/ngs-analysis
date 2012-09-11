@@ -20,7 +20,7 @@ OUT_FILE=$OUT_PREFIX.somaticfilter
 OUT_LOG=$OUT_FILE.log
 
 # Run tool
-$JAVAJAR16G $VARSCAN                    \
+`javajar 16g` $VARSCAN                  \
   somaticFilter                         \
   $MUTATIONS_FILE                       \
   --min-coverage  10                    \

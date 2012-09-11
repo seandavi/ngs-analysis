@@ -26,7 +26,7 @@ OUTPUTFILE=$OUTPREFIX.recal.csv
 OUTPUTLOG=$OUTPUTFILE.log
 
 # Run tool
-$JAVAJAR8G $GATK                                          \
+`javajar 8g` $GATK                                        \
   -T CountCovariates                                      \
   -R $REF                                                 \
   -nt $NUM_THREADS                                        \

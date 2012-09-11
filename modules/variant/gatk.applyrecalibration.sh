@@ -31,7 +31,7 @@ OUTVCF=$OUTPRE.recal.vcf
 OUTLOG=$OUTVCF.log
 
 # Run tool
-$JAVAJAR2G $GATK                                                                                 \
+`javajar 2g` $GATK                                                                               \
    -T ApplyRecalibration                                                                         \
    -R $REFER                                                                                     \
    -input $VCFIN                                                                                 \

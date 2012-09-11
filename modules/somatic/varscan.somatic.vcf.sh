@@ -32,7 +32,7 @@ OUT_PREFIX=$SAMPLE_NAME.varscan
 assert_file_not_exists_w_content $OUT_PREFIX.snp.vcf
 
 # Run tool
-$JAVAJAR16G $VARSCAN                    \
+`javajar 16g` $VARSCAN                  \
   somatic                               \
   $PILEUP_NORM                          \
   $PILEUP_TUMOR                         \

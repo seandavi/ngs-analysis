@@ -1,9 +1,14 @@
 #!/bin/bash
 
-
 # Echo to standard error
 echoerr() {
     echo "$@" 1>&2; 
+}
+
+# Java jar shortcut
+javajar() {
+    HEAPSIZE=$1
+    echo "java -Xmx"$HEAPSIZE" -Djava.io.tmpdir=`pwd` -jar"
 }
 
 # If file doesn't exist, exit with error

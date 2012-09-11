@@ -22,7 +22,7 @@ OUTPUTLOG=$OUTPUTDIR.log
 OUTPUTERR=$OUTPUTDIR.err
 
 # Run tool
-$JAVAJAR8G $GATK_ANALYZECOVARIATES                \
+`javajar 8g` $GATK_ANALYZECOVARIATES              \
   -recalFile $RECALFILE                           \
   -outputDir $OUTPUTDIR                           \
   -l INFO                                         \

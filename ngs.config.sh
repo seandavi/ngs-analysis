@@ -61,20 +61,12 @@ export SURESELECT_INTERVAL=path/to/SureSelect_All_Exon_50mb_with_annotation_hg19
 #=====================================================================================
 # Developers Only
 
-# NGS Analysis Pipeline Framework Tools
+# Bash function library
 source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/align
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/annot
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/seq
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/somatic
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/util
-export PATH=$PATH:$NGS_ANALYSIS_DIR/modules/variant
-export JAVAJAR1G='java -Xmx1g -Djava.io.tmpdir='$PWD' -jar'
-export JAVAJAR2G='java -Xmx2g -Djava.io.tmpdir='$PWD' -jar'
-export JAVAJAR4G='java -Xmx4g -Djava.io.tmpdir='$PWD' -jar'
-export JAVAJAR8G='java -Xmx8g -Djava.io.tmpdir='$PWD' -jar'
-export JAVAJAR16G='java -Xmx16g -Djava.io.tmpdir='$PWD' -jar'
-export JAVAJAR32G='java -Xmx32g -Djava.io.tmpdir='$PWD' -jar'
-export JAVAJAR64G='java -Xmx64g -Djava.io.tmpdir='$PWD' -jar'
-export JAVAJAR128G='java -Xmx128g -Djava.io.tmpdir='$PWD' -jar'
-export JAVAJAR256G='java -Xmx256g -Djava.io.tmpdir='$PWD' -jar'
+
+# Set module paths
+modules="align annot seq somatic util variant"
+for module in `echo $modules | sed 's/ /\n/g'`; do
+  PATH=$PATH:$NGS_ANALYSIS_DIR/modules/$module
+done
+export $PATH
