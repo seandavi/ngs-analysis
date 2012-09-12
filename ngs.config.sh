@@ -69,4 +69,4 @@ modules="align annot seq somatic util variant"
 for module in `echo $modules | sed 's/ /\n/g'`; do
   PATH=$PATH:$NGS_ANALYSIS_DIR/modules/$module
 done
-export $PATH
+export PATH
