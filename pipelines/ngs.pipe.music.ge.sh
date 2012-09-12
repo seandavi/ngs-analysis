@@ -73,10 +73,11 @@ music.smg.sh $OUT_DIR/gene_mrs $OUT_DIR 20
 # Check if tool ran successfully
 assert_normal_exit_status $? "Error computing smg. Exiting"
 
+exit
+
 # Merge maf gene summary with the p-values from smg
 python_ngs.sh inner_join.py --header $MAFFILE.summary.gene  $OUT_DIR/smg_detailed > $MAFFILE.summary.gene.smg
 
-exit
 
 # Mutation relation test
 echo 'Running mutation_relation test'
