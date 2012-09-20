@@ -24,7 +24,11 @@ SOMPVAL=$2
 TPURITY=$3
 NUM_PAR=$4
 
+# Make sure that bamlist file exists
 assert_file_exists_w_content $BAMLIST
+
+# Create varscan output directory
+mkdir varscan
 
 # Run VarScan
 P=0
@@ -35,6 +39,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   # Make sure that pileups exist for the bam pairs
   assert_file_exists_w_content $BAM_N.mpileup
   assert_file_exists_w_content $BAM_T.mpileup
+  echo "Processing sample: "$SAMPL
   $NGS_ANALYSIS_DIR/modules/somatic/varscan.somatic.vcf.sh                \
     $BAM_N.mpileup                                                        \
     $BAM_T.mpileup                                                        \
