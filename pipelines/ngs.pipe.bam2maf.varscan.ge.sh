@@ -108,15 +108,14 @@ if [ ! -z $TSINGLE ]; then
 	$NGS_ANALYSIS_DIR/modules/util/python_ngs.sh                            \
           vcf_snpeff_count_transcript_effects.py                                \
             -l $t2l                                                             \
-            -o $OUT_PRE.tcount                                                   \
+            -o $OUT_PRE.tcount                                                  \
             varscan/*snpeff.vcf
 
   # Generate maf for each sample based on the selected transcripts
   for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
     SAMPL=`echo $bamfiles | cut -f1 -d':'`
-    VCF_SNP_ANNOTFILE=`ls varscan/$SAMPL.snp.somatic.*snpeff.vcf`
-    VCF_INDEL_ANNOTFILE=`ls varscan/$SAMPL.indel.somatic.*snpeff.vcf`
-    for file in $VCF_SNP_ANNOTFILE $VCF_INDEL_ANNOTFILE; do
+    for file in `ls varscan/$SAMPL.snp.somatic.*snpeff.vcf`                     \
+                `ls varscan/$SAMPL.indel.somatic.*snpeff.vcf`; do
       $QSUB vcf2maf                                                             \
             all.q                                                               \
             1                                                                   \
@@ -127,7 +126,7 @@ if [ ! -z $TSINGLE ]; then
               $file                                                             \
               $SAMPL                                                            \
               $GENE2ENTREZ                                                      \
-              -s $OUT_PRE.tcount.g2t.pkl                                         \
+              -s $OUT_PRE.tcount.g2t.pkl                                        \
               -t varscan                                                        \
               -o $file.maf
     done
