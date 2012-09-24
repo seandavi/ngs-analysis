@@ -6,10 +6,13 @@ Requirements
 - Python 2.6/2.7
 	- Required Python Modules
 		- argparse
+		- django
 		- gzip
 		- os
+		- reportlab
 		- sys
 		- unittest
+		- xhtml2pdf
 		- zipfile
 - Bioinformatics tools
 	- GATK

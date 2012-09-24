@@ -78,7 +78,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
         n                                                                       \
         $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.snp.sh             \
           $SAMPL                                                                \
-          varscan/$SAMPL.snp.vcf                                                \
+          varscan/$SAMPL.varscan.snp.vcf                                        \
           $SNPEFFV
 
   # Convert varscan indel output to maf
@@ -90,7 +90,7 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
         n                                                                       \
         $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.indel.sh           \
           $SAMPL                                                                \
-          varscan/$SAMPL.indel.vcf                                              \
+          varscan/$SAMPL.varscan.indel.vcf                                      \
           $SNPEFFV
 
 done
@@ -114,9 +114,9 @@ if [ ! -z $TSINGLE ]; then
   # Generate maf for each sample based on the selected transcripts
   for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
     SAMPL=`echo $bamfiles | cut -f1 -d':'`
-    for file in `ls varscan/$SAMPL.snp.somatic.*snpeff.vcf`                     \
-                `ls varscan/$SAMPL.indel.somatic.*snpeff.vcf`; do
-      $QSUB vcf2maf                                                             \
+    for file in `echo varscan/$SAMPL.varscan.snp.somatic.snpeff.vcf`            \
+                `echo varscan/$SAMPL.varscan.indel.somatic.clean.snpeff.vcf`; do
+      $QSUB vcf2maf.selected                                                    \
             all.q                                                               \
             1                                                                   \
             4G                                                                  \

@@ -44,5 +44,6 @@ genome music bmr calc-bmr              \
   --bam-list=$BAMLIST                  \
   --output-dir=$OUT_DIR                \
   --maf-file=$MAFFILE                  \
+  --show-skipped=true                  \
   $NOSKIP_PARAMS                       \
   &> $OUTPUTLOG
