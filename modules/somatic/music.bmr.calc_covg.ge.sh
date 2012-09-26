@@ -69,7 +69,7 @@ for file in `ls *cmds.fixed.split_*`; do
     music.calc_covg                                 \
     all.q                                           \
     1                                               \
-    2G                                              \
+    4G                                              \
     none                                            \
     n                                               \
     $file

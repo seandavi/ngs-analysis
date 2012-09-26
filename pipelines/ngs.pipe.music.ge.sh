@@ -50,9 +50,9 @@ cut -f1 $MAFFILE | sed 1d | sort -u | sed '/^$/d' | $PYTHON $NGS_ANALYSIS_DIR/mo
 assert_normal_exit_status $? "Error generating subset of roi for genes in the maf file. Exiting"
 
 # Compute bases covered
-~/bin/genome.env.sh
+source ~/bin/genome.env.sh
 echo 'Running bmr calc-covg'
-music.bmr.calc_covg.ge.sh $BAMLIST $TMPDIR/roi.bed $OUT_DIR $REFEREN 20
+music.bmr.calc_covg.ge.sh $BAMLIST $TMPDIR/roi.bed $OUT_DIR $REFEREN 40
 
 # Check if tool ran successfully
 assert_normal_exit_status $? "Error running calc-covg. Exiting"
