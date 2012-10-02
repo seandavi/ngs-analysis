@@ -19,7 +19,7 @@ register = Library()
 
 @register.filter
 def keyval(dict, key):
-    return dict[key]
+    return dict.get(key,'')
 
 builtins.append(register)
     
@@ -67,6 +67,8 @@ def load_fastqc_data(data, datafile, sample, read=READ_NUM['R1']):
             if len(la) > 1:
                 k = la[0]
                 v = la[1]
+                if k == 'Filename':
+                    k = 'FastqFilename'
                 data.setdefault('data', {}).setdefault(sample, {}).setdefault(k, {})[read] = v
 
 def load_fastqc_images(data, imagedir, sample, read=READ_NUM['R1']):
@@ -170,10 +172,23 @@ def main():
 
         # Get the filesizes
         data_sample = data['data'][sample]
-        r1_filesize = os.path.getsize(os.path.join(sample_dir, data_sample['Filename'][READ_NUM['R1']]))
-        r2_filesize = os.path.getsize(os.path.join(sample_dir, data_sample['Filename'][READ_NUM['R2']]))
-        data_sample.setdefault('Filesize', {})[READ_NUM['R1']] = ' '.join([str(r1_filesize), 'bytes'])
-        data_sample.setdefault('Filesize', {})[READ_NUM['R2']] = ' '.join([str(r2_filesize), 'bytes'])
+        r1_fastqfile = os.path.join(sample_dir, data_sample['FastqFilename'][READ_NUM['R1']])
+        r2_fastqfile = os.path.join(sample_dir, data_sample['FastqFilename'][READ_NUM['R2']])
+        r1_fastqfilesize = str(os.path.getsize(r1_fastqfile))
+        r2_fastqfilesize = str(os.path.getsize(r2_fastqfile))
+        data_sample.setdefault('FastqFilesize', {})[READ_NUM['R1']] = ' '.join([r1_fastqfilesize, 'bytes'])
+        data_sample.setdefault('FastqFilesize', {})[READ_NUM['R2']] = ' '.join([r2_fastqfilesize, 'bytes'])
+        # Check if md5 is made, and append that data
+        data_sample.setdefault('MD5Filename', {})
+        data_sample['MD5Filename'][READ_NUM['R1']] = data_sample['FastqFilename'][READ_NUM['R1']] + '.MD5'
+        data_sample['MD5Filename'][READ_NUM['R2']] = data_sample['FastqFilename'][READ_NUM['R2']] + '.MD5'
+        r1_md5file = r1_fastqfile + '.MD5'
+        r2_md5file = r2_fastqfile + '.MD5'
+        if os.path.exists(r1_md5file) and os.path.exists(r2_md5file):
+            r1_md5filesize = str(os.path.getsize(r1_md5file))
+            r2_md5filesize = str(os.path.getsize(r2_md5file))
+            data_sample.setdefault('MD5Filesize', {})[READ_NUM['R1']] = ' '.join([r1_md5filesize, 'bytes'])
+            data_sample.setdefault('MD5Filesize', {})[READ_NUM['R2']] = ' '.join([r2_md5filesize, 'bytes'])
 
         # Load the images
         r1_imagedir = os.path.join(fastqc_R1_dir, 'Images')

@@ -25,6 +25,9 @@ def main():
                     help='Column number to search the key terms for in the data file, with column count starting with 0', 
                     type=int, 
                     default=0)
+    ap.add_argument('-v', '--invert-match',
+                    help='Select non-matching lines',
+                    action='store_true')
     ap.add_argument('-i', '--ignore-case', 
                     help='Ignore case when matching',
                     action='store_true')
@@ -44,8 +47,13 @@ def main():
         target_word = line.strip('\n').split('\t')[params.column]
         if params.ignore_case:
             target_word = target_word.lower()
-        if target_word in search_words:
-            sys.stdout.write(line)
+        # If -v is set
+        if params.invert_match:
+            if not target_word in search_words:
+                sys.stdout.write(line)
+        else:
+            if target_word in search_words:
+                sys.stdout.write(line)
         
     params.data_file.close()
     

@@ -2,7 +2,10 @@
 ## 
 ## DESCRIPTION:   Run Hiseq base calling from within BaseCalls directory
 ##
-## USAGE:         ngs.pipe.hiseq.bcl2fastq.sh output_dir_name path/to/SampleSheet.csv [num_threads]
+## USAGE:         ngs.pipe.bcl2fastq.sh
+##                                      output_dir
+##                                      path/to/SampleSheet.csv
+##                                      [num_threads]
 ##
 ## OUTPUT:        directory containing fastq files for each project/sample
 ##

@@ -30,7 +30,7 @@ OUTPUTLOG=$OUTPREFIX.bam.log
 # create symbolic link to out_prefix.bam
 if [ $NUM_BAMFILES -eq 1 ]; then
   SINGLE_BAMFILE=${PARAMS[1]}
-  ln -s $SINGLE_BAMFILE $OUTPUTBAM
+  ln -s `readlink -f $SINGLE_BAMFILE` $OUTPUTBAM
   exit
 fi
 

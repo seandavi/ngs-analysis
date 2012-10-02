@@ -139,12 +139,20 @@
 	<h1> Basic Information </h1>
 	<h2> Files </h2>
 	<table>
-		<tr><th> Filename          </th><th> File size </th></tr>
+		<tr><th> Filename </th><th> File size </th></tr>
 		{% for sample in samples %}
-		<tr><td> {{ data|keyval:sample|keyval:"Filename"|keyval:"R1" }} </td>
-		    <td> {{ data|keyval:sample|keyval:"Filesize"|keyval:"R1" }} </td></tr>
-		<tr><td> {{ data|keyval:sample|keyval:"Filename"|keyval:"R2" }} </td>
-		    <td> {{ data|keyval:sample|keyval:"Filesize"|keyval:"R2" }} </td></tr>
+		<tr><td> {{ data|keyval:sample|keyval:"FastqFilename"|keyval:"R1" }} </td>
+		    <td> {{ data|keyval:sample|keyval:"FastqFilesize"|keyval:"R1" }} </td></tr>
+			{% if data|keyval:sample|keyval:"MD5Filesize" != "" %}
+			<tr><td> {{ data|keyval:sample|keyval:"MD5Filename"|keyval:"R1" }} </td>
+			    <td> {{ data|keyval:sample|keyval:"MD5Filesize"|keyval:"R1" }} </td></tr>
+			{% endif %}
+		<tr><td> {{ data|keyval:sample|keyval:"FastqFilename"|keyval:"R2" }} </td>
+		    <td> {{ data|keyval:sample|keyval:"FastqFilesize"|keyval:"R2" }} </td></tr>
+			{% if data|keyval:sample|keyval:"MD5Filesize" != "" %}
+			<tr><td> {{ data|keyval:sample|keyval:"MD5Filename"|keyval:"R2" }} </td>
+			    <td> {{ data|keyval:sample|keyval:"MD5Filesize"|keyval:"R2" }} </td></tr>
+			{% endif %}
 		{% endfor %}
 	</table>
 

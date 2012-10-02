@@ -17,6 +17,7 @@ usage_min 1 $# $0
 # Submit each sample directory to the grid engine
 SAMPLEDIRS=$@
 for sampledir in $SAMPLEDIRS; do
+  sampledir=`echo $sampledir | sed 's/\/$//'`
   SAMPLENAME=`echo $sampledir | cut -f2- -d'_'`
   qsub_wrapper.sh                                                   \
     $SAMPLENAME.reset                                               \

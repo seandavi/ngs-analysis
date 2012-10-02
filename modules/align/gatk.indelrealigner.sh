@@ -30,7 +30,7 @@ OUTPUTBAM=$OUTPUTPREFIX.realign.bam
 OUTPUTLOG=$OUTPUTBAM.log
 
 # Run tool
-`javajar 32g` $GATK                                       \
+`javajar 8g` $GATK                                        \
   -T IndelRealigner                                       \
   -R $REF                                                 \
   -I $BAMFILE                                             \
