@@ -5,7 +5,7 @@
 ## USAGE:         ngs.pipe.bcl2fastq.sh
 ##                                      output_dir
 ##                                      path/to/SampleSheet.csv
-##                                      [num_threads]
+##                                      [num_threads (default:20)]
 ##
 ## OUTPUT:        directory containing fastq files for each project/sample
 ##
@@ -19,6 +19,7 @@ usage_min 2 $# $0
 OUTPUT_DIR=$1
 SAMPLESHEET=$2
 NUM_THREADS=$3
+NUM_THREADS=${NUM_THREADS:=20}
 
 # Samplesheet sanity check
 $PYTHON $NGS_ANALYSIS_DIR/modules/seq/illumina_samplesheet_sanitycheck.py $SAMPLESHEET

@@ -5,7 +5,7 @@
 ##
 ## USAGE:         music.smg.sh gene_mrs output_dir [num_parallel]
 ##
-## OUTPUT:        gene_mr_file.smg
+## OUTPUT:        output_dir/smg
 ##
 
 # Load analysis config

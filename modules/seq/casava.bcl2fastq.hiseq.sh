@@ -37,7 +37,9 @@ $BCL2FASTQ                                                 \
   --output-dir $OUTPUT_DIR                                 \
   >& $BASECALLS_DIR/configureBclToFastq.log
 
+# Check if tool ran successfully
+assert_normal_exit_status $? "configureBclToFastq exited with error"
 
 # Go into output directory, and run the makefile
 cd $OUTPUT_DIR
-nohup make -j $NUM_THREADS
+/usr/bin/make -j $NUM_THREADS
