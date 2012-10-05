@@ -42,4 +42,4 @@ assert_normal_exit_status $? "configureBclToFastq exited with error"
 
 # Go into output directory, and run the makefile
 cd $OUTPUT_DIR
-/usr/bin/make -j $NUM_THREADS
+/usr/bin/make -j $NUM_THREADS &> make.log
