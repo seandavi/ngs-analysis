@@ -7,7 +7,9 @@
 ##                                       tumor.mpileup
 ##                                       sample_name
 ##                                       somatic_pval
-##                                       tumor_purity 
+##                                       tumor_purity
+##                                       [min_cov_normal (default 10)
+##                                       [min_cov_tumor  (default 6) ]]
 ##
 ## OUTPUT:        out_prefix.snp.vcf out_prefix.indel.vcf
 ##
@@ -16,7 +18,7 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 5 $# $0
+usage_min 5 $# $0
 
 # Process input params
 PILEUP_NORM=$1
@@ -24,6 +26,10 @@ PILEUP_TUMOR=$2
 SAMPLE_NAME=$3
 SOMATIC_PVAL=$4
 TUMOR_PURITY=$5
+MIN_COV_NORM=$6
+MIN_COV_TUMR=$7
+MIN_COV_NORM=${MIN_COV_NORM:=10}
+MIN_COV_TUMR=${MIN_COV_TUMR:=6}
 
 # Format output
 OUT_PREFIX=$SAMPLE_NAME.varscan
@@ -37,8 +43,8 @@ assert_file_not_exists_w_content $OUT_PREFIX.snp.vcf
   $PILEUP_NORM                          \
   $PILEUP_TUMOR                         \
   $OUT_PREFIX                           \
-  --min-coverage-normal 10              \
-  --min-coverage-tumor 6                \
+  --min-coverage-normal $MIN_COV_NORM   \
+  --min-coverage-tumor $MIN_COV_TUMR    \
   --min-var-freq 0.25                   \
   --min-freq-for-hom 0.80               \
   --normal-purity 1.00                  \

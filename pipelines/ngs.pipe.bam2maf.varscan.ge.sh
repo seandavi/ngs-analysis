@@ -13,6 +13,8 @@
 ##                                               ref.fa
 ##                                               maf_out_prefix
 ##                                               tumor_purity
+##                                               min_cov_normal (i.e. 10)
+##                                               min_cov_tumor  (i.e. 6)
 ##                                               snpeff_genome_version(i.e. 37.64)
 ##                                               [single_transcript]
 ##
@@ -24,15 +26,17 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage_min 5 $# $0
+usage_min 7 $# $0
 
 # Process input parameters
 BAMLIST=$1
 REFEREN=$2
 OUT_PRE=$3
 TPURITY=$4
-SNPEFFV=$5
-TSINGLE=$6
+MINCOVN=$5
+MINCOVT=$6
+SNPEFFV=$7
+TSINGLE=$8
 
 # Create temporary directory
 RNUM=$RANDOM
@@ -67,7 +71,9 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
           $BAM_T.mpileup                                                        \
           varscan/$SAMPL                                                        \
           $SOMATIC_PVAL                                                         \
-          $TPURITY
+          $TPURITY                                                              \
+          $MINCOVN                                                              \
+          $MINCOVT
 
   # Convert varscan snp output to maf
   $QSUB vcf2maf                                                                 \
