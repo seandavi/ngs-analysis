@@ -1,0 +1,12 @@
+context	warning	failure
+basic_statistics	Basic statistics never raises a warning.	Basic statistics never raises an error.
+per_base_quality	A warning will be issued if the lower quartile for any base is less than 10, or if the median for any base is less than 25.	This module will raise a failure if the lower quartile for any base is less than 5 or if the median for any base is less than 20.
+per_sequence_quality	A warning is raised if the most frequently observed mean quality is below 27 - this equates to a 0.2% error rate.	An error is raised if the most frequently observed mean quality is below 20 - this equates to a 1% error rate.
+per_base_sequence_content	This module issues a warning if the difference between a and t, or g and c is greater than 10% in any position.	This module will fail if the difference between a and t, or g and c is greater than 20% in any position.
+per_base_gc_content	This module issues a warning it the gc content of any base strays more than 5% from the mean gc content.	This module will fail if the gc content of any base strays more than 10% from the mean gc content.
+per_sequence_gc_content	A warning is raised if the sum of the deviations from the normal distribution represents more than 15% of the reads.	This module will indicate a failure if the sum of the deviations from the normal distribution represents more than 30% of the reads.
+per_base_n_content	This module raises a warning if any position shows an n content of >5%.	This module will raise an error if any position shows an n content of >20%.
+sequence_length_distribution	This module will raise a warning if all sequences are not the same length.	This module will raise an error if any of the sequences have zero length.
+duplication_levels	This module will issue a warning if non-unique sequences make up more than 20% of the total.	This module will issue a error if non-unique sequences make up more than 50% of the total.
+overrepresented_sequences	This module will issue a warning if any sequence is found to represent more than 0.1% of the total.	This module will issue an error if any sequence is found to represent more than 1% of the total.
+kmer_profiles	This module will issue a warning if any k-mer is enriched more than 3 fold overall, or more than 5 fold at any individual position.	This module will issue a error if any k-mer is enriched more than 10 fold at any individual base position.

@@ -104,7 +104,7 @@ class SampleSheet(object):
         '''
         for row in self.ss_matrix:
             for val in row:
-                if re.match('^[\w-]+$', val) is None:
+                if re.match('^[\w-]+$', val) is None and val != '':
                     sys.stderr.write('Invalid characters used in \'%s\'\n' % val)
                     return False
         return True
