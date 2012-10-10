@@ -46,15 +46,11 @@ echo SYNC  $SYNC  >> $TMP/qsub_wrapper.params
 echo COMMD $COMMD >> $TMP/qsub_wrapper.params
 
 # Submit command
-OPTION_V='NGS_ANALYSIS_CONFIG='$NGS_ANALYSIS_CONFIG
-OPTION_V=$OPTION_V',NGS_ANALYSIS_DIR='$NGS_ANALYSIS_DIR
-OPTION_V=$OPTION_V',PATH='$PATH
-OPTION_V=$OPTION_V',PYTHONPATH='$PYTHONPATH
 qsub                                             \
   -cwd                                           \
   -hold_jid $WAIT4                               \
   -N $JOBID                                      \
-  -v $OPTION_V                                   \
+  -V                                             \
   -S /bin/bash                                   \
   -j y                                           \
   -o $TMP                                        \

@@ -8,9 +8,6 @@
 ## OUTPUT:        directory containing fastq files for each project/sample
 ##
 
-# Load bash environment variables
-source ~/.bashrc
-
 # Load analysis config
 source $NGS_ANALYSIS_CONFIG
 
