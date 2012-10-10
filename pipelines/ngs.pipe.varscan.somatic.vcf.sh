@@ -7,7 +7,9 @@
 ##                                                bamlist
 ##                                                somatic_pval
 ##                                                tumor_purity
-##                                                num_parallel
+##                                                [min_cov_normal (default 10)
+##                                                [min_cov_tumor  (default 6)  ]
+##                                                [num_parallel   (default 20) ]]
 ##
 ## OUTPUT:        varscan/ directory containing varscan output files for all sample pairs
 ##
@@ -16,13 +18,18 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 4 $# $0
+usage_min 3 $# $0
 
 # Process input parameters
 BAMLIST=$1
 SOMPVAL=$2
 TPURITY=$3
-NUM_PAR=$4
+MINCOVN=$4
+MINCOVT=$5
+NUM_PAR=$6
+MINCOVN=${MINCOVN:=10}
+MINCOVT=${MINCOVT:=6}
+NUM_PAR=${NUM_PAR:=20}
 
 # Make sure that bamlist file exists
 assert_file_exists_w_content $BAMLIST
@@ -45,7 +52,9 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
     $BAM_T.mpileup                                                        \
     varscan/$SAMPL                                                        \
     $SOMPVAL                                                              \
-    $TPURITY &
+    $TPURITY                                                              \
+    $MINCOVN                                                              \
+    $MINCOVT &
   # Maintain parallel processes
   P=$((P + 1))
   if [ $P -ge $NUM_PAR ]; then
