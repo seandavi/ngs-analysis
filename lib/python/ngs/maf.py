@@ -42,7 +42,9 @@ class MafFile(file):
                 'Validation_Method',
                 'Score',
                 'BAM_File',
-                'Sequencer']
+                'Sequencer',
+                'transcript_name',
+                'amino_acid_change']
 
     def parse_line(self, line):
         '''
@@ -80,7 +82,9 @@ class MafFile(file):
                               'Tumor_Seq_Allele1',
                               'Tumor_Seq_Allele2',
                               'Match_Norm_Seq_Allele1',
-                              'Match_Norm_Seq_Allele2')
+                              'Match_Norm_Seq_Allele2',
+                              'transcript_name',
+                              'amino_acid_change')
 
         # Process file
         poskey2samples = defaultdict(set)
@@ -100,7 +104,6 @@ class MafFile(file):
             poskey2samples[poskey].add(maf_record['Tumor_Sample_Barcode'])
             
         # Sorted Output
-
         fout.write('%s\n' % '\t'.join(list(poskey_columns) + ['Num_Samples','Samples']))
         for poskey,samples in sorted(poskey2samples.items()):
             fout.write('%s\t%i\t%s\n' % ('\t'.join(poskey),

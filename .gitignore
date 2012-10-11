@@ -5,3 +5,4 @@
 *.db
 .nfs*
 tmp/
+snp135.variant2rsid.pkl

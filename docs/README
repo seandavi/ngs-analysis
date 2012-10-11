@@ -47,6 +47,12 @@ Expected Workflow
 
 
 ======================================================================================
+Generate resource files
+
+snp135.variant2rsid.pkl
+	python_ngs.sh dbsnp_variant2rsid_pickle.py snp135.txt snp135.variant2rsid.pkl
+
+======================================================================================
 Additional Guidelines
 
 --------------------------------------------------------------------------------------
