@@ -27,7 +27,6 @@ PYTHON=$NGS_ANALYSIS_DIR/modules/util/python_ngs.sh
 $QSUB_WRAPPER maf.summary.pos.simple                                           \
               all.q                                                            \
               1                                                                \
-              1G                                                               \
               none                                                             \
               n                                                                \
               $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/maf_summaries.py       \
@@ -38,7 +37,6 @@ $QSUB_WRAPPER maf.summary.pos.simple                                           \
 $QSUB_WRAPPER maf.summary.pos.detailed                                         \
               all.q                                                            \
               1                                                                \
-              1G                                                               \
               none                                                             \
               n                                                                \
               $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/maf_summaries.py       \
@@ -49,7 +47,6 @@ $QSUB_WRAPPER maf.summary.pos.detailed                                         \
 $QSUB_WRAPPER maf.summary.pos.gene                                             \
               all.q                                                            \
               1                                                                \
-              1G                                                               \
               none                                                             \
               n                                                                \
               $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/maf_summaries.py       \

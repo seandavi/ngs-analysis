@@ -23,7 +23,6 @@ for sampledir in $SAMPLEDIRS; do
     $SAMPLENAME.reset                                               \
     all.q                                                           \
     4                                                               \
-    32M                                                             \
     none                                                            \
     n                                                               \
     $NGS_ANALYSIS_DIR/modules/util/rm_non_orig_fastq.sh             \

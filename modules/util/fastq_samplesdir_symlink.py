@@ -11,6 +11,7 @@ where this tool is run.
 import argparse
 import os
 import sys
+from ngs import fastq
 
 def main():
     ap = argparse.ArgumentParser(description=description)
@@ -31,7 +32,7 @@ def main():
         # Create sample directory and symlink
         origfilepath_array = list(os.path.split(origfilepath))
         fastqfile = origfilepath_array[-1]
-        samplename = fastqfile.split('_')[0]
+        samplename = fastq.IlluminaFastqFile.parse_filename(fastqfile).sample
         sample_dirname = '_'.join(['Sample', samplename])
         if not os.path.exists(sample_dirname):
             os.makedirs(sample_dirname)

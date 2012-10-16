@@ -63,7 +63,6 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   $QSUB varscan.$SAMPL                                                          \
         all.q                                                                   \
         1                                                                       \
-        32G                                                                     \
         mpileup.$RNUM                                                           \
         n                                                                       \
         $NGS_ANALYSIS_DIR/modules/somatic/varscan.somatic.vcf.sh                \
@@ -79,7 +78,6 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   $QSUB vcf2maf                                                                 \
         all.q                                                                   \
         1                                                                       \
-        5G                                                                      \
         varscan.$SAMPL                                                          \
         n                                                                       \
         $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.snp.sh             \
@@ -91,7 +89,6 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   $QSUB vcf2maf                                                                 \
         all.q                                                                   \
         1                                                                       \
-        5G                                                                      \
         varscan.$SAMPL                                                          \
         n                                                                       \
         $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.indel.sh           \
@@ -108,7 +105,6 @@ if [ ! -z $TSINGLE ]; then
   $QSUB select.single.transcript                                                \
         all.q                                                                   \
 	1                                                                       \
-	1G                                                                      \
 	vcf2maf                                                                 \
 	n                                                                       \
 	$NGS_ANALYSIS_DIR/modules/util/python_ngs.sh                            \
@@ -125,7 +121,6 @@ if [ ! -z $TSINGLE ]; then
       $QSUB vcf2maf.selected                                                    \
             all.q                                                               \
             1                                                                   \
-            4G                                                                  \
             select.single.transcript                                            \
             n                                                                   \
             $NGS_ANALYSIS_DIR/modules/util/python_ngs.sh vcf2maf.py             \
@@ -150,7 +145,6 @@ exit
 $QSUB merge.maf                                                                 \
       all.q                                                                     \
       1                                                                         \
-      1G                                                                        \
       vcf2maf                                                                   \
       n                                                                         \
       $NGS_ANALYSIS_DIR/modules/somatic/merge_maf.sh $OUT_PRE varscan/*maf

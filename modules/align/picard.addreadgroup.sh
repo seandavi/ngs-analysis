@@ -24,7 +24,7 @@ OUTPUTFILE=$OUTPUTPREFIX.rg.bam
 OUTPUTLOG=$OUTPUTPREFIX.rg.bam.log
 
 # Run tool
-`javajar 8g` $PICARD_PATH/AddOrReplaceReadGroups.jar  \
+`javajar 12g` $PICARD_PATH/AddOrReplaceReadGroups.jar  \
   INPUT=$BAMFILE                                      \
   OUTPUT=$OUTPUTFILE                                  \
   SORT_ORDER=coordinate                               \

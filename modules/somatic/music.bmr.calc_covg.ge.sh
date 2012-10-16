@@ -69,7 +69,6 @@ for file in `ls *cmds.fixed.split_*`; do
     music.calc_covg                                 \
     all.q                                           \
     1                                               \
-    4G                                              \
     none                                            \
     n                                               \
     $file
@@ -79,7 +78,6 @@ $NGS_ANALYSIS_DIR/modules/util/qsub_wrapper.sh      \
   waiting                                           \
   all.q                                             \
   1                                                 \
-  1M                                                \
   music.calc_covg                                   \
   y                                                 \
   $NGS_ANALYSIS_DIR/modules/util/hello_world.sh

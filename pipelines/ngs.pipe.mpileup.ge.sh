@@ -32,7 +32,6 @@ for bamfile in `cat $BAMLIST`; do
   $QSUB $JOBNAME                                                                        \
         all.q                                                                           \
         1                                                                               \
-        2G                                                                              \
         none                                                                            \
         n                                                                               \
         $NGS_ANALYSIS_DIR/modules/align/samtools.mpileup.sh $bamfile $REFEREN $OPTIONS

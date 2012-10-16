@@ -39,7 +39,6 @@ QSUB=$NGS_ANALYSIS_DIR/modules/util/qsub_wrapper.sh
 $QSUB vcf.select.snp                                                                    \
       all.q                                                                             \
       1                                                                                 \
-      2G                                                                                \
       None                                                                              \
       n                                                                                 \
       $NGS_ANALYSIS_DIR/modules/variant/gatk.selectvariants.snp.sh                      \
@@ -48,7 +47,6 @@ $QSUB vcf.select.snp                                                            
 $QSUB vcf.select.indel                                                                  \
       all.q                                                                             \
       1                                                                                 \
-      2G                                                                                \
       None                                                                              \
       n                                                                                 \
       $NGS_ANALYSIS_DIR/modules/variant/gatk.selectvariants.indel.sh                    \
@@ -59,7 +57,6 @@ $QSUB vcf.select.indel                                                          
 $QSUB vcf.recal.snp                                                                     \
       all.q                                                                             \
       1                                                                                 \
-      3G                                                                                \
       vcf.select.snp                                                                    \
       n                                                                                 \
       $NGS_ANALYSIS_DIR/modules/variant/gatk.variantrecalibrator.wes.snp.sh             \
@@ -71,7 +68,6 @@ $QSUB vcf.recal.snp                                                             
 $QSUB vcf.gatk                                                                          \
       all.q                                                                             \
       1                                                                                 \
-      3G                                                                                \
       vcf.recal.snp                                                                     \
       n                                                                                 \
       $NGS_ANALYLSIS_DIR/modules/variant/gatk.applyrecalibration.sh                     \
@@ -85,7 +81,6 @@ $QSUB vcf.gatk                                                                  
 $QSUB vcf.gatk                                                                          \
       all.q                                                                             \
       1                                                                                 \
-      3G                                                                                \
       vcf.select.indel                                                                  \
       n                                                                                 \
       $NGS_ANALYSIS_DIR/modules/variant/gatk.variantfiltration.wes.indel.sh             \
@@ -96,7 +91,6 @@ $QSUB vcf.gatk                                                                  
 $QSUB vcf.combine.snp.indel                                                             \
       all.q                                                                             \
       1                                                                                 \
-      3G                                                                                \
       vcf.gatk                                                                          \
       n                                                                                 \
       $NGS_ANALYSIS_DIR/modules/variant/gatk.combinevariants.snp.indel.sh               \

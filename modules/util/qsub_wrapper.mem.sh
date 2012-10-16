@@ -6,6 +6,7 @@
 ##                                job_id
 ##                                queue_id
 ##                                num_parallel
+##                                memory_needed(i.e. 8G)
 ##                                dependent_job_id
 ##                                sync(wait to finish, y|n)
 ##                                command [param1 [param2 [...]]]
@@ -25,6 +26,7 @@ NUM_PARAMS=${#PARAMS[@]}
 JOBID=${PARAMS[0]}
 QUEUE=${PARAMS[1]}
 NUMPP=${PARAMS[2]}
+MEMSZ=${PARAMS[3]}
 WAIT4=${PARAMS[4]}
 SYNC=${PARAMS[5]}
 LEN_COMMD=$(($NUM_PARAMS - 6))
@@ -38,6 +40,7 @@ mkdir $TMP
 echo JOBID $JOBID >> $TMP/qsub_wrapper.params
 echo QUEUE $QUEUE >> $TMP/qsub_wrapper.params
 echo NUMPP $NUMPP >> $TMP/qsub_wrapper.params
+echo MEMSZ $MEMSZ >> $TMP/qsub_wrapper.params
 echo WAIT4 $WAIT4 >> $TMP/qsub_wrapper.params
 echo SYNC  $SYNC  >> $TMP/qsub_wrapper.params
 echo COMMD $COMMD >> $TMP/qsub_wrapper.params
@@ -53,6 +56,7 @@ qsub                                             \
   -o $TMP                                        \
   -e $TMP                                        \
   -pe orte $NUMPP                                \
+  -l h_vmem=$MEMSZ                               \
   -q $QUEUE                                      \
   -sync $SYNC                                    \
   $COMMD

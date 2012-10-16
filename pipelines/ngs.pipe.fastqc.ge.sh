@@ -28,7 +28,6 @@ for fastqfile in $FASTQFILES; do
   qsub_wrapper.sh fastqc                                                                          \
                   all.q                                                                           \
                   $NUM_THREAD                                                                     \
-                  4G                                                                              \
                   none                                                                            \
                   n                                                                               \
                   $NGS_ANALYSIS_DIR/modules/seq/fastqc.sh $fastqfile $NUM_THREAD

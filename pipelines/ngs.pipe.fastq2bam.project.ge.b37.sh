@@ -21,7 +21,6 @@ for sampledir in $SAMPLEDIRS; do
     $SAMPLENAME.fastq2bam                                           \
     all.q                                                           \
     1                                                               \
-    1G                                                              \
     none                                                            \
     n                                                               \
     $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq2bam.sample.ge.sh     \

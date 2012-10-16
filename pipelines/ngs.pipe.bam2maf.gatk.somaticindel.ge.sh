@@ -36,7 +36,6 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   $QSUB gatk.somaticindeldetector.$SAMPL                                                \
         all.q                                                                           \
         1                                                                               \
-        4G                                                                              \
         none                                                                            \
         n                                                                               \
         $NGS_ANALYSIS_DIR/modules/somatic/gatk.somaticindeldetector.sh                  \
@@ -50,7 +49,6 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
   $QSUB vcf2maf                                                                         \
         all.q                                                                           \
         1                                                                               \
-        5G                                                                              \
         gatk.somaticindeldetector.$SAMPL                                                \
         n                                                                               \
         $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.gatk.somaticindeldetector.sh       \

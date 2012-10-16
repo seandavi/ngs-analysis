@@ -32,7 +32,6 @@ $NGS_ANALYSIS_DIR/modules/util/qsub_wrapper.sh               \
   casava.basecall                                            \
   all.q                                                      \
   $NUM_THREADS                                               \
-  4G                                                         \
   none                                                       \
   n                                                          \
   $NGS_ANALYSIS_DIR/modules/seq/casava.bcl2fastq.hiseq.sh    \

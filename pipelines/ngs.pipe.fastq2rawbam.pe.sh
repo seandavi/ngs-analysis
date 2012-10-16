@@ -29,12 +29,6 @@ FASTQ_PE=`echo $FASTQ_R1 | sed 's/R1/PE/'`
 FASTQ_SE=`echo $FASTQ_R1 | sed 's/R1/SE/'`
 FASTQ_ME=`echo $FASTQ_R1 | sed 's/R1/ME/'`
 
-#==[ Fastq QC ]=====================================================================#
-
-$NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq.qc.sh             \
-  $FASTQ_R1                                                  \
-  $FASTQ_R2
-
 #==[ Trim ]=========================================================================#
 
 $NGS_ANALYSIS_DIR/modules/seq/sickle.pe.sh                   \

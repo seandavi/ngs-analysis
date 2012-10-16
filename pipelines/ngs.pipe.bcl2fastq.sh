@@ -29,3 +29,12 @@ assert_normal_exit_status $? "Invalid samplesheet"
 
 # Run basecall
 $NGS_ANALYSIS_DIR/modules/seq/casava.bcl2fastq.hiseq.sh $OUTPUT_DIR $SAMPLESHEET $NUM_THREADS
+
+
+exit
+
+#==[ Fastq QC ]=====================================================================#
+
+$NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq.qc.sh             \
+  $FASTQ_R1                                                  \
+  $FASTQ_R2

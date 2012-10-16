@@ -46,7 +46,6 @@ ln -s $VCF_IN $PREFIX.indel.vcf
 $QSUB vcf.recalsnp                                                                      \
       all.q                                                                             \
       1                                                                                 \
-      3G                                                                                \
       none                                                                              \
       n                                                                                 \
       $NGS_ANALYSIS_DIR/modules/variant/gatk.variantrecalibrator.wgs.snp.sh             \
@@ -60,7 +59,6 @@ $QSUB vcf.recalsnp                                                              
 $QSUB vcf.applysnp.recalindel                                                           \
       all.q                                                                             \
       1                                                                                 \
-      3G                                                                                \
       vcf.recalsnp                                                                      \
       n                                                                                 \
       $NGS_ANALYLSIS_DIR/modules/variant/gatk.applyrecalibration.sh                     \
@@ -74,7 +72,6 @@ $QSUB vcf.applysnp.recalindel                                                   
 $QSUB vcf.applysnp.recalindel                                                           \
       all.q                                                                             \
       1                                                                                 \
-      3G                                                                                \
       none                                                                              \
       n                                                                                 \
       $NGS_ANALYSIS_DIR/modules/variant/gatk.variantrecalibrator.wgs.indel.sh           \
@@ -86,7 +83,6 @@ $QSUB vcf.applysnp.recalindel                                                   
 $QSUB vcf.applyindel                                                                    \
       all.q                                                                             \
       1                                                                                 \
-      3G                                                                                \
       vcf.applysnp.recalindel                                                           \
       n                                                                                 \
       $NGS_ANALYLSIS_DIR/modules/variant/gatk.applyrecalibration.sh                     \
@@ -100,7 +96,6 @@ $QSUB vcf.applyindel                                                            
 $QSUB vcf.rename.output                                                                 \
       all.q                                                                             \
       1                                                                                 \
-      1G                                                                                \
       vcf.applyindel                                                                    \
       n                                                                                 \
       $NGS_ANALYSIS_DIR/modules/util/bash_wrapper.sh                                    \

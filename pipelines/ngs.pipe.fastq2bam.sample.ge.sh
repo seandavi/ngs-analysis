@@ -41,7 +41,6 @@ for pe in `sed 's/\t/:/' $FASTQ_PE_LIST_FILE`; do
     $SAMPLE.fastq2rawbam.pe                                   \
     all.q                                                     \
     2                                                         \
-    16G                                                       \
     none                                                      \
     n                                                         \
     $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq2rawbam.pe.sh   \
@@ -55,7 +54,6 @@ qsub_wrapper.sh                                               \
   $SAMPLE.mergelanes                                          \
   all.q                                                       \
   1                                                           \
-  24G                                                         \
   $SAMPLE.fastq2rawbam.pe                                     \
   n                                                           \
   $NGS_ANALYSIS_DIR/modules/align/samtools.mergebam.sh        \
@@ -67,7 +65,6 @@ qsub_wrapper.sh                                               \
   $SAMPLE.processbam                                          \
   all.q                                                       \
   1                                                           \
-  16G                                                         \
   $SAMPLE.mergelanes                                          \
   n                                                           \
   $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.dedup.realign.recal.sh \
