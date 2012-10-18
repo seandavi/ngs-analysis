@@ -1,6 +1,6 @@
 #!/bin/bash
 ##
-## DESCRIPTION:   Filter variants for improved call set
+## DESCRIPTION:   Evaluate list of variants in vcf file(s)
 ##
 ## USAGE:         gatk.varianteval.sh
 ##                                    ref.fa
