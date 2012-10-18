@@ -3,6 +3,7 @@
 *#
 *.pyc
 *.db
+*.swp
 .nfs*
 tmp/
 snp135.variant2rsid.pkl

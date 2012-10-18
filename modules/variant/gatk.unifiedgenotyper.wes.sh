@@ -7,6 +7,7 @@
 ##                                             ref.fasta
 ##                                             dbsnp.vcf
 ##                                             out_vcf
+##                                             threads
 ##                                             input1.bam [input2.bam [...]]
 ##
 ## OUTPUT:        out_prefix.vcf
@@ -25,8 +26,9 @@ TARGET_REGION=${PARAMS[0]}
 REF=${PARAMS[1]}
 DBSNP_VCF=${PARAMS[2]}
 OUTVCF=${PARAMS[3]}
-NUM_BAMFILES=$(($NUM_PARAMS - 4))
-BAMFILES=${PARAMS[@]:4:$NUM_BAMFILES}
+THREADS=${PARAMS[4]}
+NUM_BAMFILES=$(($NUM_PARAMS - 5))
+BAMFILES=${PARAMS[@]:5:$NUM_BAMFILES}
 
 # Format output filenames
 OUTLOG=$OUTVCF.log
@@ -40,11 +42,11 @@ for bamfile in $BAMFILES; do
 done
 
 # Run tool
-`javajar 128g` $GATK                                      \
+`javajar 32g` $GATK                                       \
   -T UnifiedGenotyper                                     \
   -l INFO                                                 \
   -R $REF                                                 \
-  -nt 20                                                  \
+  -nt $THREADS                                            \
   $INPUTBAM                                               \
   -o $OUTVCF                                              \
   -D $DBSNP_VCF                                           \

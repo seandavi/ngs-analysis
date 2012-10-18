@@ -2,7 +2,11 @@
 ##
 ## DESCRIPTION:   Assess sequence coverage in bam file(s)
 ##
-## USAGE:         gatk.depthofcoverage.wgs.sh ref.fasta out_prefix input1.bam [input2.bam [...]]
+## USAGE:         gatk.depthofcoverage.wgs.sh
+##                                           ref.fa
+##                                           out_prefix
+##                                           input1.bam
+##                                           [input2.bam [...]]
 ##
 ## OUTPUT:        Coverage summaries
 ##

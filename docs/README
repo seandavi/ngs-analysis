@@ -8,9 +8,8 @@ Requirements
 		- argparse
 		- django
 		- gzip
-		- os
+		- matplotlib
 		- reportlab
-		- sys
 		- unittest
 		- xhtml2pdf
 		- zipfile

@@ -25,7 +25,7 @@ O_CHART=$OPREFIX.pdf
 OUT_LOG=$OPREFIX.log
 
 # Run tool
-`javajar 16g` $PICARD_PATH/QualityScoreDistribution.jar    \
+`javajar 8g` $PICARD_PATH/QualityScoreDistribution.jar     \
   INPUT=$BAMFILE                                           \
   OUTPUT=$OMETRIC                                          \
   CHART=$O_CHART                                           \

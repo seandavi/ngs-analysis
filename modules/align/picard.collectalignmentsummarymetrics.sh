@@ -24,7 +24,7 @@ OMETRIC=$OPREFIX.metrics
 OUT_LOG=$OPREFIX.log
 
 # Run tool
-`javajar 16g` $PICARD_PATH/CollectAlignmentSummaryMetrics.jar   \
+`javajar 8g` $PICARD_PATH/CollectAlignmentSummaryMetrics.jar    \
   INPUT=$BAMFILE                                                \
   OUTPUT=$OMETRIC                                               \
   MAX_RECORDS_IN_RAM=$MAXRECS                                   \

@@ -2,7 +2,10 @@
 ##
 ## DESCRIPTION:   Summarize gc statistics such as distribution and base quality in an alignment file
 ##
-## USAGE:         picard.collectgcbiasmetrics.sh sample.bam [max_records_in_ram]
+## USAGE:         picard.collectgcbiasmetrics.sh
+##                                               sample.bam
+##                                               ref.fa
+##                                               [max_records_in_ram]
 ##
 ## OUTPUT:        sample.bam.gcbias.metrics
 ##                sample.bam.gcbias.pdf
@@ -15,7 +18,8 @@ source $NGS_ANALYSIS_CONFIG
 usage_min 1 $# $0
 
 BAMFILE=$1
-MAXRECS=$2
+REFEREN=$2
+MAXRECS=$3
 MAXRECS=${MAXRECS:=1000000}
 
 # Format output filenames
@@ -25,7 +29,8 @@ O_CHART=$OPREFIX.pdf
 OUT_LOG=$OPREFIX.log
 
 # Run tool
-`javajar 16g` $PICARD_PATH/CollectGcBiasMetrics.jar        \
+`javajar 8g` $PICARD_PATH/CollectGcBiasMetrics.jar         \
+  REFERENCE_SEQUENCE=$REFEREN                              \
   INPUT=$BAMFILE                                           \
   OUTPUT=$OMETRIC                                          \
   CHART=$O_CHART                                           \

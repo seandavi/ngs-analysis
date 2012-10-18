@@ -35,6 +35,6 @@ exit
 
 #==[ Fastq QC ]=====================================================================#
 
-$NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq.qc.sh             \
+$NGS_ANALYSIS_DIR/pipelines/ngs.pipe.qc.fastq.sh             \
   $FASTQ_R1                                                  \
   $FASTQ_R2
