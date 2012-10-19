@@ -25,7 +25,7 @@ NUM_BAMFILES=$(($NUM_PARAMS - 2))
 BAMFILES=${PARAMS[@]:2:$NUM_BAMFILES}
 
 # Format output filenames
-OUTPREFIX=${PARAMS[1]}
+OUTPREFIX=${PARAMS[1]}.depthofcov
 OUTPUTLOG=$OUTPREFIX.log
 
 # Format list of input bam files
