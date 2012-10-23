@@ -33,7 +33,7 @@ else
 fi
 
 QSUB=$NGS_ANALYSIS_DIR/modules/util/qsub_wrapper.sh
-# Depth of Coverage
+# Depth of coverage for target
 $QSUB depthofcov                                                                   \
       all.q                                                                        \
       1                                                                            \
@@ -42,6 +42,17 @@ $QSUB depthofcov                                                                
       $NGS_ANALYSIS_DIR/modules/align/gatk.depthofcoverage.wes.sh                  \
         $REF                                                                       \
 	$TARGET_REG                                                                \
+	samples                                                                    \
+	$BAM_FILES
+
+# Depth of coverage for entire aligned
+$QSUB depthofcov                                                                   \
+      all.q                                                                        \
+      1                                                                            \
+      none                                                                         \
+      n                                                                            \
+      $NGS_ANALYSIS_DIR/modules/align/gatk.depthofcoverage.wgs.sh                  \
+        $REF                                                                       \
 	samples                                                                    \
 	$BAM_FILES
 
