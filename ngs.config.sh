@@ -38,7 +38,7 @@ export B3x_1000G_INDELS_PHASE1_VCF=$B3x/1000G_phase1.indels.b37.vcf
 export B3x_HAPMAP_VCF=$B3x/hapmap_3.3.b37.vcf
 export B3x_HAPMAP_SITES_VCF=$B3x/hapmap_3.3.b37.sites.vcf
 export B3x_OMNI1000_VCF=$B3x/1000G_omni2.5.b37.vcf
-export B3x_OMNI1000_VCF=$B3x/1000G_omni2.5.b37.sites.vcf
+export B3x_OMNI1000_SITES_VCF=$B3x/1000G_omni2.5.b37.sites.vcf
 
 export HG=path/to/gatk/resource-bundle/hg19
 export HG_REF=$HG/ucsc.hg19.fasta
@@ -50,7 +50,7 @@ export HG_1000G_INDELS_PHASE1_VCF=$HG/1000G_phase1.indels.b37.vcf
 export HG_HAPMAP_VCF=$HG/hapmap_3.3.b37.vcf
 export HG_HAPMAP_SITES_VCF=$HG/hapmap_3.3.b37.sites.vcf
 export HG_OMNI1000_VCF=$HG/1000G_omni2.5.b37.vcf
-export HG_OMNI1000_VCF=$HG/1000G_omni2.5.b37.sites.vcf
+export HG_OMNI1000_SITES_VCF=$HG/1000G_omni2.5.b37.sites.vcf
 
 # Other Resources
 export UCSC_REFFLAT=path/to/refFlat.txt
