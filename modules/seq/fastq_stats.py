@@ -14,7 +14,7 @@ def main():
     ap = argparse.ArgumentParser(description=description)
     # Required args
     ap.add_argument('fastqfile', 
-                    help='Fastq file containing the sequence records.  May be zipped or gzipped (must have correct extension, i.e. .zip, .gz)')
+                    help='Fastq file containing the sequence records.  May be plain text, zipped, or gzipped (must have correct extension, i.e. .zip, .gz)')
     # Optional args
     ap.add_argument('-o', '--out-prefix', 
                     help='Output files\' prefix')

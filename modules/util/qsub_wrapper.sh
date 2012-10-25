@@ -31,7 +31,8 @@ LEN_COMMD=$(($NUM_PARAMS - 5))
 COMMD=${PARAMS[@]:5:$LEN_COMMD}
 
 # Make temporary files folder
-TMP=tmp.$JOBID.$RANDOM
+create_dir tmp
+TMP=tmp/tmp.$JOBID.$RANDOM
 mkdir $TMP
 
 # Record qsub parameters
