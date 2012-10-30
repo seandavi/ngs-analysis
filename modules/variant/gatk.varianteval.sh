@@ -8,7 +8,7 @@
 ##                                    input1.vcf
 ##                                    [input2.vcf [...]]
 ##
-## OUTPUT:        input.filter.vcf
+## OUTPUT:        out_prefix.vareval.report
 ##
 
 # Load analysis config
@@ -34,13 +34,13 @@ for file in $VCFSIN; do
 done
 
 # Format output
-OUTPUT=$OUTPRE.varianteval.report
+OUTPUT=$OUTPRE.vareval.report
 OUTLOG=$OUTPUT.log
 
 # Run tool
 `javajar 2g` $GATK     \
    -T VariantEval      \
-   -R $RE_FA           \
+   -R $REF_FA          \
    -o $OUTPUT          \
    $INPUTVCFS          \
    &> $OUTLOG

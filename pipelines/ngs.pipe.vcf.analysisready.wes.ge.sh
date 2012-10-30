@@ -4,10 +4,8 @@
 ##
 ## USAGE:         ngs.pipe.vcf.analysisready.wes.ge.sh
 ##                                                     input.vcf
-##                                                     ref.fa
-##                                                     hapmap.sites.vcf
-##                                                     omni.sites.vcf
-##                                                     dbsnp.vcf
+##                                                     (HG|B3x)
+##
 ## OUTPUT:        input.analysisready.vcf
 ##
 
@@ -15,14 +13,24 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Check correct usage
-usage 5 $# $0
+usage 2 $# $0
 
 # Process input params
 VCF_IN=$1
-REF_FA=$2
-HAPMAP_SITES_VCF=$3
-OMNI_SITES_VCF=$4
-DBSNP_VCF=$5
+RESOURCE_T=$2
+
+# Set resource vars
+if [ $RESOURCE_T = 'HG' ]; then
+  REF_FA=$HG_REF
+  HAPMAP_SITES_VCF=$HG_HAPMAP_SITES_VCF
+  OMNI_SITES_VCF=$HG_OMNI1000_SITES_VCF
+  DBSNP_VCF=$HG_DBSNP_VCF
+else
+  REF_FA=$B3x_REF
+  HAPMAP_SITES_VCF=$B3x_HAPMAP_SITES_VCF
+  OMNI_SITES_VCF=$B3x_OMNI1000_SITES_VCF
+  DBSNP_VCF=$B3x_DBSNP_VCF
+fi
 
 # Make sure that input files exist with content
 assert_file_exists_w_content $VCF_IN
@@ -70,7 +78,7 @@ $QSUB vcf.gatk                                                                  
       1                                                                                 \
       vcf.recal.snp                                                                     \
       n                                                                                 \
-      $NGS_ANALYLSIS_DIR/modules/variant/gatk.applyrecalibration.sh                     \
+      $NGS_ANALYSIS_DIR/modules/variant/gatk.applyrecalibration.sh                      \
         $PREFIX.snp.vcf                                                                 \
         $PREFIX.snp.vcf.recal.tranches                                                  \
         $PREFIX.snp.vcf.recal                                                           \

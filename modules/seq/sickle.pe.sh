@@ -1,6 +1,6 @@
 #!/bin/bash
 ##
-## DESCRIPTION:   Trim off low quality regions of fastq sequences
+## DESCRIPTION:   Trim off low quality regions of PE fastq sequences
 ##
 ## USAGE:         sickle.pe.sh R1.fastq.gz R2.fastq.gz [min_readlength [qual_thresh]]
 ##

@@ -54,34 +54,22 @@ done
   -stand_call_conf 30.0                                   \
   -stand_emit_conf 30.0                                   \
   -mbq 17                                                 \
-  -dcov 250                                               \
+  -dcov 5000                                              \
   -glm BOTH                                               \
   -L $TARGET_REGION                                       \
-  -A TransmissionDisequilibriumTest                       \
-  -A ChromosomeCounts                                     \
-  -A IndelType                                            \
-  -A HardyWeinberg                                        \
   -A SpanningDeletions                                    \
-  -A NBaseCount                                           \
   -A AlleleBalance                                        \
   -A MappingQualityZero                                   \
-  -A LowMQ                                                \
-  -A BaseCounts                                           \
-  -A MVLikelihoodRatio                                    \
-  -A InbreedingCoeff                                      \
   -A RMSMappingQuality                                    \
-  -A TechnologyComposition                                \
   -A HaplotypeScore                                       \
-  -A SampleList                                           \
   -A QualByDepth                                          \
   -A FisherStrand                                         \
   -A HomopolymerRun                                       \
   -A DepthOfCoverage                                      \
-  -A MappingQualityZeroFraction                           \
-  -A GCContent                                            \
   -A MappingQualityRankSumTest                            \
-  -A ReadPosRankSumTest                                   \
   -A BaseQualityRankSumTest                               \
+  -A ReadPosRankSumTest                                   \
+  -A InbreedingCoeff                                      \
   &> $OUTLOG
 
 #   -A SnpEff                                               \

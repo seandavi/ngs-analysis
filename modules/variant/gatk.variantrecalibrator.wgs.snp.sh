@@ -37,13 +37,13 @@ OUTPUTLOG=$OUT_RECAL.log
 `javajar 2g` $GATK                                                                                     \
    -T VariantRecalibrator                                                                              \
    -R $REFER                                                                                           \
-   -input,VCF    $VCFIN                                                                                \
+   -input        $VCFIN                                                                                \
    -recalFile    $OUT_RECAL                                                                            \
    -tranchesFile $OUTTRANCH                                                                            \
    -rscriptFile  $OUTRSCRIP                                                                            \
-   -resource:hapmap,VCF,known=false,training=true,truth=true,prior=15.0 $HAPMAP_VCF                    \
-   -resource:omni,VCF,known=false,training=true,truth=false,prior=12.0 $OMNI_VCF                       \
-   -resource:dbsnp,VCF,known=true,training=false,truth=false,prior=6.0 $DBSNP_VCF                      \
+   -resource:hapmap,known=false,training=true,truth=true,prior=15.0 $HAPMAP_VCF                        \
+   -resource:omni,known=false,training=true,truth=false,prior=12.0 $OMNI_VCF                           \
+   -resource:dbsnp,known=true,training=false,truth=false,prior=6.0 $DBSNP_VCF                          \
    -an QD -an HaplotypeScore -an MQRankSum -an ReadPosRankSum -an FS -an MQ -an InbreedingCoeff -an DP \
    -mode SNP                                                                                           \
    &> $OUTPUTLOG

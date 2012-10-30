@@ -42,6 +42,9 @@ done
   -R $REF                       \
   $INPUTBAM                     \
   -o $OUTPREFIX                 \
+  -omitLocusTable               \
+  -omitIntervals                \
+  -omitBaseOutput               \
   &> $OUTPUTLOG
 
 

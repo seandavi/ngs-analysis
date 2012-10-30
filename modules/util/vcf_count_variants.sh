@@ -2,7 +2,7 @@
 ## 
 ## DESCRIPTION:   Count number of records (variants, i.e. lines) in a vcf file
 ##
-## USAGE:         vcf_count_variants.sh input.vcf
+## USAGE:         vcf_count_variants.sh in1.vcf [in2.vcf [...]]
 ##
 ## OUTPUT:        Number of lines in a vcf file that is not prefixed by a '#'
 ##
@@ -11,9 +11,11 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Usage check:
-usage 1 $# $0
+usage_min 1 $# $0
 
-# PROCESS INPUT PARAMS
-INPUTVCF=$1
+# Process input params
+VCFFILES=$@
 
-grep -v ^# $INPUTVCF | wc -l
+for file in $VCFFILES; do
+  echo -e `grep -v ^# $file | wc -l` "\t"$file
+done
