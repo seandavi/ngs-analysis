@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Run ANNOVAR
 ##
-## USAGE:         annovar.sh sample.vcf
+## USAGE:         annovar.summarize.sh sample.vcf
 ##
 ## OUTPUT:        sample.annovar.vcf
 ##
@@ -18,10 +18,9 @@ VCF_IN=$1
 
 # Format outputs
 OUTPRE=`filter_ext $VCF_IN 1`.annovar
-VCFOUT=$OUTPRE.vcf
 
 # Convert to annovar input
-$ANNOVAR_CONVERT                     \
+$ANNOVAR_PATH/convert2annovar.pl     \
   -includeinfo                       \
   -format vcf4                       \
   $VCF_IN                            \
@@ -32,16 +31,18 @@ $ANNOVAR_CONVERT                     \
 assert_normal_exit_status $? "convert2annovar.pl exited with error"
 
 # Run tool
-$ANNOVAR                             \
-  -geneanno                          \
+$ANNOVAR_PATH/summarize_annovar.pl   \
+  --outfile $OUTPRE.summarize        \
+  --buildver hg19                    \
+  --verdbsnp 135                     \
+  --ver1000g 1000g2010nov            \
   $OUTPRE.in                         \
   $ANNOVAR_HUMANDB                   \
-  --outfile $OUTPRE                  \
-  &> $OUTPRE.variant_function.log
+  &> $OUTPRE.summarize.log
 
 # Check if ANNOVAR ran successfully
-assert_normal_exit_status $? "ANNOVAR exited with error"
+assert_normal_exit_status $? "summarize_annovar.pl exited with error"
 
 # Convert output to vcf
-cut -f 3- $OUTPRE.variant_function > $OUTVCF
+#cut -f 3- $OUTPRE.summarize > $OUTPRE.summarize.vcf
 

@@ -2,7 +2,7 @@
 ##
 ## DESCRIPTION:   Run snpeff to annotate the variants in a vcf file
 ##
-## USAGE:         snpeff.eff.sh sample.vcf [genome_version(default GRCh37.64) ["other_snpeff_options"]]
+## USAGE:         snpeff.eff.sh sample.vcf [genome_version(default GRCh37.66) ["other_snpeff_options"]]
 ##
 ## OUTPUT:        sample.snpeff.vcf
 ##                sample.snpeff.snpEff_summary.html
@@ -24,7 +24,7 @@ NUM_OPTIONS=$(($NUM_PARAMS - 2))
 SNPEFF_OPTIONS=${PARAMS[@]:2:$NUM_OPTIONS}
 
 # Set default genome version
-GENOME_VERSION=${GENOME_VERSION:=GRCh37.64}
+GENOME_VERSION=${GENOME_VERSION:=GRCh37.66}
 
 # If only genome version is provided, prefix GRCh
 if [[ $GENOME_VERSION =~ '^[0-9]{2}\.[0-9]{2}$' ]]; then
