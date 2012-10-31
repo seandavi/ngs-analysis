@@ -24,8 +24,7 @@ export VEP=path/to/variant_effect_predictor.pl
 export BEDTOOLS_PATH=path/to/bedtools_dir
 export FASTQC=path/to/fastqc
 export MUSIC=path/to/music
-export ANNOVAR=path/to/annotate_variation.pl
-export ANNOVAR_CONVERT=path/to/convert2annovar.pl
+export ANNOVAR_PATH=path/to/annovar_directory/
 export ANNOVAR_HUMANDB=path/to/humandb
 
 # GATK Resource Bundle
