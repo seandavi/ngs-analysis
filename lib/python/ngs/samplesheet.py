@@ -70,17 +70,17 @@ class SampleSheet(object):
                         return False
         return True
 
-    def check_index_lens(self):
-        '''
-        Check to make sure that the index lengths are all equal
-        '''
-        index_lengths = set()
-        for row in self.ss_matrix[1:]:
-            collabel2val = dict(zip(self.COLUMN_HEADER, row))
-            index_lengths.add(len(collabel2val['Index']))
-        if len(index_lengths) > 1:
-            return False
-        return True
+#     def check_index_lens(self):
+#         '''
+#         Check to make sure that the index lengths are all equal
+#         '''
+#         index_lengths = set()
+#         for row in self.ss_matrix[1:]:
+#             collabel2val = dict(zip(self.COLUMN_HEADER, row))
+#             index_lengths.add(len(collabel2val['Index']))
+#         if len(index_lengths) > 1:
+#             return False
+#         return True
             
     def check_duplicate_index_per_lane(self):
         '''
@@ -128,9 +128,9 @@ class SampleSheet(object):
             sys.stderr.write('Invalid characters found\n')
             valid = valid & False
 
-        if not self.check_index_lens():
-            sys.stderr.write('Index lengths are not all equal\n')
-            valid = valid & False
+#         if not self.check_index_lens():
+#             sys.stderr.write('Index lengths are not all equal\n')
+#             valid = valid & False
 
         if not self.check_duplicate_index_per_lane():
             sys.stderr.write('Multiple occurrences of the same index in the same lane\n')

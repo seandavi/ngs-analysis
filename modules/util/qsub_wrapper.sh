@@ -17,7 +17,7 @@
 source $NGS_ANALYSIS_CONFIG
 
 # Usage check:
-usage_min 7 $# $0
+usage_min 6 $# $0
 
 # Process input params
 PARAMS=($@)
