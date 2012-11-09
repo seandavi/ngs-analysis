@@ -64,7 +64,7 @@ export SURESELECT_INTERVAL=path/to/SureSelect_All_Exon_50mb_with_annotation_hg19
 source $NGS_ANALYSIS_DIR/lib/bash/bash_fnc.sh
 
 # Set module paths
-modules="align annot seq somatic util variant"
+modules="align annot seq somatic util variant denovo"
 for module in `echo $modules | sed 's/ /\n/g'`; do
   PATH=$PATH:$NGS_ANALYSIS_DIR/modules/$module
 done
