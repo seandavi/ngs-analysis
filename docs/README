@@ -639,3 +639,25 @@ svn checkout https://vcftools.svn.sourceforge.net/svnroot/vcftools vcftools
 cd vcftools
 make
 
+--------------------------------------------------------
+# Abyss
+
+# Install google-sparsehash
+wget http://sparsehash.googlecode.com/files/sparsehash-2.0.2.tar.gz
+tar zxf sparsehash*tar.gz
+cd sparsehash*
+./configure --prefix=$HOME
+make
+make install
+
+# Install abyss
+wget http://www.bcgsc.ca/downloads/abyss/abyss-1.3.4.tar.gz
+tar zxf abyss*tar.gz
+cd abyss*
+./configure --prefix=$HOME CPPFLAGS=-I$HOME/include
+make
+make install
+
+# Install trans-abyss
+wget http://www.bcgsc.ca/platform/bioinfo/software/trans-abyss/releases/1.4.4/trans-ABySS-v1.4.4.tar.gz
+cd trans-ABySS
