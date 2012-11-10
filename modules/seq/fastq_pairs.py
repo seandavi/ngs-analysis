@@ -13,9 +13,9 @@ def subcommand_lengthfilter(args):
     out_pe2 = open(args.out_pe_r2, 'w')
     out_se = open(args.out_se, 'w')
     with contextlib.nested(args.fastq_read1, args.fastq_read2, out_pe1, out_pe2, out_se):
-        fastqpairs = fastq.FastqFilePairs(f1, f2)
+        fastqpairs = fastq.FastqFilePairs(args.fastq_read1, args.fastq_read2)
         # Loop through the pair lines
-        for status, rec1, rec2 in generate_length_tests(args.minlength):
+        for status, rec1, rec2 in fastqpairs.generate_length_tests(args.minlength):
             # If both fail, skip
             if status == fastq.FastqFilePairs.STATUS['BOTH_FAIL']:
                 continue
