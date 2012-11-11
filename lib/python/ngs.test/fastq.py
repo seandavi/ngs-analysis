@@ -13,10 +13,11 @@ example_fastqfile_R2 = 'example.R2.fastq'
 class TestFastqFileFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.fastqfile = os.path.join(resource_dir, example_fastqfile_R1)
+        self.fastqfile1 = os.path.join(resource_dir, example_fastqfile_R1)
+        self.fastqfile2 = os.path.join(resource_dir, example_fastqfile_R2)
 
     def test_next(self):
-        f = open(self.fastqfile, 'r')
+        f = open(self.fastqfile1, 'r')
         with f:
             fastqfile = fastq.FastqFile(f)
             (record_id,
@@ -29,6 +30,18 @@ class TestFastqFileFunctions(unittest.TestCase):
             self.assertEqual(record[1], 'GGGGGTTTTT')
             record = fastqfile.next()
             self.assertEqual(record[1], 'AAAAAGGGGG')
+
+    def test_lengthfilter(self):
+        f = open(self.fastqfile2,'r')
+        with f:
+            fastqfile = fastq.FastqFile(f)
+            sequences = []
+            for record in fastqfile.generate_length_filtered_records(1):
+                sequences.append(record[1])
+            
+        self.assertEqual(len(sequences), 2)
+        self.assertEqual(sequences[0], 'AAAAACCCCC')
+        self.assertEqual(sequences[1], 'AAAAAGGGGG')
 
 class TestIlluminaFastqFileFunctions(unittest.TestCase):
     

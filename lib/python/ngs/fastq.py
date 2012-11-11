@@ -15,11 +15,19 @@ class FastqFile(object):
         return self
 
     def next(self):
-        record_id = self.f.next().strip('\n')
-        record_seq = self.f.next().strip('\n')
-        record_info = self.f.next().strip('\n')
-        record_qscores = self.f.next().strip('\n')
+        record_id = self.f.next().strip()
+        record_seq = self.f.next().strip()
+        record_info = self.f.next().strip()
+        record_qscores = self.f.next().strip()
         return record_id, record_seq, record_info, record_qscores
+
+    def generate_length_filtered_records(self, minlength):
+        '''
+        Generate records of minimum length sequences
+        '''
+        for rec in self:
+            if len(rec[1]) >= minlength:
+                yield rec
 
 class IlluminaFastqFile(FastqFile):
     '''
