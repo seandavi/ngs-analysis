@@ -26,8 +26,9 @@ Requirements
 ======================================================================================
 Setup/Install
 
-1. Clone source code from google code
-	git clone https://jjinking@code.google.com/p/ngs-analysis
+1. Clone source code from code repository
+   	git clone https://jjinking@bitbucket.org/jjinking/ngs-analysis.git
+    or  git clone https://jjinking@code.google.com/p/ngs-analysis
 2. Edit ~/.bash_profile to contain the following line
 	source path/to/ngs-analysis/ngs.init.sh
 3. Set path to tools and resources in the configuration file located at
