@@ -34,6 +34,7 @@ GENE2ENTREZ=$NGS_ANALYSIS_DIR/resources/gene2entrezid
 # Filter for somatic
 $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_somatic_filter.py         \
           $PREFIX_SNP.vcf                                               \
+          -t somatic
           -o $PREFIX_SNP.somatic.vcf
 
 # Annotate

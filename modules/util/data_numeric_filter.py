@@ -26,7 +26,6 @@ def is_true(left_param, right_param):
     return True
 
 def filter_data(fin, column,
-                delim=None,
                 greater_than=None,
                 less_than=None,
                 equal_to=None):
@@ -56,15 +55,15 @@ def filter_data(fin, column,
     # Read through the file records/rows
     line_number = 1
     for line in fin:
-        line_stripped = line.strip()
+        line_stripped = line.strip('\n')
         if line_stripped:
-            la = line_stripped.split(delim)
+            la = line_stripped.split('\t')
             try:
                 val = float(la[column])
                 if comparison_op(val, comparison_val):
                     sys.stdout.write(line)
             except ValueError:
-                sys.stderr.write('Warning: Non-numeric value in line %i\n' % line_number)
+                sys.stderr.write('Warning: Non-numeric value in line %i\n%s\n' % (line_number, line))
         line_number += 1
 
 def main():
@@ -78,10 +77,6 @@ def main():
                     help='Column number, with column count starting with 0',
                     type=int,
                     default=0)
-    ap.add_argument('-d', '--delim',
-                    help='File column delimiter', 
-                    type=str, 
-                    default=None)
     ap.add_argument('-g', '--greater-than',
                     help='select rows containing values > given value',
                     type=float)
@@ -96,7 +91,6 @@ def main():
     # Filter the data
     filter_data(params.file,
                 params.column,
-                params.delim,
                 params.greater_than,
                 params.less_than,
                 params.equal_to)
