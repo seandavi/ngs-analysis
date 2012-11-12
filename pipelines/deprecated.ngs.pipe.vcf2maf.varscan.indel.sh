@@ -34,6 +34,7 @@ GENE2ENTREZ=$NGS_ANALYSIS_DIR/resources/gene2entrezid
 # Filter for somatic
 $PYTHON $NGS_ANALYSIS_DIR/modules/somatic/vcf_somatic_filter.py         \
           $PREFIX_INDEL.vcf                                             \
+          -t somatic
           -o $PREFIX_INDEL.somatic.vcf
 
 # Clean up indel file

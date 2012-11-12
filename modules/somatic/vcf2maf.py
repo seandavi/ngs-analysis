@@ -164,15 +164,15 @@ def parse_vcf(vcf_in,
             # Select single highest priority
             if highest_priority:
                 effects = [vcffile.select_highest_priority_effect(variant)]
-                # Check if there were no effects
-                if effects[0] is None:
-                    continue
+#                 # Check if there were no effects
+#                 if effects[0] is None:
+#                    continue
             # Select gene_transcript with the most variants
             elif gene2transcript is not None:
                 selected_transcript_effects = vcffile.find_selected_transcript_effects(variant, gene2transcript)
                 # If non were found, continue
                 if not selected_transcript_effects:
-                    continue
+                    effects = [None]
                 effects = [selected_transcript_effects[0]]
                 
             # By default, use all variants
@@ -223,35 +223,41 @@ def parse_vcf(vcf_in,
             # Iterate over the effects
             for effect in effects:
 
-                # If gene or transcript name is not found, skip
-                if not effect.gene or not effect.transcript:
-                    continue
+#                 # If gene or transcript name is not found, skip
+#                 if not effect.gene or not effect.transcript:
+#                     continue
 
-                # If gene name contains a '.', skip
-                if re.search(r'\.', effect.gene):
-                    continue
+#                 # If gene name contains a '.', skip
+#                 if re.search(r'\.', effect.gene):
+#                     continue
 
-                # If transcript name contains a '.', skip
-                if re.search(r'\.', effect.transcript):
-                    continue
+#                 # If transcript name contains a '.', skip
+#                 if re.search(r'\.', effect.transcript):
+#                     continue
 
                 # If aa change, add 'p.'
-                aa_change = effect.aa_change
-                if aa_change:
-                    aa_change = 'p.' + aa_change
+                aa_change = ''
+                if effect is not None:
+                    aa_change = effect.aa_change
+                    if aa_change:
+                        aa_change = 'p.' + aa_change
 
                 # Set up entrez id
                 entrez_id = ''
-                if effect.gene in gene2entrez:
-                    entrez_id = gene2entrez[effect.gene]
+                if effect is not None:
+                    if effect.gene in gene2entrez:
+                        entrez_id = gene2entrez[effect.gene]
+                
 
                 # Frame shift - determine whether insertion or deletion
-                effect_val = effect.effect
-                if effect_val == 'FRAME_SHIFT':
-                    if len(ref) < len(alt):
-                        effect_val = 'FRAME_SHIFT_INS'
-                    else:
-                        effect_val = 'FRAME_SHIFT_DEL'
+                effect_val = ''
+                if effect is not None:
+                    effect_val = effect.effect
+                    if effect_val == 'FRAME_SHIFT':
+                        if len(ref) < len(alt):
+                            effect_val = 'FRAME_SHIFT_INS'
+                        else:
+                            effect_val = 'FRAME_SHIFT_DEL'
 
                 # Variant class
                 var_class = ''
@@ -259,11 +265,17 @@ def parse_vcf(vcf_in,
                     var_class = SNPEFF2TCGA[effect_val]
 
                 # Gene name column
-                gene_col_val = '_'.join([effect.gene, effect.transcript])
-                if highest_priority:
-                    gene_col_val = effect.gene
+                gene_col_val = ''
+                if effect is not None:
+                    gene_col_val = '_'.join([effect.gene, effect.transcript])
+                    if highest_priority:
+                        gene_col_val = effect.gene
                 # elif single_transcript:
                 #    gene_col_val = '_'.join([effect.gene, effect.transcript])
+
+                transcrpt = ''
+                if effect is not None:
+                    transcrpt = effect.transcript
 
                 # Output to standard output
                 UNAVAILABLE=''
@@ -299,7 +311,7 @@ def parse_vcf(vcf_in,
                                                UNAVAILABLE,
                                                UNAVAILABLE,
                                                'Illumina HiSeq',
-                                               effect.transcript,
+                                               transcrpt,
                                                aa_change]))
 
 def main():

@@ -22,7 +22,7 @@ assert_file_exists() {
 # If file doesn't exist or have content, exit with error
 assert_file_exists_w_content() {
     if [ ! -s $1 ]; then
-	echoerr "File '"$1"' does not have content.  Exiting."
+	echoerr "File '"$1"' does not exist or have content.  Exiting."
 	exit 1
     fi
 }

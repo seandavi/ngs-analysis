@@ -74,28 +74,65 @@ for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
           $MINCOVN                                                              \
           $MINCOVT
 
-  # Convert varscan snp output to maf
-  $QSUB vcf2maf                                                                 \
+  # Filter varscan
+  $QSUB varscan.filter.$SAMPL                                                   \
         all.q                                                                   \
         1                                                                       \
         varscan.$SAMPL                                                          \
         n                                                                       \
-        $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.snp.sh             \
-          $SAMPL                                                                \
+        $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.varscan.somatic.filter.sh          \
           varscan/$SAMPL.varscan.snp.vcf                                        \
+          varscan/$SAMPL.varscan.indel.vcf                                      \
+          $SOMATIC_PVAL                                                         \
+          $MINCOVN
+
+  # Annotate snp
+  $QSUB snpeff.snp.$SAMPL                                                       \
+        all.q                                                                   \
+        1                                                                       \
+        varscan.filter.$SAMPL                                                   \
+        n                                                                       \
+        $NGS_ANALYSIS_DIR/modules/annot/snpeff.eff.sh                           \
+          varscan/$SAMPL.varscan.snp.somaticfilter.somatic.vcf                  \
           $SNPEFFV
 
-  # Convert varscan indel output to maf
+  # Annotate indel
+  $QSUB snpeff.indel.$SAMPL                                                     \
+        all.q                                                                   \
+        1                                                                       \
+        varscan.filter.$SAMPL                                                   \
+        n                                                                       \
+        $NGS_ANALYSIS_DIR/modules/annot/snpeff.eff.sh                           \
+          varscan/$SAMPL.varscan.indel.dp10.clean.somatic.vcf                   \
+          $SNPEFFV
+
+  # Convert snp to maf
   $QSUB vcf2maf                                                                 \
         all.q                                                                   \
         1                                                                       \
-        varscan.$SAMPL                                                          \
+        snpeff.snp.$SAMPL                                                       \
         n                                                                       \
-        $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.vcf2maf.varscan.indel.sh           \
+        `which python_ngs.sh` $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf.py      \
+          varscan/$SAMPL.varscan.snp.somaticfilter.somatic.snpeff.vcf           \
           $SAMPL                                                                \
-          varscan/$SAMPL.varscan.indel.vcf                                      \
-          $SNPEFFV
+          $GENE2ENTREZ                                                          \
+          -e                                                                    \
+          -t varscan                                                            \
+          -o varscan/$SAMPL.varscan.snp.somaticfilter.somatic.snpeff.vcf.maf
 
+  # Convert indel to maf
+  $QSUB vcf2maf                                                                 \
+        all.q                                                                   \
+        1                                                                       \
+        snpeff.indel.$SAMPL                                                     \
+        n                                                                       \
+        `which python_ngs.sh` $NGS_ANALYSIS_DIR/modules/somatic/vcf2maf.py      \
+          varscan/$SAMPL.varscan.indel.dp10.clean.somatic.snpeff.vcf            \
+          $SAMPL                                                                \
+          $GENE2ENTREZ                                                          \
+          -e                                                                    \
+          -t varscan                                                            \
+          -o varscan/$SAMPL.varscan.indel.dp10.clean.somatic.snpeff.vcf.maf
 done
 
 # If select single transcript per gene
@@ -116,8 +153,9 @@ if [ ! -z $TSINGLE ]; then
   # Generate maf for each sample based on the selected transcripts
   for bamfiles in `sed 's/\t/:/g' $BAMLIST`; do
     SAMPL=`echo $bamfiles | cut -f1 -d':'`
-    for file in `echo varscan/$SAMPL.varscan.snp.somatic.snpeff.vcf`            \
-                `echo varscan/$SAMPL.varscan.indel.somatic.clean.snpeff.vcf`; do
+    SNPVCF=`echo varscan/$SAMPL.varscan.snp.somaticfilter.somatic.snpeff.vcf`
+    INDVCF=`echo varscan/$SAMPL.varscan.indel.dp10.clean.somatic.snpeff.vcf`
+    for file in '$SNPVCF $INDVCF'; do
       $QSUB vcf2maf.selected                                                    \
             all.q                                                               \
             1                                                                   \
@@ -141,6 +179,9 @@ exit
 
 
 ######################################################################################
+
+$NGS_ANALYSIS_DIR/modules/somatic/merge_maf.sh samples varscan/*maf
+
 # Merge all mafs
 $QSUB merge.maf                                                                 \
       all.q                                                                     \

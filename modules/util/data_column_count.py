@@ -7,7 +7,7 @@ Read in a file, and generate a report on the number of columns in each line
 import argparse
 import sys
 
-def count_columns(fi, delim=None):
+def count_columns(fi):
     '''
     Read through each row of the file input stream, and count
     the number of columns.
@@ -17,7 +17,7 @@ def count_columns(fi, delim=None):
     i = 0
     for line in fi:
         i += 1
-        colcount = len(line.strip('\n').split(delim))
+        colcount = len(line.strip('\n').split('\t'))
         if colcount not in colcount2freq:
             colcount2freq[colcount] = 0
         colcount2freq[colcount] += 1
@@ -51,14 +51,10 @@ def main():
                     nargs='?',
                     type=argparse.FileType('r'),
                     default=sys.stdin)
-    ap.add_argument('-d', '--delim',
-                    help='File delimiter',
-                    type=str,
-                    default=None)
     params = ap.parse_args()
 
     # Generate the report
-    count_columns(params.file, params.delim)
+    count_columns(params.file)
     params.file.close()
 
 
