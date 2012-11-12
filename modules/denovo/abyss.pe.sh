@@ -33,7 +33,7 @@ S1_PE_R2=$6
 S2_PE_R1=$7
 S2_PE_R2=$8
 S1_SE=$9
-S2_SE=$10
+S2_SE=${10}
 
 export k
 for((k=$KMER_BEG; k<=$KMER_END; k=k+2)); do
