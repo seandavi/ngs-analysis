@@ -73,3 +73,40 @@ qsub_wrapper.sh                                               \
     $DBSNP_VCF                                                \
     $MILLS_INDEL_VCF                                          \
     $INDEL_1000G_VCF
+
+
+# QC and statistics ===========================================
+
+# Fastqc
+qsub_wrapper.sh                                               \
+  $SAMPLE.fastqc                                              \
+  all.q                                                       \
+  1                                                           \
+  $SAMPLE.fastq2rawbam.pe                                     \
+  n                                                           \
+  $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastqc.ge.sh           \
+    2                                                         \
+    $SAMPLEDIR/*fastq.gz                                      \
+    $SAMPLEDIR/*fastq
+
+# Sequence stats
+qsub_wrapper.sh                                               \
+  $SAMPLE.seqstats                                            \
+  all.q                                                       \
+  1                                                           \
+  $SAMPLE.fastq2rawbam.pe                                     \
+  n                                                           \
+  $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.fastq.stat.ge.sh       \
+    $SAMPLEDIR/*fastq.gz                                      \
+    $SAMPLEDIR/*fastq
+
+# # BAM QC
+# qsub_wrapper.sh                                               \
+#   $SAMPLE.bam.qc                                              \
+#   all.q                                                       \
+#   1                                                           \
+#   $SAMPLE.processbam                                          \
+#   n                                                           \
+#   $NGS_ANALYSIS_DIR/pipelines/ngs.pipe.qc.bam.wes.ge.sh       \
+#     B3x                                                       \
+#     $SURESELECT_BED Sample_*/*recal.bam
