@@ -270,7 +270,7 @@ make clean
 export LAPACK=~/src/lapack/lapack-3.4.0/liblapack.a
 cd ../..
 
-# PYTHON 2.6
+# PYTHON 2.6 #2.7
 # Install python
 mkdir python; cd python
 #wget http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
@@ -283,16 +283,18 @@ make install
 
 # Install setuptools
 cd ..
-# Add site-packages directory to $PYTHONPATH $HOME/lib/python2.6/site-packages
+# Add site-packages directory to PYTHONPATH=$PYTHONPATH:$HOME/lib/python2.6/site-packages
+# 2.7: export PYTHONPATH=$PYTHONPATH:$HOME/lib/python2.7/site-packages
 wget http://pypi.python.org/packages/2.6/s/setuptools/setuptools-0.6c11-py2.6.egg
 # wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
 sh setuptools-0.6c11-py2.6.egg --prefix=$HOME
+# sh setuptools-0.6c11-py2.7.egg --prefix=$HOME
 
 # Install modules
-easy_install --prefix=~ numpy
-easy_install --prefix=~ scipy
-easy_install --prefix=~ BioPython
-easy_install --prefix=~ argparse
+easy_install numpy
+easy_install scipy
+easy_install BioPython
+easy_install argparse
 
 --------------------------------------------------------
 # GIT
@@ -668,6 +670,9 @@ make install
 # Install trans-abyss
 wget http://www.bcgsc.ca/platform/bioinfo/software/trans-abyss/releases/1.4.4/trans-ABySS-v1.4.4.tar.gz
 cd trans-ABySS
+modify setup.sh to set the paths for the tools
+modify configs/transcriptome.cfg to include the project currently being assembled
+
 
 --------------------------------------------------------
 # GMAP
@@ -677,5 +682,6 @@ tar zxf *tar.gz
 cd gmap*
 ./configure --prefix=$HOME
 make
+make install
 
 ------------------------------------------------------

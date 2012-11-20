@@ -1,6 +1,6 @@
 #!/bin/bash
 ## 
-## DESCRIPTION:   Run velvetg
+## DESCRIPTION:   Run abyss-pe
 ##
 ## USAGE:         abyss.pe.sh
 ##                            prefix               # Run prefix
@@ -45,8 +45,8 @@ for((k=$KMER_BEG; k<=$KMER_END; k=k+2)); do
       k=$k                                 \
       name=$R_PREFIX                       \
       lib='pe1 pe2'                        \
-      pe1='../$S1_PE_R1 ../$S1_PE_R2'      \
-      pe2='../$S2_PE_R1 ../$S2_PE_R2'      \
-      se='../$S1_SE ../$S2_SE'
+      pe1="../$S1_PE_R1 ../$S1_PE_R2"      \
+      pe2="../$S2_PE_R1 ../$S2_PE_R2"      \
+      se="../$S1_SE ../$S2_SE"
 done &> $R_PREFIX.abyss.pe.log
 abyss-fac k*/$R_PREFIX-contigs.fa > $R_PREFIX.abyss.pe.stats
