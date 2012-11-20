@@ -21,10 +21,12 @@ FASTQS=$@
 # Run tool
 FASTQSTATS=$NGS_ANALYSIS_DIR/modules/seq/fastq_stats.py
 for fastqfile in $FASTQS; do
-  qsub_wrapper.sh fastqstats                                                                      \
-                  all.q                                                                           \
-                  1                                                                               \
-                  none                                                                            \
-                  n                                                                               \
-                  $NGS_ANALYSIS_DIR/modules/util/python_ngs.sh $FASTQSTATS $fastqfile
+  if [ ! -s $fastqfile.seqstat.txt ]; then
+    qsub_wrapper.sh fastqstats                                                                      \
+                    all.q                                                                           \
+                    1                                                                               \
+                    none                                                                            \
+                    n                                                                               \
+                    $NGS_ANALYSIS_DIR/modules/util/python_ngs.sh $FASTQSTATS $fastqfile
+  fi
 done
