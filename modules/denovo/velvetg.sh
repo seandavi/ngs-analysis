@@ -6,7 +6,8 @@
 ##                           dir_prefix         # Output directory prefix of velveth
 ##                           kmer_start         # Must be odd, inclusive
 ##                           kmer_end           # Must be odd, inclusive
-##                           [cov_cutoff
+##                           [min_contig_lgth
+##                           [cov_cutoff]
 ##                           [insert_length1]
 ##                           [insert_length2]]
 ##
@@ -23,11 +24,15 @@ usage_min 3 $# $0
 DIRPREFX=$1
 KMER_BEG=$2
 KMER_END=$3
-COV_CUTF=$4
-INSERTL1=$5
-INSERTL2=$6
+MIN_CONT=$4
+COV_CUTF=$5
+INSERTL1=$6
+INSERTL2=$7
 
 # Add options
+if [ ! -z "$MIN_CONT" ]; then
+  PARAM_MIN_CONT='-min_contig_lgth '$MIN_CONT
+fi
 if [ ! -z "$COV_CUTF" ]; then
   PARAM_COV_CUTF='-cov_cutoff '$COV_CUTF
 fi
@@ -42,8 +47,8 @@ fi
 for((n=$KMER_BEG; n<=$KMER_END; n=n+2)); do
   velvetg                      \
     $DIRPREFX"_"$n             \
-    -min_contig_lgth 100       \
+    -read_trkg yes             \
+    $PARAM_MIN_CONT            \
     $PARAM_COV_CUTF            \
-    $PARAM_INSERTL             \
-    -read_trkg yes
+    $PARAM_INSERTL
 done &> $DIRPREFX.velvetg.log
